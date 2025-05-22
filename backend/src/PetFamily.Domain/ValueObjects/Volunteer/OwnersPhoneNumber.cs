@@ -8,12 +8,13 @@ public record OwnersPhoneNumber
 {
     private const int PHONE_LENGTH = 11;
     
-    public string PhoneNumber { get; }
+    
 
     private OwnersPhoneNumber(string phoneNumber) 
     {
         PhoneNumber = phoneNumber;
     }
+    public string PhoneNumber { get; }
 
     public static Result<OwnersPhoneNumber> Create(string phoneNumber)
     {

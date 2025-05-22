@@ -1,26 +1,27 @@
 ﻿
 using PetFamily.Domain.Shared;
+using PetFamily.Domain.ValueObjects.Breed;
 
 namespace PetFamily.Domain.Species;
 
-public class Breed
+public class Breed:Entity<BreedId>
 {
-    public Guid Id { get; private set; }
-    public string Name { get; private set; }
-
-   
-    private Breed(string name)
+    //ef core
+    private Breed(BreedId id):base(id)
     {
-        Id=Guid.NewGuid();
+    }
+    private Breed(BreedId breedId,string name):base(breedId)
+    {
         Name = name;
     }
+    public string Name { get; private set; }
 
-    public static Result<Breed> Create(string name)
+    public static Result<Breed> Create(BreedId breedId,string name)
     {
         if (string.IsNullOrWhiteSpace(name))
             return "Name cannot be empty";
         
-        var breed = new Breed(name);
+        var breed = new Breed(breedId,name);
         
         return breed;
     }

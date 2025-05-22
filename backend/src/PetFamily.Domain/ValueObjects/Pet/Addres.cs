@@ -4,12 +4,6 @@ namespace PetFamily.Domain.ValueObjects.Pet;
 
 public record Address
 {
-    public string Street { get; }
-    public string City { get; }
-    public string Country { get; }
-    public string? ZipCode { get; }
-    
-
     private Address(string street, string city, string country, string zipcode)
     {
         Street = street;
@@ -17,6 +11,10 @@ public record Address
         Country = country;
         ZipCode = zipcode;
     }
+    public string Street { get; }
+    public string City { get; }
+    public string Country { get; }
+    public string? ZipCode { get; }
 
     public static Result<Address> Create(string street, string city, string country, string zipCode)
     {

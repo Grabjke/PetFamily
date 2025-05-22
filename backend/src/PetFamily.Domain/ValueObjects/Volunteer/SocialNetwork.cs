@@ -5,14 +5,15 @@ namespace PetFamily.Domain.ValueObjects.Volunteer;
 
 public record SocialNetwork
 {
-    public string URL { get; }
-    public string Name { get; }
+    
 
     private SocialNetwork(string url,string name)
     {
         URL = url;
         Name = name;
     }
+    public string URL { get; }
+    public string Name { get; }
 
     public static Result<SocialNetwork> Create(string url, string name)
     {

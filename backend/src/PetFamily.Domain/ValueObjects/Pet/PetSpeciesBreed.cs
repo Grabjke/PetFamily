@@ -4,14 +4,15 @@ namespace PetFamily.Domain.ValueObjects.Pet;
 
 public record PetSpeciesBreed
 {
-    public Guid SpeciesId { get; }
-    public Guid BreedId { get; }
+    
 
     private PetSpeciesBreed(Guid speciesId,Guid breedId)
     {
         SpeciesId = speciesId;
         BreedId = breedId;
     }
+    public Guid SpeciesId { get; }
+    public Guid BreedId { get; }
 
     public static Result<PetSpeciesBreed> Create(Guid speciesId, Guid breedId)
     {

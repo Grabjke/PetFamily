@@ -5,14 +5,15 @@ namespace PetFamily.Domain.ValueObjects.Volunteer;
 
 public record Requisites
 {
-    public string Title { get; }
-    public string Description { get; }
+    
 
     private Requisites(string title, string description)
     {
         Title = title;
         Description = description;
     }
+    public string Title { get; }
+    public string Description { get; }
     
     public static Result<Requisites> Create(string title,string description)
     {

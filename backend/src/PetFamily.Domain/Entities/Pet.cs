@@ -7,24 +7,6 @@ namespace PetFamily.Domain.Entities;
 public class Pet : Entity<PetId>
 {
     private readonly List<Requisites> _requisites = [];
-    
-    public string Name { get; private set; } = null!;
-    public string Description { get; private set; } = null!;
-    public PetSpeciesBreed PetSpeciesBreed { get; private set; } 
-    public string Colour { get; private set; } = null!;
-    public string HealthInformation { get; private set; } = null!;
-    public Address Address { get; private set; } = null!;
-    public double Weight { get; private set; }
-    public double Height { get; private set; }
-    public OwnersPhoneNumber OwnersPhoneNumber { get; private set; }
-    public bool Castration { get; private set; }
-    public DateTime Birthday { get; private set; }
-    public bool IsVaccinated { get; private set; }
-    public HelpStatus HelpStatus { get; private set; }
-    public IReadOnlyList<Requisites> Requisites  => _requisites;
-    public DateTime DateOfCreation { get; private set; }
-    
-    //ef core
     private Pet(PetId id):base(id)
     {
     }
@@ -61,6 +43,26 @@ public class Pet : Entity<PetId>
         HelpStatus = helpStatus;
         DateOfCreation = DateTime.UtcNow;
     }
+    
+    
+    public string Name { get; private set; } = null!;
+    public string Description { get; private set; } = null!;
+    public PetSpeciesBreed PetSpeciesBreed { get; private set; } 
+    public string Colour { get; private set; } = null!;
+    public string HealthInformation { get; private set; } = null!;
+    public Address Address { get; private set; } = null!;
+    public double Weight { get; private set; }
+    public double Height { get; private set; }
+    public OwnersPhoneNumber OwnersPhoneNumber { get; private set; }
+    public bool Castration { get; private set; }
+    public DateTime Birthday { get; private set; }
+    public bool IsVaccinated { get; private set; }
+    public HelpStatus HelpStatus { get; private set; }
+    public IReadOnlyList<Requisites> Requisites  => _requisites;
+    public DateTime DateOfCreation { get; private set; }
+    
+    //ef core
+   
 
     public static Result<Pet> Create(
         PetId petId,

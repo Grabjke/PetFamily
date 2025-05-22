@@ -4,12 +4,13 @@ namespace PetFamily.Domain.ValueObjects.Volunteer;
 
 public record Email
 {
-    public string Value { get; }
+    
 
     private Email(string value)
     {
         Value = value;
     }
+    public string Value { get; }
 
     public static Result<Email> Create(string value)
     {
