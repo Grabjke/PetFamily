@@ -7,43 +7,44 @@ namespace PetFamily.Domain.Entities;
 public class Pet : Entity<PetId>
 {
     private readonly List<Requisites> _requisites = [];
-    private Pet(PetId id):base(id)
+    
+    //ef core
+    private Pet(PetId id) : base(id)
     {
     }
     
     private Pet(
-        PetId petId,
+        PetId id,
         string name,
         string description,
-        PetSpeciesBreed petSpeciesBreed,
+        PetSpeciesBreed speciesBreed,
         string colour,
         string healthInformation,
         Address address,
         double weight,
         double height,
-        OwnersPhoneNumber ownersPhoneNumber,
+        OwnersPhoneNumber phoneNumber,
         bool castration,
         DateTime birthday,
         bool isVaccinated,
         HelpStatus helpStatus
-    ) : base(petId)
+    ) : base(id)
     {
         Name = name;
         Description = description;
-        PetSpeciesBreed = petSpeciesBreed;
+        PetSpeciesBreed = speciesBreed; 
         Colour = colour;
         HealthInformation = healthInformation;
         Address = address;
         Weight = weight;
         Height = height;
-        OwnersPhoneNumber = ownersPhoneNumber;
+        OwnersPhoneNumber = phoneNumber;
         Castration = castration;
         Birthday = birthday;
         IsVaccinated = isVaccinated;
         HelpStatus = helpStatus;
         DateOfCreation = DateTime.UtcNow;
     }
-    
     
     public string Name { get; private set; } = null!;
     public string Description { get; private set; } = null!;
@@ -61,9 +62,6 @@ public class Pet : Entity<PetId>
     public IReadOnlyList<Requisites> Requisites  => _requisites;
     public DateTime DateOfCreation { get; private set; }
     
-    //ef core
-   
-
     public static Result<Pet> Create(
         PetId petId,
         string name,

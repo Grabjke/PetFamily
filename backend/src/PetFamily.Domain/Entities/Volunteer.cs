@@ -8,6 +8,7 @@ public class Volunteer: Entity<VolunteerId>
 {
     private readonly List<Pet> _pets = [];
     private readonly List<SocialNetwork> _socialNetworks = [];
+    private readonly List<Requisites> _requisites = [];
     
     //ef core
     private Volunteer(VolunteerId id):base(id)
@@ -20,8 +21,7 @@ public class Volunteer: Entity<VolunteerId>
         Email email,
         string description,
         int experience,
-        OwnersPhoneNumber phoneNumber,
-        Requisites requisites
+        OwnersPhoneNumber phoneNumber
         ):base(volunteerId)
     {
         FullName = fullName;
@@ -29,7 +29,6 @@ public class Volunteer: Entity<VolunteerId>
         Description = description;
         Experience = experience;
         PhoneNumber = phoneNumber;
-        Requisites = requisites;
 
     }
     public FullName FullName { get; private set; }
@@ -41,7 +40,7 @@ public class Volunteer: Entity<VolunteerId>
     public int PetsNeedsHelp => GetCountPetsNeedsHelp();
     public OwnersPhoneNumber PhoneNumber { get; private set; }
     public IReadOnlyList<SocialNetwork> SocialNetworks => _socialNetworks;
-    public Requisites Requisites { get; private set; }
+    public IReadOnlyList<Requisites> Requisites => _requisites;
     public IReadOnlyList<Pet> Pets => _pets;
 
 
@@ -51,8 +50,7 @@ public class Volunteer: Entity<VolunteerId>
         Email email,
         string description,
         int experience,
-        OwnersPhoneNumber phoneNumber,
-        Requisites requisites
+        OwnersPhoneNumber phoneNumber
         )
     {
         
@@ -62,7 +60,7 @@ public class Volunteer: Entity<VolunteerId>
         if (experience<0)
             return "Experience is invalid";
 
-        var volunteer = new Volunteer(volunteerId,fullName, email, description, experience, phoneNumber, requisites);
+        var volunteer = new Volunteer(volunteerId,fullName, email, description, experience, phoneNumber);
 
         return volunteer;
 
@@ -78,6 +76,15 @@ public class Volunteer: Entity<VolunteerId>
         return Result.Success();
     }
     
+    public Result AddRequisites(Requisites requisites)
+    {
+        if(_requisites.Contains(requisites))
+            return "Requisites already exists in the list";
+
+        _requisites.Add(requisites);
+
+        return Result.Success();
+    }
     public Result AddSocialNetwork(SocialNetwork socialNetwork)
     {
         if(_socialNetworks.Contains(socialNetwork))

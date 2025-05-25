@@ -4,7 +4,12 @@ namespace PetFamily.Domain.ValueObjects.Pet;
 
 public record Address
 {
-    private Address(string street, string city, string country, string zipcode)
+    private Address()
+    {
+    }
+
+    
+    private Address(string street, string city, string country, string? zipcode)
     {
         Street = street;
         City = city;
@@ -16,7 +21,7 @@ public record Address
     public string Country { get; }
     public string? ZipCode { get; }
 
-    public static Result<Address> Create(string street, string city, string country, string zipCode)
+    public static Result<Address> Create(string street, string city, string country, string? zipCode=null)
     {
         if (string.IsNullOrWhiteSpace(street))
             return "Street cannot be empty";
@@ -30,7 +35,6 @@ public record Address
         var address = new Address(street, city, country, zipCode);
 
         return address;
-
     }
 
  
