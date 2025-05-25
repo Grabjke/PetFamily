@@ -1,25 +1,25 @@
 ﻿using PetFamily.Domain.Shared;
+using PetFamily.Domain.ValueObjects.Breed;
+using PetFamily.Domain.ValueObjects.Species;
 
 namespace PetFamily.Domain.ValueObjects.Pet;
 
 public record PetSpeciesBreed
 {
-    
-
-    private PetSpeciesBreed(Guid speciesId,Guid breedId)
+    private PetSpeciesBreed(SpeciesId speciesId,BreedId breedId)
     {
         SpeciesId = speciesId;
         BreedId = breedId;
     }
-    public Guid SpeciesId { get; }
-    public Guid BreedId { get; }
+    public SpeciesId SpeciesId { get; }
+    public BreedId BreedId { get; }
 
-    public static Result<PetSpeciesBreed> Create(Guid speciesId, Guid breedId)
+    public static Result<PetSpeciesBreed> Create(SpeciesId speciesId,BreedId breedId)
     {
-        if (speciesId == Guid.Empty)
+        if (speciesId == SpeciesId.Empty())
             return "SpeciesId cannot be empty";
         
-        if (breedId == Guid.Empty)
+        if (breedId == BreedId.Empty())
             return "BreedId cannot be empty";
 
         var petSpeciesBreed = new PetSpeciesBreed(speciesId, breedId);

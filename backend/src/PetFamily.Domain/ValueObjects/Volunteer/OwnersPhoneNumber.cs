@@ -8,8 +8,6 @@ public record OwnersPhoneNumber
 {
     private const int PHONE_LENGTH = 11;
     
-    
-
     private OwnersPhoneNumber(string phoneNumber) 
     {
         PhoneNumber = phoneNumber;

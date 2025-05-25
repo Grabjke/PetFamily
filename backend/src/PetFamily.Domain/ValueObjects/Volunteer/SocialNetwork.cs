@@ -6,7 +6,6 @@ namespace PetFamily.Domain.ValueObjects.Volunteer;
 public record SocialNetwork
 {
     
-
     private SocialNetwork(string url,string name)
     {
         URL = url;

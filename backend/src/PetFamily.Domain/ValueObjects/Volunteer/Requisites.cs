@@ -5,8 +5,6 @@ namespace PetFamily.Domain.ValueObjects.Volunteer;
 
 public record Requisites
 {
-    
-
     private Requisites(string title, string description)
     {
         Title = title;
