@@ -1,4 +1,5 @@
-﻿using PetFamily.Domain.Shared;
+﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.Shared;
 using PetFamily.Domain.ValueObjects.Breed;
 using PetFamily.Domain.ValueObjects.Species;
 
@@ -14,16 +15,14 @@ public record PetSpeciesBreed
     public SpeciesId SpeciesId { get; }
     public BreedId BreedId { get; }
 
-    public static Result<PetSpeciesBreed> Create(SpeciesId speciesId,BreedId breedId)
+    public static Result<PetSpeciesBreed,Error> Create(SpeciesId speciesId,BreedId breedId)
     {
         if (speciesId == SpeciesId.Empty())
-            return "SpeciesId cannot be empty";
+            return Errors.General.ValueIsInvalid("SpeciesId");
         
         if (breedId == BreedId.Empty())
-            return "BreedId cannot be empty";
+            return Errors.General.ValueIsInvalid("BreedId");
 
-        var petSpeciesBreed = new PetSpeciesBreed(speciesId, breedId);
-
-        return petSpeciesBreed;
+        return new PetSpeciesBreed(speciesId, breedId);
     }
 }

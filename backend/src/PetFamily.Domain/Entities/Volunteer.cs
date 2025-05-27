@@ -1,10 +1,11 @@
-﻿using PetFamily.Domain.Shared;
+﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.Shared;
 using PetFamily.Domain.ValueObjects.Pet;
 using PetFamily.Domain.ValueObjects.Volunteer;
 
 namespace PetFamily.Domain.Entities;
 
-public class Volunteer: Entity<VolunteerId>
+public class Volunteer: Shared.Entity<VolunteerId>
 {
     private readonly List<Pet> _pets = [];
     private readonly List<SocialNetwork> _socialNetworks = [];
@@ -44,7 +45,7 @@ public class Volunteer: Entity<VolunteerId>
     public IReadOnlyList<Pet> Pets => _pets;
 
 
-    public static Result<Volunteer> Create( 
+    public static Result<Volunteer,Error> Create( 
         VolunteerId volunteerId,
         FullName fullName,
         Email email,
@@ -55,44 +56,41 @@ public class Volunteer: Entity<VolunteerId>
     {
         
         if (string.IsNullOrWhiteSpace(description))
-            return "Description cannot be empty";
+            return Errors.General.ValueIsInvalid("Description");
         
         if (experience<0)
-            return "Experience is invalid";
+            return Errors.General.ValueIsInvalid("Experience");
 
-        var volunteer = new Volunteer(volunteerId,fullName, email, description, experience, phoneNumber);
-
-        return volunteer;
+        return new Volunteer(volunteerId,fullName, email, description, experience, phoneNumber);
 
     }
     
     public Result AddPet(Pet pet)
     {
         if(_pets.Contains(pet))
-            return "Pet already exists in the list";
+            return Result.Failure<Volunteer>("Pet already exists in the list");
 
         _pets.Add(pet);
 
         return Result.Success();
     }
     
-    public Result AddRequisites(Requisites requisites)
+    public UnitResult<Error> AddRequisites(Requisites requisites)
     {
-        if(_requisites.Contains(requisites))
-            return "Requisites already exists in the list";
+       if(_requisites.Contains(requisites))
+            return Errors.General.ValueIsInvalid("Requisites");
 
         _requisites.Add(requisites);
 
-        return Result.Success();
+        return Result.Success<Error>();
     }
-    public Result AddSocialNetwork(SocialNetwork socialNetwork)
+    public UnitResult<Error> AddSocialNetwork(SocialNetwork socialNetwork)
     {
-        if(_socialNetworks.Contains(socialNetwork))
-            return "Social network already exists in the list";
+        if((_socialNetworks).Contains(socialNetwork))
+            return Errors.General.ValueIsInvalid("Social network");
 
         _socialNetworks.Add(socialNetwork);
-
-        return Result.Success();
+        return Result.Success<Error>();
     }
     
     private int GetCountPetsFoundHome()

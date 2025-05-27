@@ -1,9 +1,10 @@
-﻿using PetFamily.Domain.Shared;
+﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.Shared;
 using PetFamily.Domain.ValueObjects.Species;
 
 namespace PetFamily.Domain.Species;
 
-public class PetSpecies:Entity<SpeciesId>
+public class PetSpecies: Shared.Entity<SpeciesId>
 {
     private readonly List<Breed> _breeds = [];
 
@@ -19,20 +20,21 @@ public class PetSpecies:Entity<SpeciesId>
     public string Title { get; private set; }
     public IReadOnlyList<Breed> Breeds => _breeds;
     
-    public static Result<PetSpecies> Create(SpeciesId speciesId,string title)
+    public static Result<PetSpecies,Error> Create(SpeciesId speciesId,string title)
     {
-        if (string.IsNullOrWhiteSpace(title))
-            return "Title cannot be empty";
+        if (speciesId == SpeciesId.Empty())
+            return Errors.General.ValueIsInvalid("SpeciesId");
         
-        var species = new PetSpecies(speciesId,title);
+        if (string.IsNullOrWhiteSpace(title))
+            return Errors.General.ValueIsInvalid("Title");
 
-        return species;
+        return new PetSpecies(speciesId,title);
     }
     
     public Result AddBreed(Breed breed)
     {
         if(_breeds.Contains(breed))
-            return "Breed already exists in this species";
+            return Result.Failure<PetSpecies>("Breed already exists in this species");
 
         _breeds.Add(breed);
 
