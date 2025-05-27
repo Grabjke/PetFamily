@@ -1,4 +1,5 @@
-﻿using PetFamily.Domain.Shared;
+﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.Shared;
 
 namespace PetFamily.Domain.ValueObjects.Pet;
 
@@ -21,20 +22,20 @@ public record Address
     public string Country { get; }
     public string? ZipCode { get; }
 
-    public static Result<Address> Create(string street, string city, string country, string? zipCode=null)
+    public static Result<Address,Error> Create(string street, string city, string country, string? zipCode=null)
     {
         if (string.IsNullOrWhiteSpace(street))
-            return "Street cannot be empty";
+            return Errors.General.ValueIsInvalid("Street");
         
         if (string.IsNullOrWhiteSpace(city))
-            return "City cannot be empty";
+            return Errors.General.ValueIsInvalid("City");
         
         if (string.IsNullOrWhiteSpace(country))
-            return "Country cannot be empty";
+            return Errors.General.ValueIsInvalid("Country");
 
-        var address = new Address(street, city, country, zipCode);
+        
 
-        return address;
+        return new Address(street, city, country, zipCode);
     }
 
  

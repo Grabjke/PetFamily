@@ -1,10 +1,11 @@
-﻿using PetFamily.Domain.Shared;
+﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.Shared;
 using PetFamily.Domain.ValueObjects.Pet;
 using PetFamily.Domain.ValueObjects.Volunteer;
 
 namespace PetFamily.Domain.Entities;
 
-public class Pet : Entity<PetId>
+public class Pet : Shared.Entity<PetId>
 {
     private readonly List<Requisites> _requisites = [];
     
@@ -62,7 +63,7 @@ public class Pet : Entity<PetId>
     public IReadOnlyList<Requisites> Requisites  => _requisites;
     public DateTime DateOfCreation { get; private set; }
     
-    public static Result<Pet> Create(
+    public static Result<Pet,Error> Create(
         PetId petId,
         string name,
         string description,
@@ -79,37 +80,35 @@ public class Pet : Entity<PetId>
         HelpStatus helpStatus)
     {
         if (string.IsNullOrWhiteSpace(name))
-            return "Name cannot be empty";
+            return Errors.General.ValueIsInvalid("Name");
         
         if (string.IsNullOrWhiteSpace(description))
-            return "Description cannot be empty";
+            return Errors.General.ValueIsInvalid("Description");
         
         if (string.IsNullOrWhiteSpace(colour))
-            return "Colour cannot be empty";
+            return Errors.General.ValueIsInvalid("Colour");
         
         if (string.IsNullOrWhiteSpace(healthInformation))
-            return "HealthInformation cannot be empty";
+            return Errors.General.ValueIsInvalid("Health Information");
         
         if (weight<=0)
-            return "Weight is invalid";
+            return Errors.General.ValueIsInvalid("Weight");
         
         if (height<=0)
-            return "Height is invalid";
+            return Errors.General.ValueIsInvalid("Height");
         
         if(birthday>DateTime.Now)
-            return "Birthday is invalid";
+            return Errors.General.ValueIsInvalid("Birthday");
 
-        var pet = new Pet(petId,name, description, petSpeciesBreed, colour, healthInformation, address, weight, height,
+        return new Pet(petId,name, description, petSpeciesBreed, colour, healthInformation, address, weight, height,
             ownersPhoneNumber, castration, birthday, isVaccinated, helpStatus);
-
-        return pet;
 
     }
     
     public Result AddRequisites(Requisites requisites)
     {
         if(_requisites.Contains(requisites))
-            return "Requisites already exists in the list";
+            return Result.Failure<Pet>("Requisites already exists in the list");
 
         _requisites.Add(requisites);
 

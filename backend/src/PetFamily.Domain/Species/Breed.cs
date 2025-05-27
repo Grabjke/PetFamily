@@ -1,10 +1,11 @@
 ﻿
+using CSharpFunctionalExtensions;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.ValueObjects.Breed;
 
 namespace PetFamily.Domain.Species;
 
-public class Breed:Entity<BreedId>
+public class Breed: Shared.Entity<BreedId>
 {
     //ef core
     private Breed(BreedId id):base(id)
@@ -16,13 +17,16 @@ public class Breed:Entity<BreedId>
     }
     public string Name { get; private set; }
 
-    public static Result<Breed> Create(BreedId breedId,string name)
+    public static Result<Breed,Error> Create(BreedId breedId,string name)
     {
+        if (breedId == BreedId.Empty())
+            return Errors.General.ValueIsInvalid("BreedId");
+        
         if (string.IsNullOrWhiteSpace(name))
-            return "Name cannot be empty";
+            return Errors.General.ValueIsInvalid("Name");
         
         var breed = new Breed(breedId,name);
         
-        return breed;
+        return new Breed(breedId,name);
     }
 }

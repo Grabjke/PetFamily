@@ -1,11 +1,10 @@
-﻿using PetFamily.Domain.Shared;
+﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.Shared;
 
 namespace PetFamily.Domain.ValueObjects.Volunteer;
 
 public record FullName
 {
-    
-
     private FullName(string name,string surname,string patronymic)
     {
         Name = name;
@@ -16,18 +15,16 @@ public record FullName
     public string Surname { get; }
     public string? Patronymic { get; }
 
-    public static Result<FullName> Create(string name, string surname, string patronymic)
+    public static Result<FullName,Error> Create(string name, string surname, string patronymic)
     {
         if (string.IsNullOrWhiteSpace(name))
-            return "Name can not be empty";
+            return Errors.General.ValueIsInvalid("Name");
         
         if (string.IsNullOrWhiteSpace(surname))
-            return Result<FullName>.Failure("Surname can not be empty");
+            return Errors.General.ValueIsInvalid("Surname");
         
 
-        var fullName = new FullName(name, surname, patronymic);
-
-        return fullName;
+        return new FullName(name, surname, patronymic);
     }
     
 }

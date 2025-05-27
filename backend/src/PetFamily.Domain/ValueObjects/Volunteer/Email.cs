@@ -1,24 +1,22 @@
-﻿using PetFamily.Domain.Shared;
+﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.Shared;
 
 namespace PetFamily.Domain.ValueObjects.Volunteer;
 
 public record Email
 {
     
-
     private Email(string value)
     {
         Value = value;
     }
     public string Value { get; }
 
-    public static Result<Email> Create(string value)
+    public static Result<Email,Error> Create(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
-            return "Email can not be empty";
-
-        var email = new Email(value);
+            return Errors.General.ValueIsInvalid("Email");
         
-        return email;
+        return new Email(value);
     }
 }

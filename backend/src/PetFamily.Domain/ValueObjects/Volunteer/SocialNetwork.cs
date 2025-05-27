@@ -1,11 +1,11 @@
 ﻿
+using CSharpFunctionalExtensions;
 using PetFamily.Domain.Shared;
 
 namespace PetFamily.Domain.ValueObjects.Volunteer;
 
 public record SocialNetwork
 {
-    
     private SocialNetwork(string url,string name)
     {
         URL = url;
@@ -14,16 +14,15 @@ public record SocialNetwork
     public string URL { get; }
     public string Name { get; }
 
-    public static Result<SocialNetwork> Create(string url, string name)
+    public static Result<SocialNetwork,Error> Create(string url, string name)
     {
         if (string.IsNullOrWhiteSpace(url))
-            return "URL is invalid";
+            return Errors.General.ValueIsInvalid("URL");
         
         if (string.IsNullOrWhiteSpace(name))
-            return "Name is invalid";
+            return Errors.General.ValueIsInvalid("Name");
+        
 
-        var socialNetwork = new SocialNetwork(url, name);
-
-        return socialNetwork;
+        return new SocialNetwork(url, name);
     }
 }

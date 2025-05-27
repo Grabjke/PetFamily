@@ -1,4 +1,5 @@
 ﻿
+using CSharpFunctionalExtensions;
 using PetFamily.Domain.Shared;
 
 namespace PetFamily.Domain.ValueObjects.Volunteer;
@@ -13,17 +14,16 @@ public record Requisites
     public string Title { get; }
     public string Description { get; }
     
-    public static Result<Requisites> Create(string title,string description)
+    public static Result<Requisites,Error> Create(string title,string description)
     {
         if (string.IsNullOrWhiteSpace(title))
-            return "Title cannot be empty";
+            return Errors.General.ValueIsInvalid("Title");
         
         if (string.IsNullOrWhiteSpace(description))
-            return "Description cannot be empty";
+            return Errors.General.ValueIsInvalid("Description");
         
-        var requisites = new Requisites(title, description);
 
-        return requisites;
+        return new Requisites(title, description);
     }
     
 }
