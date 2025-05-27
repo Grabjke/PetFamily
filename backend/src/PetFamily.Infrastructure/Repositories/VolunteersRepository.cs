@@ -24,11 +24,11 @@ public class VolunteersRepository:IVolunteersRepository
         return volunteer.Id;
     }
 
-    public async Task<Result<Volunteer,Error>> GetById(Volunteer volunteer)
+    public async Task<Result<Volunteer,Error>> GetById(Volunteer volunteer,CancellationToken cancellationToken = default)
     {
         var record = await  _context.Volunteers
             .Include(v => v.Pets)
-            .FirstOrDefaultAsync(v=>v.Id==volunteer.Id);
+            .FirstOrDefaultAsync(v=>v.Id==volunteer.Id, cancellationToken);
 
         if (record is null)
             return Errors.General.NotFound(volunteer.Id);
@@ -36,11 +36,11 @@ public class VolunteersRepository:IVolunteersRepository
         return record;
     }
 
-    public async Task<Result<Volunteer,Error>> GetByName(string name)
+    public async Task<Result<Volunteer,Error>> GetByName(string name,CancellationToken cancellationToken = default)
     {
         var record = await  _context.Volunteers
             .Include(v => v.Pets)
-            .FirstOrDefaultAsync(v=>v.FullName.Name==name);
+            .FirstOrDefaultAsync(v=>v.FullName.Name==name,cancellationToken);
         
         if (record is null)
             return Errors.General.NotFound();
