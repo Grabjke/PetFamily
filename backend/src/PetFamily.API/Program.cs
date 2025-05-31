@@ -12,6 +12,7 @@ builder.Services
     .AddInfrastructure()
     .AddApplication();
 
+
 var app = builder.Build();
 
 

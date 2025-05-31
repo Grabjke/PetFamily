@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
+using PetFamily.API.Controllers.Volunteers.Requests;
 using PetFamily.API.Extensions;
-using PetFamily.API.Response;
 using PetFamily.Application.Volunteers.CreateVolunteer;
 
-namespace PetFamily.API.Controllers;
+namespace PetFamily.API.Controllers.Volunteers;
 
 [ApiController]
 [Route("[controller]")]
@@ -15,12 +16,11 @@ public class VolunteersController:ControllerBase
         [FromBody] CreateVolunteerRequest request, 
         CancellationToken cancellationToken)
     {
-        var result = await handler.Handle(request, cancellationToken);
+        
+        var result = await handler.Handle(request.ToCommand(), cancellationToken);
 
-        if (result.IsSuccess)
-            return Ok(result.Value);
-    
-        return BadRequest(result.Error);
-
+        return result.IsFailure 
+            ? result.Error.ToResponse() 
+            : Ok(result.Value);
     }
 }

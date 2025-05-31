@@ -20,6 +20,8 @@ public record OwnersPhoneNumber
         if (string.IsNullOrWhiteSpace(phoneNumber) || phoneNumber.Length != PHONE_LENGTH)
             return Errors.General.ValueIsInvalid("Phone number");
         
+        if (!phoneNumber.All(char.IsDigit))
+            return Errors.General.ValueIsInvalid("Phone number");
 
         return new OwnersPhoneNumber(phoneNumber);
     }
