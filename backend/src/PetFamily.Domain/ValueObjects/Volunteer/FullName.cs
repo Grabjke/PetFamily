@@ -17,11 +17,14 @@ public record FullName
 
     public static Result<FullName,Error> Create(string name, string surname, string patronymic)
     {
-        if (string.IsNullOrWhiteSpace(name))
+        if (string.IsNullOrWhiteSpace(name)||name.Length > Constants.MAX_LOW_TEXT_LENGTH)
             return Errors.General.ValueIsInvalid("Name");
         
-        if (string.IsNullOrWhiteSpace(surname))
+        if (string.IsNullOrWhiteSpace(surname)|| surname.Length > Constants.MAX_LOW_TEXT_LENGTH)
             return Errors.General.ValueIsInvalid("Surname");
+        
+        if(patronymic.Length > Constants.MAX_LOW_TEXT_LENGTH)
+            return Errors.General.ValueIsInvalid("Patronymic");
         
 
         return new FullName(name, surname, patronymic);

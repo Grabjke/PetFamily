@@ -1,4 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
+using FluentValidation;
+using PetFamily.Application.Extensions;
 using PetFamily.Domain.Entities;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.ValueObjects.Volunteer;
@@ -8,78 +10,77 @@ namespace PetFamily.Application.Volunteers.CreateVolunteer;
 public class CreateVolunteerHandler
 {
     private readonly IVolunteersRepository _volunteersRepository;
+    private readonly IValidator<CreateVolunteerCommand> _validator;
 
-    public CreateVolunteerHandler(IVolunteersRepository volunteersRepository)
+    public CreateVolunteerHandler(
+        IVolunteersRepository volunteersRepository,
+        IValidator<CreateVolunteerCommand> validator)
     {
+        _validator = validator;
         _volunteersRepository = volunteersRepository;
     }
-    
-    public async Task<Result<Guid, Error>> Handle(
-    CreateVolunteerRequest request, CancellationToken cancellationToken = default)
-{
-    var volunteerId = VolunteerId.NewVolunteerId();
-    
-    var fullNameResult = FullName.Create(request.Name, request.Surname, request.Patronymic);
-    if (fullNameResult.IsFailure)
-        return fullNameResult.Error;
-    
-    var emailResult = Email.Create(request.Email);
-    if (emailResult.IsFailure)
-        return emailResult.Error;
-    
-    var phoneNumberResult = OwnersPhoneNumber.Create(request.PhoneNumber);
-    if (phoneNumberResult.IsFailure)
-        return phoneNumberResult.Error;
-    
-    var volunteerByNameResult = await _volunteersRepository.GetByName(fullNameResult.Value.Name);
-    if (volunteerByNameResult.IsSuccess)
-        return Errors.Volunteer.AllReadyExist();
-    
-    var volunteerResult = Volunteer.Create(
-        volunteerId,
-        fullNameResult.Value,
-        emailResult.Value,
-        request.Description,
-        request.Experience,
-        phoneNumberResult.Value
-    );
-    
-    if (volunteerResult.IsFailure)
-        return volunteerResult.Error;
 
-    var volunteer = volunteerResult.Value;
-    
-    if (request.SocialNetworks?.Any() == true)
+    public async Task<Result<Guid, ErrorList>> Handle(
+        CreateVolunteerCommand command,
+        CancellationToken cancellationToken = default)
     {
-        foreach (var (url, name) in request.SocialNetworks)
+        var validationResult = await _validator.ValidateAsync(command, cancellationToken);
+        if (validationResult.IsValid==false)
         {
-            var socialNetworkResult = SocialNetwork.Create(url, name);
-            if (socialNetworkResult.IsFailure)
-                return socialNetworkResult.Error;
-
-            var addResult = volunteer.AddSocialNetwork(socialNetworkResult.Value);
-            if (addResult.IsFailure)
-                return addResult.Error;
+           return validationResult.ToErrorList();
         }
-    }
+        
+        var volunteerId = VolunteerId.NewVolunteerId();
 
-    if (request.Requisites?.Any() == true)
-    {
-        foreach (var (title, description) in request.Requisites)
+        var fullName = FullName.Create(command.Name, command.Surname, command.Patronymic!).Value;
+
+        var petDescription = VolunteerDescription.Create(command.Description).Value;
+
+        var experience = VolunteerExperience.Create(command.Experience).Value;
+
+        var email = Email.Create(command.Email).Value;
+
+        var phoneNumber = OwnersPhoneNumber.Create(command.PhoneNumber).Value;
+
+        var volunteerByNameResult = await _volunteersRepository.GetByName(command.Name, cancellationToken);
+        if (volunteerByNameResult.IsSuccess)
+            return Errors.General.AllReadyExist().ToErrorList();
+
+        var volunteer = new Volunteer(
+            volunteerId,
+            fullName,
+            email,
+            petDescription,
+            experience,
+            phoneNumber
+        );
+
+        if (command.SocialNetworks?.Any() == true)
         {
-            var requisitesResult = Requisites.Create(title, description);
-            if (requisitesResult.IsFailure)
-                return requisitesResult.Error;
+            foreach (var (url, name) in command.SocialNetworks)
+            {
+                var socialNetwork = SocialNetwork.Create(url, name).Value;
 
-            var addRequisitesResult = volunteer.AddRequisites(requisitesResult.Value);
-            if (addRequisitesResult.IsFailure)
-                return addRequisitesResult.Error;
+                var addResult = volunteer.AddSocialNetwork(socialNetwork);
+                if (addResult.IsFailure)
+                    return addResult.Error.ToErrorList();
+            }
         }
-    }
 
-    await _volunteersRepository.Add(volunteer, cancellationToken);
-    
-    return volunteer.Id.Value;
-}
-   
+        if (command.Requisites?.Any() == true)
+        {
+            foreach (var (title, description) in command.Requisites)
+            {
+                var requisites = Requisites.Create(title, description).Value;
+
+                var addRequisitesResult = volunteer.AddRequisites(requisites);
+                if (addRequisitesResult.IsFailure)
+                    return addRequisitesResult.Error.ToErrorList();
+            }
+        }
+
+        await _volunteersRepository.Add(volunteer, cancellationToken);
+
+        return volunteer.Id.Value;
+    }
 }

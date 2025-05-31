@@ -36,15 +36,14 @@ public static class Errors
 
             return Error.Validation("invalid.length", $"{label} has invalid length{lengthInfo}");
         }
+        
+        public static Error AllReadyExist()
+        {
+            return Error.Validation("record.allready.exist", "record allready exist");
+        }
       
         
     }
     
-    public static class Volunteer
-    {
-        public static Error AllReadyExist()
-        {
-            return Error.Validation("record.allready.exist", "Volunteer allready exist");
-        }
-    }
+    
 }

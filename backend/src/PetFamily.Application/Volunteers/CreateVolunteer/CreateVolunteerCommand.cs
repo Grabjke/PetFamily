@@ -1,6 +1,8 @@
-﻿namespace PetFamily.Application.Volunteers.CreateVolunteer;
+﻿using PetFamily.Application.Dtos;
 
-public record CreateVolunteerRequest(
+namespace PetFamily.Application.Volunteers.CreateVolunteer;
+
+public record CreateVolunteerCommand(
     string Name,
     string Surname,
     string? Patronymic,
@@ -11,5 +13,4 @@ public record CreateVolunteerRequest(
     IEnumerable<SocialNetworkDto>? SocialNetworks,
     IEnumerable<RequisitesDto>? Requisites);
     
-    public record SocialNetworkDto(string URL,string Name);
-    public record RequisitesDto(string Title,string Description);
+

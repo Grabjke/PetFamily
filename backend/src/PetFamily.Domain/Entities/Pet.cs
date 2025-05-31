@@ -14,19 +14,19 @@ public class Pet : Shared.Entity<PetId>
     {
     }
     
-    private Pet(
+    public Pet(
         PetId id,
-        string name,
-        string description,
+        PetName name,
+        PetDescription description,
         PetSpeciesBreed speciesBreed,
-        string colour,
-        string healthInformation,
+        PetColour colour,
+        PetHealthInformation healthInformation,
         Address address,
-        double weight,
-        double height,
+        PetWeight weight,
+        PetHeight height,
         OwnersPhoneNumber phoneNumber,
         bool castration,
-        DateTime birthday,
+        Birthday birthday,
         bool isVaccinated,
         HelpStatus helpStatus
     ) : base(id)
@@ -47,71 +47,30 @@ public class Pet : Shared.Entity<PetId>
         DateOfCreation = DateTime.UtcNow;
     }
     
-    public string Name { get; private set; } = null!;
-    public string Description { get; private set; } = null!;
+    public PetName Name { get; private set; } = null!;
+    public PetDescription Description { get; private set; } = null!;
     public PetSpeciesBreed PetSpeciesBreed { get; private set; } 
-    public string Colour { get; private set; } = null!;
-    public string HealthInformation { get; private set; } = null!;
+    public PetColour Colour { get; private set; } = null!;
+    public PetHealthInformation HealthInformation { get; private set; } = null!;
     public Address Address { get; private set; } = null!;
-    public double Weight { get; private set; }
-    public double Height { get; private set; }
+    public PetWeight Weight { get; private set; }
+    public PetHeight Height { get; private set; }
     public OwnersPhoneNumber OwnersPhoneNumber { get; private set; }
     public bool Castration { get; private set; }
-    public DateTime Birthday { get; private set; }
+    public Birthday Birthday { get; private set; }
     public bool IsVaccinated { get; private set; }
     public HelpStatus HelpStatus { get; private set; }
     public IReadOnlyList<Requisites> Requisites  => _requisites;
     public DateTime DateOfCreation { get; private set; }
     
-    public static Result<Pet,Error> Create(
-        PetId petId,
-        string name,
-        string description,
-        PetSpeciesBreed petSpeciesBreed,
-        string colour,
-        string healthInformation,
-        Address address,
-        double weight,
-        double height,
-        OwnersPhoneNumber ownersPhoneNumber,
-        bool castration,
-        DateTime birthday,
-        bool isVaccinated,
-        HelpStatus helpStatus)
-    {
-        if (string.IsNullOrWhiteSpace(name))
-            return Errors.General.ValueIsInvalid("Name");
-        
-        if (string.IsNullOrWhiteSpace(description))
-            return Errors.General.ValueIsInvalid("Description");
-        
-        if (string.IsNullOrWhiteSpace(colour))
-            return Errors.General.ValueIsInvalid("Colour");
-        
-        if (string.IsNullOrWhiteSpace(healthInformation))
-            return Errors.General.ValueIsInvalid("Health Information");
-        
-        if (weight<=0)
-            return Errors.General.ValueIsInvalid("Weight");
-        
-        if (height<=0)
-            return Errors.General.ValueIsInvalid("Height");
-        
-        if(birthday>DateTime.Now)
-            return Errors.General.ValueIsInvalid("Birthday");
-
-        return new Pet(petId,name, description, petSpeciesBreed, colour, healthInformation, address, weight, height,
-            ownersPhoneNumber, castration, birthday, isVaccinated, helpStatus);
-
-    }
     
-    public Result AddRequisites(Requisites requisites)
+    public UnitResult<Error> AddRequisites(Requisites requisites)
     {
         if(_requisites.Contains(requisites))
-            return Result.Failure<Pet>("Requisites already exists in the list");
+            return Errors.General.AllReadyExist();
 
         _requisites.Add(requisites);
 
-        return Result.Success();
+        return Result.Success<Error>();
     }
 }

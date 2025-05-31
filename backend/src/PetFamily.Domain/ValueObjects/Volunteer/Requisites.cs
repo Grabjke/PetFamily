@@ -1,4 +1,5 @@
 ﻿
+using System.Text.Json.Serialization;
 using CSharpFunctionalExtensions;
 using PetFamily.Domain.Shared;
 
@@ -6,6 +7,11 @@ namespace PetFamily.Domain.ValueObjects.Volunteer;
 
 public record Requisites
 {
+    //ef
+    private Requisites()
+    {
+    }
+    [JsonConstructor]
     private Requisites(string title, string description)
     {
         Title = title;
@@ -22,7 +28,6 @@ public record Requisites
         if (string.IsNullOrWhiteSpace(description))
             return Errors.General.ValueIsInvalid("Description");
         
-
         return new Requisites(title, description);
     }
     
