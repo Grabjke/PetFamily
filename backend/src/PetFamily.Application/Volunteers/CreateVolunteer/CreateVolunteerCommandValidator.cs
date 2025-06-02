@@ -9,7 +9,7 @@ public class CreateVolunteerCommandValidator:AbstractValidator<CreateVolunteerCo
 {
     public CreateVolunteerCommandValidator()
     {
-        RuleFor(c => new { c.Name, c.Surname, c.Patronymic })
+        RuleFor(c =>c.FullName)
             .MustBeValueObject(c => FullName.Create(c.Name, c.Surname, c.Patronymic!));
         
         RuleFor(c => c.Description).MustBeValueObject(VolunteerDescription.Create);

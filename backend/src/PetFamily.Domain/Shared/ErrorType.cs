@@ -1,6 +1,6 @@
 ﻿namespace PetFamily.Domain.Shared;
 
-public  enum ErrorType
+public enum ErrorType
 {
     Validation,
     NotFound,

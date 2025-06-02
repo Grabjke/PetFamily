@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
+using Microsoft.Extensions.Logging;
 using PetFamily.Application.Extensions;
 using PetFamily.Domain.Entities;
 using PetFamily.Domain.Shared;
@@ -11,11 +12,14 @@ public class CreateVolunteerHandler
 {
     private readonly IVolunteersRepository _volunteersRepository;
     private readonly IValidator<CreateVolunteerCommand> _validator;
+    private readonly ILogger<CreateVolunteerHandler> _logger;
 
     public CreateVolunteerHandler(
         IVolunteersRepository volunteersRepository,
-        IValidator<CreateVolunteerCommand> validator)
+        IValidator<CreateVolunteerCommand> validator,
+        ILogger<CreateVolunteerHandler> logger)
     {
+        _logger = logger;
         _validator = validator;
         _volunteersRepository = volunteersRepository;
     }
@@ -25,14 +29,17 @@ public class CreateVolunteerHandler
         CancellationToken cancellationToken = default)
     {
         var validationResult = await _validator.ValidateAsync(command, cancellationToken);
-        if (validationResult.IsValid==false)
+        if (validationResult.IsValid == false)
         {
-           return validationResult.ToErrorList();
+            return validationResult.ToErrorList();
         }
-        
+
         var volunteerId = VolunteerId.NewVolunteerId();
 
-        var fullName = FullName.Create(command.Name, command.Surname, command.Patronymic!).Value;
+        var fullName = FullName.Create(
+            command.FullName.Name,
+            command.FullName.Surname,
+            command.FullName.Patronymic!).Value;
 
         var petDescription = VolunteerDescription.Create(command.Description).Value;
 
@@ -42,7 +49,9 @@ public class CreateVolunteerHandler
 
         var phoneNumber = OwnersPhoneNumber.Create(command.PhoneNumber).Value;
 
-        var volunteerByNameResult = await _volunteersRepository.GetByName(command.Name, cancellationToken);
+        var volunteerByNameResult = await _volunteersRepository.GetByName(
+            command.FullName.Name,
+            cancellationToken);
         if (volunteerByNameResult.IsSuccess)
             return Errors.General.AllReadyExist().ToErrorList();
 
@@ -80,6 +89,8 @@ public class CreateVolunteerHandler
         }
 
         await _volunteersRepository.Add(volunteer, cancellationToken);
+
+        _logger.LogInformation("Created volunteer with id {Id}", volunteerId);
 
         return volunteer.Id.Value;
     }
