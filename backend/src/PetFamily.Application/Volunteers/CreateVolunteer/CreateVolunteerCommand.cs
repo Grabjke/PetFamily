@@ -3,9 +3,7 @@
 namespace PetFamily.Application.Volunteers.CreateVolunteer;
 
 public record CreateVolunteerCommand(
-    string Name,
-    string Surname,
-    string? Patronymic,
+    FullNameDto FullName,
     string Email,
     string Description,
     int Experience,

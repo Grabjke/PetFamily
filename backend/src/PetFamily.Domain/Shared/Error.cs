@@ -1,5 +1,4 @@
-﻿
-namespace PetFamily.Domain.Shared;
+﻿namespace PetFamily.Domain.Shared;
 
 public class Error
 {
@@ -17,8 +16,8 @@ public class Error
         PropertyName = propertyName;
     }
 
-    public static Error Validation(string code, string message,string? propertyName=null) =>
-        new Error(code, message, ErrorType.Validation,propertyName);
+    public static Error Validation(string code, string message, string? propertyName = null) =>
+        new Error(code, message, ErrorType.Validation, propertyName);
 
     public static Error NotFound(string code, string message) =>
         new Error(code, message, ErrorType.NotFound);
@@ -53,6 +52,6 @@ public class Error
 
         return new Error(parts[0], parts[1], type);
     }
-   
-    public ErrorList ToErrorList()=>new([this]);
+
+    public ErrorList ToErrorList() => new([this]);
 }

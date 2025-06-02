@@ -4,9 +4,7 @@ using PetFamily.Application.Volunteers.CreateVolunteer;
 namespace PetFamily.API.Controllers.Volunteers.Requests;
 
 public record CreateVolunteerRequest(
-    string Name,
-    string Surname,
-    string? Patronymic,
+    FullNameDto FullName,
     string Email,
     string Description,
     int Experience,
@@ -15,9 +13,7 @@ public record CreateVolunteerRequest(
     IEnumerable<RequisitesDto>? Requisites)
 {
     public CreateVolunteerCommand ToCommand() => new(
-        Name,
-        Surname,
-        Patronymic,
+        FullName,
         Email,
         Description,
         Experience,
