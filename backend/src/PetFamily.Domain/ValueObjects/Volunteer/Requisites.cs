@@ -8,9 +8,8 @@ namespace PetFamily.Domain.ValueObjects.Volunteer;
 public record Requisites
 {
     //ef
-    private Requisites()
-    {
-    }
+    private Requisites() { }
+    
     [JsonConstructor]
     private Requisites(string title, string description)
     {

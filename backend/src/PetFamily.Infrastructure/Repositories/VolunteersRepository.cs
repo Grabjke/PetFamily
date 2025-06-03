@@ -24,14 +24,16 @@ public class VolunteersRepository:IVolunteersRepository
         return volunteer.Id;
     }
 
-    public async Task<Result<Volunteer,Error>> GetById(Volunteer volunteer,CancellationToken cancellationToken = default)
+    public async Task<Result<Volunteer,Error>> GetById(
+        Guid volunteerId,
+        CancellationToken cancellationToken = default)
     {
         var record = await  _context.Volunteers
             .Include(v => v.Pets)
-            .FirstOrDefaultAsync(v=>v.Id==volunteer.Id, cancellationToken);
+            .FirstOrDefaultAsync(v=>v.Id==volunteerId, cancellationToken);
 
         if (record is null)
-            return Errors.General.NotFound(volunteer.Id);
+            return Errors.General.NotFound(volunteerId);
 
         return record;
     }
@@ -47,5 +49,14 @@ public class VolunteersRepository:IVolunteersRepository
 
         return record;
         
+    }
+
+    public async Task<Guid> Save(Volunteer volunteer, CancellationToken cancellationToken = default)
+    {
+        _context.Volunteers.Attach(volunteer);
+        
+        await _context.SaveChangesAsync(cancellationToken);
+        
+        return volunteer.Id.Value;
     }
 }
