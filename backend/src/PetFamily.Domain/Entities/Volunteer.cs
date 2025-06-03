@@ -12,9 +12,7 @@ public class Volunteer : Shared.Entity<VolunteerId>
     private readonly List<Requisites> _requisites = [];
 
     //ef core
-    private Volunteer(VolunteerId id) : base(id)
-    {
-    }
+    private Volunteer(VolunteerId id) : base(id) { }
 
     public Volunteer(
         VolunteerId volunteerId,
@@ -43,7 +41,55 @@ public class Volunteer : Shared.Entity<VolunteerId>
     public IReadOnlyList<SocialNetwork> SocialNetworks => _socialNetworks;
     public IReadOnlyList<Requisites> Requisites => _requisites;
     public IReadOnlyList<Pet> Pets => _pets;
-    
+
+    public void UpdateMainInfo(
+        FullName fullName,
+        Email email,
+        VolunteerDescription description,
+        VolunteerExperience experience,
+        OwnersPhoneNumber phoneNumber)
+    {
+        FullName = fullName;
+        Email = email;
+        Description = description;
+        Experience = experience;
+        PhoneNumber = phoneNumber;
+    }
+
+    public UnitResult<Error> UpdateRequisites(List<Requisites> requisites)
+    {
+        var newRequisites = new List<Requisites>();
+
+        foreach (var requisite in requisites)
+        {
+            if (newRequisites.Contains(requisite))
+                return Errors.General.AllReadyExist();
+            
+            newRequisites.Add(requisite);
+        }
+        
+        _requisites.Clear();
+        _requisites.AddRange(newRequisites);
+        
+        return Result.Success<Error>();
+    }
+    public UnitResult<Error> UpdateSocialNetworks(List<SocialNetwork> socialNetworks)
+    {
+        var newSocialNetworks = new List<SocialNetwork>();
+
+        foreach (var socialNetwork in socialNetworks)
+        {
+            if (newSocialNetworks.Contains(socialNetwork))
+                return Errors.General.AllReadyExist();
+            
+            newSocialNetworks.Add(socialNetwork);
+        }
+        
+        _socialNetworks.Clear();
+        _socialNetworks.AddRange(newSocialNetworks);
+        
+        return Result.Success<Error>();
+    }
 
     public UnitResult<Error> AddPet(Pet pet)
     {
@@ -69,7 +115,7 @@ public class Volunteer : Shared.Entity<VolunteerId>
     {
         if (_socialNetworks.Contains(socialNetwork))
             return Errors.General.AllReadyExist();
-        
+
         _socialNetworks.Add(socialNetwork);
         return Result.Success<Error>();
     }
