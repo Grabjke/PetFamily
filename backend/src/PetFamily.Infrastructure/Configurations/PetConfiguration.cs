@@ -155,6 +155,11 @@ public class PetConfiguration:IEntityTypeConfiguration<Pet>
             .HasColumnName("date_of_creation");
 
 
+        builder.Property(v => v.IsDeleted)
+            .IsRequired()
+            .HasDefaultValue(false);
+
+        builder.Property(v => v.DeletionDate);
 
     }
 }

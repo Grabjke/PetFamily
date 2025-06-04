@@ -5,14 +5,12 @@ using PetFamily.Domain.ValueObjects.Volunteer;
 
 namespace PetFamily.Domain.Entities;
 
-public class Pet : Shared.Entity<PetId>
+public class Pet : SoftDeletableEntity<PetId>
 {
     private readonly List<Requisites> _requisites = [];
     
     //ef core
-    private Pet(PetId id) : base(id)
-    {
-    }
+    private Pet(PetId id) : base(id) { }
     
     public Pet(
         PetId id,
@@ -62,7 +60,6 @@ public class Pet : Shared.Entity<PetId>
     public HelpStatus HelpStatus { get; private set; }
     public IReadOnlyList<Requisites> Requisites  => _requisites;
     public DateTime DateOfCreation { get; private set; }
-    
     
     public UnitResult<Error> AddRequisites(Requisites requisites)
     {
