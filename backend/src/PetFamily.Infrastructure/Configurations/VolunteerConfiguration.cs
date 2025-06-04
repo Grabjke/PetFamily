@@ -87,5 +87,12 @@ public class VolunteerConfiguration:IEntityTypeConfiguration<Volunteer>
             .WithOne()
             .HasForeignKey("volunteer_id")
             .IsRequired();
+        
+        builder.Property(v => v.IsDeleted)
+            .IsRequired()
+            .HasDefaultValue(false);
+
+        builder.Property(v => v.DeletionDate);
+
     }
 }

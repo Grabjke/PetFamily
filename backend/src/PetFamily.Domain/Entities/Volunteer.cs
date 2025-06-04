@@ -5,7 +5,7 @@ using PetFamily.Domain.ValueObjects.Volunteer;
 
 namespace PetFamily.Domain.Entities;
 
-public class Volunteer : Shared.Entity<VolunteerId>
+public class Volunteer : SoftDeletableEntity<VolunteerId>
 {
     private readonly List<Pet> _pets = [];
     private readonly List<SocialNetwork> _socialNetworks = [];
@@ -41,6 +41,24 @@ public class Volunteer : Shared.Entity<VolunteerId>
     public IReadOnlyList<SocialNetwork> SocialNetworks => _socialNetworks;
     public IReadOnlyList<Requisites> Requisites => _requisites;
     public IReadOnlyList<Pet> Pets => _pets;
+    
+    public override void Delete()
+    {
+        base.Delete();
+        foreach (var pet in _pets)
+        {
+            pet.Delete();
+        }
+    }
+
+    public override void Restore()
+    {
+        base.Restore();
+        foreach (var pet in _pets)
+        {
+            pet.Restore();
+        }
+    }
 
     public void UpdateMainInfo(
         FullName fullName,

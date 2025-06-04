@@ -1,6 +1,6 @@
 ﻿namespace PetFamily.Domain.ValueObjects.Volunteer;
 
-public record VolunteerId
+public record VolunteerId : IComparable<VolunteerId>
 {
     private VolunteerId(Guid value)
     {
@@ -16,5 +16,12 @@ public record VolunteerId
     {
         ArgumentNullException.ThrowIfNull(volunteerId);
         return volunteerId.Value;
+    }
+
+    public int CompareTo(VolunteerId? other)
+    {
+        if (ReferenceEquals(this, other)) return 0;
+        if (other is null) return 1;
+        return Value.CompareTo(other.Value);
     }
 }

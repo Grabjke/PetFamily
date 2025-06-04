@@ -23,32 +23,32 @@ public class UpdateSocialNetworksHandler
         _volunteersRepository = volunteersRepository;
     }
 
-    public async Task<Result<Guid,ErrorList>> Handle(
+    public async Task<Result<Guid, ErrorList>> Handle(
         UpdateSocialNetworksCommand command,
         CancellationToken cancellationToken)
     {
         var resultValidation = await _validator.ValidateAsync(command, cancellationToken);
         if (resultValidation.IsValid == false)
             return resultValidation.ToErrorList();
-        
-        var volunteerResult=await _volunteersRepository.GetById(command.VolunteerId, cancellationToken);
+
+        var volunteerResult = await _volunteersRepository.GetById(command.VolunteerId, cancellationToken);
         if (volunteerResult.IsFailure)
-            return  volunteerResult.Error.ToErrorList();
-        
+            return volunteerResult.Error.ToErrorList();
+
         var newSocialNetworks = new List<SocialNetwork>();
-        
+
         foreach (var (url, name) in command.SocialNetworks)
         {
             var socialNetwork = SocialNetwork.Create(url, name).Value;
             newSocialNetworks.Add(socialNetwork);
         }
-        
+
         var addSocialNetworksResult = volunteerResult.Value.UpdateSocialNetworks(newSocialNetworks);
         if (addSocialNetworksResult.IsFailure)
             return addSocialNetworksResult.Error.ToErrorList();
 
-        await _volunteersRepository.Save(volunteerResult.Value,cancellationToken);
-       
+        await _volunteersRepository.Save(volunteerResult.Value, cancellationToken);
+
         _logger.LogInformation("Updated volunteer social networks with id:{id}", command.VolunteerId);
 
         return command.VolunteerId;

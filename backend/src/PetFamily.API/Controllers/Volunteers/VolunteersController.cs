@@ -1,9 +1,8 @@
-﻿using FluentValidation;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PetFamily.API.Controllers.Volunteers.Requests;
 using PetFamily.API.Extensions;
-using PetFamily.Application.Extensions;
 using PetFamily.Application.Volunteers.Create;
+using PetFamily.Application.Volunteers.Delete;
 using PetFamily.Application.Volunteers.UpdateMainInfo;
 using PetFamily.Application.Volunteers.UpdateRequisites;
 using PetFamily.Application.Volunteers.UpdateSocialNetworks;
@@ -63,6 +62,36 @@ public class VolunteersController : ControllerBase
         CancellationToken cancellationToken = default)
     {
         var result = await handler.Handle(request.ToCommand(id), cancellationToken);
+        
+        return result.IsFailure
+            ? result.Error.ToResponse()
+            : Ok(result.Value);
+    }
+    
+    [HttpDelete("{id:guid}")]
+    public async Task<ActionResult<Guid>> Delete(
+        [FromRoute] Guid id,
+        [FromServices] DeleteVolunteerHandler handler,
+        CancellationToken cancellationToken = default)
+    {
+        var command = new DeleteVolunteerCommand(id);
+        
+        var result = await handler.Handle(command, cancellationToken);
+        
+        return result.IsFailure
+            ? result.Error.ToResponse()
+            : Ok(result.Value);
+    }
+    
+    [HttpDelete("{id:guid}/soft")]
+    public async Task<ActionResult<Guid>> Delete(
+        [FromRoute] Guid id,
+        [FromServices] SoftDeleteVolunteerHandler handler,
+        CancellationToken cancellationToken = default)
+    {
+        var command = new DeleteVolunteerCommand(id);
+        
+        var result = await handler.Handle(command, cancellationToken);
         
         return result.IsFailure
             ? result.Error.ToResponse()
