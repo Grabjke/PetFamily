@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.AggregateRoots;
 using PetFamily.Domain.Entities;
 using PetFamily.Domain.Shared;
 

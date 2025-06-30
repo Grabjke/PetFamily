@@ -72,6 +72,7 @@ namespace PetFamily.Infrastructure.Migrations
                     is_vaccinated = table.Column<bool>(type: "boolean", nullable: false),
                     help_status = table.Column<string>(type: "text", nullable: false),
                     requisites = table.Column<string>(type: "jsonb", maxLength: 2000, nullable: false),
+                    photos = table.Column<string>(type: "jsonb", maxLength: 2000, nullable: false),
                     date_of_creation = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     volunteer_id = table.Column<Guid>(type: "uuid", nullable: false),
                     city = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
@@ -87,6 +88,7 @@ namespace PetFamily.Infrastructure.Migrations
                     phone_number = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: false),
                     breed_id = table.Column<Guid>(type: "uuid", nullable: false),
                     species_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    serial_number = table.Column<int>(type: "integer", nullable: false),
                     weight = table.Column<double>(type: "double precision", nullable: false),
                     is_deleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
                     deletion_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)

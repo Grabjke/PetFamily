@@ -9,9 +9,7 @@ public class PetSpecies: Shared.Entity<SpeciesId>
     private readonly List<Breed> _breeds = [];
 
     //ef core
-    private PetSpecies(SpeciesId id):base(id)
-    {
-    }
+    private PetSpecies(SpeciesId id):base(id){ }
     private PetSpecies(SpeciesId speciesId,string title):base(speciesId)
     {
         Title = title;

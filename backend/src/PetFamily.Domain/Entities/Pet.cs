@@ -8,10 +8,13 @@ namespace PetFamily.Domain.Entities;
 public class Pet : SoftDeletableEntity<PetId>
 {
     private readonly List<Requisites> _requisites = [];
-    
+    private readonly List<Photo> _photos = [];
+
     //ef core
-    private Pet(PetId id) : base(id) { }
-    
+    private Pet(PetId id) : base(id)
+    {
+    }
+
     public Pet(
         PetId id,
         PetName name,
@@ -31,7 +34,7 @@ public class Pet : SoftDeletableEntity<PetId>
     {
         Name = name;
         Description = description;
-        PetSpeciesBreed = speciesBreed; 
+        PetSpeciesBreed = speciesBreed;
         Colour = colour;
         HealthInformation = healthInformation;
         Address = address;
@@ -44,10 +47,10 @@ public class Pet : SoftDeletableEntity<PetId>
         HelpStatus = helpStatus;
         DateOfCreation = DateTime.UtcNow;
     }
-    
+
     public PetName Name { get; private set; } = null!;
     public PetDescription Description { get; private set; } = null!;
-    public PetSpeciesBreed PetSpeciesBreed { get; private set; } 
+    public PetSpeciesBreed PetSpeciesBreed { get; private set; }
     public PetColour Colour { get; private set; } = null!;
     public PetHealthInformation HealthInformation { get; private set; } = null!;
     public Address Address { get; private set; } = null!;
@@ -58,16 +61,47 @@ public class Pet : SoftDeletableEntity<PetId>
     public Birthday Birthday { get; private set; }
     public bool IsVaccinated { get; private set; }
     public HelpStatus HelpStatus { get; private set; }
-    public IReadOnlyList<Requisites> Requisites  => _requisites;
+    public IReadOnlyList<Requisites> Requisites => _requisites;
+    public IReadOnlyList<Photo> Photos => _photos;
     public DateTime DateOfCreation { get; private set; }
-    
+    public Position Position { get; private set; }
+
     public UnitResult<Error> AddRequisites(Requisites requisites)
     {
-        if(_requisites.Contains(requisites))
+        if (_requisites.Contains(requisites))
             return Errors.General.AllReadyExist();
 
         _requisites.Add(requisites);
 
         return Result.Success<Error>();
     }
+
+    public UnitResult<Error> MoveForward()
+    {
+        var newPosition = Position.Forward();
+        if (newPosition.IsFailure)
+            return newPosition.Error;
+
+        Position = newPosition.Value;
+
+        return Result.Success<Error>();
+    }
+
+    public UnitResult<Error> MoveBack()
+    {
+        var newPosition = Position.Back();
+        if (newPosition.IsFailure)
+            return newPosition.Error;
+
+        Position = newPosition.Value;
+
+        return Result.Success<Error>();
+    }
+
+    public void SetSerialNumber(Position position) =>
+        Position = position;
+
+    public void Move(Position newPosition)=>
+        Position = newPosition;
+    
 }

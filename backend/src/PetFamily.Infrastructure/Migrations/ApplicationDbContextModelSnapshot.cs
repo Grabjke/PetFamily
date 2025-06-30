@@ -56,6 +56,12 @@ namespace PetFamily.Infrastructure.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("is_vaccinated");
 
+                    b.Property<string>("Photos")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("jsonb")
+                        .HasColumnName("photos");
+
                     b.Property<string>("Requisites")
                         .IsRequired()
                         .HasMaxLength(2000)
@@ -178,6 +184,15 @@ namespace PetFamily.Infrastructure.Migrations
                             b1.Property<Guid>("SpeciesId")
                                 .HasColumnType("uuid")
                                 .HasColumnName("species_id");
+                        });
+
+                    b.ComplexProperty<Dictionary<string, object>>("Position", "PetFamily.Domain.Entities.Pet.Position#Position", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<int>("Value")
+                                .HasColumnType("integer")
+                                .HasColumnName("serial_number");
                         });
 
                     b.ComplexProperty<Dictionary<string, object>>("Weight", "PetFamily.Domain.Entities.Pet.Weight#PetWeight", b1 =>

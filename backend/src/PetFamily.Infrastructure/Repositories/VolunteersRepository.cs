@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
 using PetFamily.Application.Volunteers;
+using PetFamily.Domain.AggregateRoots;
 using PetFamily.Domain.Entities;
 using PetFamily.Domain.Shared;
 

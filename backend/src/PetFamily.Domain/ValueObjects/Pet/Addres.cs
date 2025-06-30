@@ -32,9 +32,7 @@ public record Address
         
         if (string.IsNullOrWhiteSpace(country))
             return Errors.General.ValueIsInvalid("Country");
-
         
-
         return new Address(street, city, country, zipCode);
     }
 

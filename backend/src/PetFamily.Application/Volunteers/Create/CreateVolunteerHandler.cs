@@ -2,6 +2,7 @@
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 using PetFamily.Application.Extensions;
+using PetFamily.Domain.AggregateRoots;
 using PetFamily.Domain.Entities;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.ValueObjects.Volunteer;
