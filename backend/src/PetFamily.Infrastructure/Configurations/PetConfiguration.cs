@@ -108,6 +108,13 @@ public class PetConfiguration:IEntityTypeConfiguration<Pet>
                 .IsRequired()
                 .HasColumnName("height");
         });
+        
+        builder.ComplexProperty(p => p.Position, hb =>
+        {
+            hb.Property(p => p.Value)
+                .IsRequired()
+                .HasColumnName("serial_number");
+        });
 
         builder.ComplexProperty(p => p.OwnersPhoneNumber, pnb =>
         {
@@ -147,7 +154,12 @@ public class PetConfiguration:IEntityTypeConfiguration<Pet>
             .IsRequired()
             .HasColumnName("requisites")
             .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
-
+        
+        builder.Property(p => p.Photos)
+            .JsonValueObjectCollectionConversion()
+            .IsRequired()
+            .HasColumnName("photos")
+            .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
 
         builder.Property(p => p.DateOfCreation)
             .SetDefaultDateTimeKind(DateTimeKind.Utc)

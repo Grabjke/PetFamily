@@ -68,7 +68,7 @@ public class VolunteersController : ControllerBase
             : Ok(result.Value);
     }
     
-    [HttpDelete("{id:guid}")]
+    [HttpDelete("{id:guid}/hard")]
     public async Task<ActionResult<Guid>> Delete(
         [FromRoute] Guid id,
         [FromServices] DeleteVolunteerHandler handler,

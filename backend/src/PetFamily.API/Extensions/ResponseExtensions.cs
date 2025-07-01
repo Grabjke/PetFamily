@@ -7,6 +7,7 @@ namespace PetFamily.API.Extensions;
 
 public static class ResponseExtensions
 {
+    
     public static ActionResult ToResponse(this Error error)
     {
         var statusCode = GetStatusCodeByErrorType(error.Type);

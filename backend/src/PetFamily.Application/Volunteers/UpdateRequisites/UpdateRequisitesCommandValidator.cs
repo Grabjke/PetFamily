@@ -9,7 +9,9 @@ public class UpdateRequisitesCommandValidator:AbstractValidator<UpdateRequisites
 {
     public UpdateRequisitesCommandValidator()
     {
-        RuleFor(u => u.VolunteerId).NotEmpty().WithError(Errors.General.ValueIsRequired());
+        RuleFor(u => u.VolunteerId)
+            .NotEmpty()
+            .WithError(Errors.General.ValueIsRequired());
         
         RuleForEach(c => c.Requisites)
             .MustBeValueObject(r => Requisites.Create(r.Title, r.Description));
