@@ -18,17 +18,5 @@ public interface IFileProvider
         string fileName,
         CancellationToken cancellationToken = default);
     
-    Task<Result<FilePath, Error>> PutObject(
-        FileData fileData,
-        SemaphoreSlim semaphore,
-        CancellationToken cancellationToken = default);
-
-    Task<Result<string, Error>> RemoveObject(
-        string fileName,
-        SemaphoreSlim semaphore,
-        CancellationToken cancellationToken = default);
-
-    Task IfBucketsNotExistCreateBucket(
-        IEnumerable<FileData> filesData,
-        CancellationToken cancellationToken = default);
+   
 }

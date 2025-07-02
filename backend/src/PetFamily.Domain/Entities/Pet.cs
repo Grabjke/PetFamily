@@ -75,6 +75,20 @@ public class Pet : SoftDeletableEntity<PetId>
 
         return Result.Success<Error>();
     }
+    
+    public void AddPhoto(Photo photo)
+    {
+        _photos.Add(photo);
+    }
+    public UnitResult<Error> RemovePhoto(Photo photo)
+    {
+        if (!_photos.Contains(photo))
+            return Errors.General.NotFound();
+        
+        _photos.Remove(photo);
+        
+        return Result.Success<Error>();
+    }
 
     public UnitResult<Error> MoveForward()
     {
