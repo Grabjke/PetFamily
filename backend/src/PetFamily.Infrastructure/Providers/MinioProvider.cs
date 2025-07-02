@@ -105,7 +105,7 @@ public class MinioProvider : IFileProvider
         }
     }
 
-    public async Task<Result<FilePath, Error>> PutObject(
+    private async Task<Result<FilePath, Error>> PutObject(
         FileData fileData,
         SemaphoreSlim semaphore,
         CancellationToken cancellationToken = default)
@@ -138,7 +138,7 @@ public class MinioProvider : IFileProvider
         }
     }
 
-    public async Task<Result<string, Error>> RemoveObject(
+    private async Task<Result<string, Error>> RemoveObject(
         string fileName,
         SemaphoreSlim semaphore,
         CancellationToken cancellationToken = default)
@@ -163,7 +163,7 @@ public class MinioProvider : IFileProvider
         }
     }
 
-    public async Task IfBucketsNotExistCreateBucket(
+    private async Task IfBucketsNotExistCreateBucket(
         IEnumerable<FileData> filesData,
         CancellationToken cancellationToken = default)
     {
