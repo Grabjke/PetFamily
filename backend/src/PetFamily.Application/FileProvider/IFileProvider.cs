@@ -17,6 +17,10 @@ public interface IFileProvider
     Task<Result<string, Error>> PresignedGetFile(
         string fileName,
         CancellationToken cancellationToken = default);
-    
-   
+
+    Task<UnitResult<Error>> DeleteFile(
+        FileInfo fileInfo,
+        CancellationToken cancellationToken = default);
+
+
 }

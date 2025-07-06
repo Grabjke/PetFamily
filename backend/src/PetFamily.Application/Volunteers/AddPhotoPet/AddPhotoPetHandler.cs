@@ -3,8 +3,10 @@ using FluentValidation;
 using Microsoft.Extensions.Logging;
 using PetFamily.Application.Extensions;
 using PetFamily.Application.FileProvider;
+using PetFamily.Application.Messaging;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.ValueObjects.Pet;
+using FileInfo = PetFamily.Application.FileProvider.FileInfo;
 
 namespace PetFamily.Application.Volunteers.AddPhotoPet;
 
@@ -12,6 +14,7 @@ public class AddPhotoPetHandler
 {
     private readonly IFileProvider _provider;
     private readonly IVolunteersRepository _volunteersRepository;
+    private readonly IMessageQueue<IEnumerable<FileInfo>> _messageQueue;
     private readonly IValidator<AddPhotoPetCommand> _validator;
     private readonly ILogger<AddPhotoPetHandler> _logger;
     private const string BUCKET_NAME = "photos";
@@ -19,11 +22,13 @@ public class AddPhotoPetHandler
     public AddPhotoPetHandler(
         IFileProvider provider,
         IVolunteersRepository volunteersRepository,
+        IMessageQueue<IEnumerable<FileInfo>> messageQueue,
         IValidator<AddPhotoPetCommand> validator,
         ILogger<AddPhotoPetHandler> logger)
     {
         _provider = provider;
         _volunteersRepository = volunteersRepository;
+        _messageQueue = messageQueue;
         _validator = validator;
         _logger = logger;
     }
@@ -32,6 +37,7 @@ public class AddPhotoPetHandler
         AddPhotoPetCommand command,
         CancellationToken cancellationToken = default)
     {
+        
         var validationResult = await _validator.ValidateAsync(command, cancellationToken);
         if (validationResult.IsValid == false)
         {
@@ -58,16 +64,20 @@ public class AddPhotoPetHandler
             if (pathResult.IsFailure)
                 return pathResult.Error.ToErrorList();
 
-            var fileData = new FileData(file.Content, pathResult.Value, BUCKET_NAME);
+            var fileData = new FileData(file.Content,new FileInfo(pathResult.Value, BUCKET_NAME));
 
             files.Add(fileData);
         }
 
         var uploadFileResult = await _provider.UploadFiles(files, cancellationToken);
         if (uploadFileResult.IsFailure)
+        {
+            await _messageQueue.WriteAsync(files.Select(file => file.Info), cancellationToken);
+            
             return uploadFileResult.Error.ToErrorList();
+        }
 
-        var filePaths = files.Select(f => f.FilePath.Path).ToList();
+        var filePaths = files.Select(f => f.Info.FilePath.Path).ToList();
 
         foreach (var filePath in filePaths)
         {
