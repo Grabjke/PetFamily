@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using PetFamily.Application.FileProvider;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.ValueObjects.Pet;
+using FileInfo = PetFamily.Application.FileProvider.FileInfo;
 
 namespace PetFamily.Application.Files.Upload;
 
@@ -32,7 +33,7 @@ public class UploadFilesHandler
             if (pathResult.IsFailure)
                 return pathResult.Error.ToErrorList();
 
-            var fileData = new FileData(file.Content, pathResult.Value, BUCKET_NAME);
+            var fileData = new FileData(file.Content,new FileInfo(pathResult.Value, BUCKET_NAME));
 
             files.Add(fileData);
         }
@@ -43,7 +44,7 @@ public class UploadFilesHandler
 
         _logger.LogInformation("Files upload completed");
 
-        var filePaths = files.Select(f => f.FilePath.Path).ToList();
+        var filePaths = files.Select(f => f.Info.FilePath.Path).ToList();
 
         return filePaths;
     }
