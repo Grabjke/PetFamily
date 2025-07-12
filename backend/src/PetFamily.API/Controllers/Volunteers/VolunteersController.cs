@@ -2,16 +2,15 @@
 using PetFamily.API.Controllers.Volunteers.Requests;
 using PetFamily.API.Extensions;
 using PetFamily.API.Processors;
-using PetFamily.API.Response;
-using PetFamily.Application.Volunteers.Command.AddPet;
-using PetFamily.Application.Volunteers.Command.AddPhotoPet;
-using PetFamily.Application.Volunteers.Command.Create;
-using PetFamily.Application.Volunteers.Command.Delete;
-using PetFamily.Application.Volunteers.Command.MovePetPosition;
-using PetFamily.Application.Volunteers.Command.RemovePhotoPet;
-using PetFamily.Application.Volunteers.Command.UpdateMainInfo;
-using PetFamily.Application.Volunteers.Command.UpdateRequisites;
-using PetFamily.Application.Volunteers.Command.UpdateSocialNetworks;
+using PetFamily.Application.Volunteers.Commands.AddPet;
+using PetFamily.Application.Volunteers.Commands.AddPhotoPet;
+using PetFamily.Application.Volunteers.Commands.Create;
+using PetFamily.Application.Volunteers.Commands.Delete;
+using PetFamily.Application.Volunteers.Commands.MovePetPosition;
+using PetFamily.Application.Volunteers.Commands.RemovePhotoPet;
+using PetFamily.Application.Volunteers.Commands.UpdateMainInfo;
+using PetFamily.Application.Volunteers.Commands.UpdateRequisites;
+using PetFamily.Application.Volunteers.Commands.UpdateSocialNetworks;
 using PetFamily.Application.Volunteers.Queries.GetVolunteerById;
 using PetFamily.Application.Volunteers.Queries.GetVolunteersWithPagination;
 

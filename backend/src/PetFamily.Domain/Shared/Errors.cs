@@ -44,6 +44,22 @@ public static class Errors
       
         
     }
+    public static class Species
+    {
+        public static Error CannotDeleteBecauseHasAnimals()
+        {
+            return Error.Validation("species.has.dependencies", 
+                "cannot delete species because there are animals associated with it");
+        }
+    }
+    public static class Breed
+    {
+        public static Error CannotDeleteBecauseHasAnimals()
+        {
+            return Error.Validation("breed.has.dependencies", 
+                "cannot delete breed because there are animals associated with it");
+        }
+    }
     
     
 }

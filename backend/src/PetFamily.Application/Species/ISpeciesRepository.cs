@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using PetFamily.Domain.Shared;
+using PetFamily.Domain.Species;
 using PetFamily.Domain.ValueObjects.Breed;
 using PetFamily.Domain.ValueObjects.Species;
 
@@ -7,8 +8,8 @@ namespace PetFamily.Application.Species;
 
 public interface ISpeciesRepository
 {
-    public Task<Result<bool, Error>> VerifySpeciesAndBreedExist(
-        SpeciesId speciesId,
-        BreedId breedId, 
-        CancellationToken cancellationToken = default);
+    public Task<Guid> DeleteSpecies(PetSpecies species, CancellationToken cancellationToken = default);
+    public Task<Guid> DeleteBreed(Breed breed, CancellationToken cancellationToken = default);
+    public Task<Result<PetSpecies,Error>> GetById(Guid speciesId,CancellationToken cancellationToken = default);
+    
 }

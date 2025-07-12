@@ -23,8 +23,6 @@ public class GetVolunteerWithPaginationHandler :
     {
         var volunteerQuery = _readDbContext.Volunteers;
 
-        //фильтрация
-
         return await volunteerQuery.ToPagedList(query.Page, query.PageSize, cancellationToken);
     }
 }
