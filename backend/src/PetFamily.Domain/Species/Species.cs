@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using PetFamily.Domain.Shared;
+using PetFamily.Domain.ValueObjects.Breed;
 using PetFamily.Domain.ValueObjects.Species;
 
 namespace PetFamily.Domain.Species;
@@ -40,5 +41,16 @@ public class PetSpecies : Shared.Entity<SpeciesId>
         _breeds.Add(breed);
 
         return Result.Success();
+    }
+
+    public UnitResult<Error> DeleteBreed(BreedId breedId)
+    {
+        var breed = _breeds.FirstOrDefault(b => b.Id.Value == breedId.Value);
+        if (breed is null)
+            return Errors.General.NotFound();
+        
+        _breeds.Remove(breed);
+        
+        return Result.Success<Error>();
     }
 }

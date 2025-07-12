@@ -5,15 +5,6 @@ using PetFamily.Application.FileProvider;
 using PetFamily.Application.Files.Presigned;
 using PetFamily.Application.Files.Remove;
 using PetFamily.Application.Files.Upload;
-using PetFamily.Application.Volunteers.Command.AddPet;
-using PetFamily.Application.Volunteers.Command.AddPhotoPet;
-using PetFamily.Application.Volunteers.Command.Create;
-using PetFamily.Application.Volunteers.Command.Delete;
-using PetFamily.Application.Volunteers.Command.MovePetPosition;
-using PetFamily.Application.Volunteers.Command.RemovePhotoPet;
-using PetFamily.Application.Volunteers.Command.UpdateMainInfo;
-using PetFamily.Application.Volunteers.Command.UpdateRequisites;
-using PetFamily.Application.Volunteers.Command.UpdateSocialNetworks;
 using PetFamily.Application.Volunteers.Queries.GetVolunteersWithPagination;
 
 namespace PetFamily.Application;
