@@ -26,7 +26,7 @@ public class SpeciesController:ApplicationController
     }
     
     [HttpDelete("{speciesId:guid}/species/{breedId:guid}/breed")]
-    public async Task<ActionResult<Guid>> Update(
+    public async Task<ActionResult<Guid>> RemoveBreed(
         [FromRoute] Guid speciesId,
         [FromRoute] Guid breedId,  
         [FromServices] RemoveBreedHandler handler,
