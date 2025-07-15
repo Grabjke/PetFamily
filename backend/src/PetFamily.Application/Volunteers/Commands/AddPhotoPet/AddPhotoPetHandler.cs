@@ -86,7 +86,7 @@ public class AddPhotoPetHandler: ICommandHandler<List<string>,AddPhotoPetCommand
             if (filePathResult.IsFailure)
                 return filePathResult.Error.ToErrorList();
 
-            var photo = new Photo(filePathResult.Value);
+            var photo = new Photo(filePathResult.Value,false);
 
             petResult.Value.AddPhoto(photo);
         }

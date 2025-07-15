@@ -120,8 +120,7 @@ public class PetConfiguration:IEntityTypeConfiguration<Pet>
         {
             pnb.Property(pn => pn.PhoneNumber)
                 .IsRequired()
-                .HasColumnName("phone_number")
-                .HasMaxLength(Constants.PHONE_NUMBER_LENGTH);
+                .HasColumnName("phone_number");
         });
         
         builder.Property(p => p.Castration)

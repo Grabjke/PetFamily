@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using PetFamily.Application.Volunteers;
 using PetFamily.Domain.AggregateRoots;
+using PetFamily.Domain.Entities;
 using PetFamily.Domain.Shared;
 using PetFamily.Infrastructure.DbContexts;
 
@@ -68,4 +69,6 @@ public class VolunteersRepository : IVolunteersRepository
 
         return volunteer.Id;
     }
+
+   
 }

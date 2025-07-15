@@ -36,7 +36,7 @@ namespace PetFamily.Infrastructure.Migrations
                     name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     patronymic = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     surname = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    phone_number = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: false),
+                    phone_number = table.Column<string>(type: "text", nullable: false),
                     is_deleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
                     deletion_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -85,7 +85,7 @@ namespace PetFamily.Infrastructure.Migrations
                     health_information = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
                     height = table.Column<int>(type: "integer", nullable: false),
                     name = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
-                    phone_number = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: false),
+                    phone_number = table.Column<string>(type: "text", nullable: false),
                     breed_id = table.Column<Guid>(type: "uuid", nullable: false),
                     species_id = table.Column<Guid>(type: "uuid", nullable: false),
                     serial_number = table.Column<int>(type: "integer", nullable: false),

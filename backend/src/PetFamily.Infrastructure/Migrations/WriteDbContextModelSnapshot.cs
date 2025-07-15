@@ -110,8 +110,7 @@ namespace PetFamily.Infrastructure.Migrations
 
                             b1.Property<string>("PhoneNumber")
                                 .IsRequired()
-                                .HasMaxLength(16)
-                                .HasColumnType("character varying(16)")
+                                .HasColumnType("text")
                                 .HasColumnName("phone_number");
                         });
 
@@ -266,8 +265,7 @@ namespace PetFamily.Infrastructure.Migrations
 
                             b1.Property<string>("PhoneNumber")
                                 .IsRequired()
-                                .HasMaxLength(16)
-                                .HasColumnType("character varying(16)")
+                                .HasColumnType("text")
                                 .HasColumnName("phone_number");
                         });
 

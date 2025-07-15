@@ -67,8 +67,7 @@ public class VolunteerConfiguration:IEntityTypeConfiguration<Volunteer>
         {
             vnb.Property(pn => pn.PhoneNumber)
                 .IsRequired()
-                .HasColumnName("phone_number")
-                .HasMaxLength(Constants.PHONE_NUMBER_LENGTH);
+                .HasColumnName("phone_number");
         });
 
         builder.Property(v => v.SocialNetworks)

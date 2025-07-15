@@ -66,6 +66,41 @@ public class Pet : SoftDeletableEntity<PetId>
     public DateTime DateOfCreation { get; private set; }
     public Position Position { get; private set; }
 
+    public override void Delete()
+    {
+        if (IsDeleted) return;
+
+        base.Delete();
+    }
+
+    public override void Restore()
+    {
+        if (!IsDeleted) return;
+
+        base.Restore();
+    }
+
+    public UnitResult<Error> SetMainPhoto(string path)
+    {
+        var photoExists = _photos.Any(p => p.PathToStorage.Path == path);
+        if (!photoExists)
+            return Errors.General.NotFound();
+        
+        var updatedPhotos = new List<Photo>();
+    
+        foreach (var photo in _photos)
+        {
+            var isMain = photo.PathToStorage.Path == path;
+            var newPhoto = new Photo(photo.PathToStorage, isMain);
+            updatedPhotos.Add(newPhoto);
+        }
+        
+        _photos.Clear();
+        _photos.AddRange(updatedPhotos);
+
+        return UnitResult.Success<Error>();
+    }
+
     public UnitResult<Error> AddRequisites(Requisites requisites)
     {
         if (_requisites.Contains(requisites))
@@ -75,18 +110,61 @@ public class Pet : SoftDeletableEntity<PetId>
 
         return Result.Success<Error>();
     }
-    
+
+    public UnitResult<Error> UpdateMainInfo(
+        PetName name,
+        PetDescription description,
+        PetSpeciesBreed speciesBreed,
+        PetColour colour,
+        PetHealthInformation healthInformation,
+        Address address,
+        PetWeight weight,
+        PetHeight height,
+        OwnersPhoneNumber phoneNumber,
+        bool castration,
+        Birthday birthday,
+        bool isVaccinated,
+        HelpStatus helpStatus)
+    {
+        Name = name;
+        Description = description;
+        PetSpeciesBreed = speciesBreed;
+        Colour = colour;
+        HealthInformation = healthInformation;
+        Address = address;
+        Weight = weight;
+        Height = height;
+        OwnersPhoneNumber = phoneNumber;
+        Castration = castration;
+        Birthday = birthday;
+        IsVaccinated = isVaccinated;
+        HelpStatus = helpStatus;
+
+        return Result.Success<Error>();
+    }
+
+    public UnitResult<Error> ChangeStatus(int status)
+    {
+        if (!Enum.IsDefined(typeof(HelpStatus), status))
+            return Errors.General.ValueIsInvalid();
+
+        HelpStatus = (HelpStatus)status;
+
+        return UnitResult.Success<Error>();
+    }
+
     public void AddPhoto(Photo photo)
     {
         _photos.Add(photo);
     }
+
     public UnitResult<Error> RemovePhoto(Photo photo)
     {
         if (!_photos.Contains(photo))
             return Errors.General.NotFound();
-        
+
         _photos.Remove(photo);
-        
+
         return Result.Success<Error>();
     }
 
@@ -115,7 +193,6 @@ public class Pet : SoftDeletableEntity<PetId>
     public void SetSerialNumber(Position position) =>
         Position = position;
 
-    public void Move(Position newPosition)=>
+    public void Move(Position newPosition) =>
         Position = newPosition;
-    
 }

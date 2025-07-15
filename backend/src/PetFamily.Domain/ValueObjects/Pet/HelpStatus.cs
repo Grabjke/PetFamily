@@ -2,7 +2,7 @@
 
 public enum HelpStatus
 {
-    NeedsHelp,
-    LookingForHome,
-    FoundHome
+    NeedsHelp = 1,
+    LookingForHome = 2,
+    FoundHome = 3
 }

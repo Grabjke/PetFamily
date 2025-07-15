@@ -12,8 +12,9 @@ public interface IVolunteersRepository
     public Task<Result<Volunteer,Error>> GetByName(string name,CancellationToken cancellationToken = default);
     public  Task<Guid> Save(Volunteer volunteer,CancellationToken cancellationToken = default);
     Task<Guid> Delete(Volunteer volunteer,CancellationToken cancellationToken = default);
-    
-    
-    
-    
+  
+
+
+
+
 }
