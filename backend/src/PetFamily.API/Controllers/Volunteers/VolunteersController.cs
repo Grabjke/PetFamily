@@ -15,6 +15,8 @@ using PetFamily.Application.Volunteers.Commands.UpdateMainInfo;
 using PetFamily.Application.Volunteers.Commands.UpdateMainInfoPet;
 using PetFamily.Application.Volunteers.Commands.UpdateRequisites;
 using PetFamily.Application.Volunteers.Commands.UpdateSocialNetworks;
+using PetFamily.Application.Volunteers.Queries.GetPetById;
+using PetFamily.Application.Volunteers.Queries.GetPetsWithPagination;
 using PetFamily.Application.Volunteers.Queries.GetVolunteerById;
 using PetFamily.Application.Volunteers.Queries.GetVolunteersWithPagination;
 
@@ -22,6 +24,29 @@ namespace PetFamily.API.Controllers.Volunteers;
 
 public class VolunteersController : ApplicationController
 {
+    [HttpGet("pets/{petId:guid}")]
+    public async Task<ActionResult> GetPetById(
+        [FromServices] GetPetByIdHandler handler,
+        [FromRoute] Guid petId,
+        CancellationToken cancellationToken)
+    {
+        var query = new GetPetByIdQuery(petId);
+
+        var response = await handler.Handle(query, cancellationToken);
+
+        return Ok(response);
+    }
+    [HttpGet("pets")]
+    public async Task<ActionResult> GetPetsWithPagination(
+        [FromServices] GetPetsWithPaginationHandler handler,
+        [FromQuery] GetPetsWithPaginationRequest request,
+        CancellationToken cancellationToken)
+    {
+        var response = await handler.Handle(request.ToQuery(), cancellationToken);
+
+        return Ok(response);
+    }
+    
     [HttpPut("volunteers/{volunteerId:guid}/pets/{petId:guid}/set-main-photo")]
     public async Task<ActionResult<Guid>> SetMainPhoto(
         [FromRoute] Guid volunteerId,

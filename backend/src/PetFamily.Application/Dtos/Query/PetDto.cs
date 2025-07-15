@@ -3,6 +3,7 @@
 public class PetDto
 {
     public Guid Id { get; init; }
+    public Guid VolunteerId { get; init; }
     public string Name { get;  init; } = null!;
     public string Description { get;  init; } = null!;
     public Guid SpeciesId { get;  init; }
@@ -20,8 +21,9 @@ public class PetDto
     public DateTime Birthday { get;  init; }
     public bool IsVaccinated { get;  init; }
     public string HelpStatus { get;  init; } = string.Empty;
-    public RequisitesDto[] Requisites = [];
-    public PhotoDto[] Photos = [];
+    public RequisitesDto[] Requisites { get; init; } = []; 
+    public PhotoDto[] Photos { get; init; } = [];         
     public DateTime DateOfCreation { get;  init; }
     public int Position { get;  init; }
 }
+

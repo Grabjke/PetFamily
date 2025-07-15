@@ -58,4 +58,24 @@ public static class EfCorePropertyExtensions
             )
             .HasColumnType("jsonb");
     }
+    
+    public static PropertyBuilder<T[]> HasJsonArrayConversion<T>(
+        this PropertyBuilder<T[]> builder,
+        JsonSerializerOptions? options = null)
+        where T : class 
+    {
+        var serializerOptions = options ?? new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            WriteIndented = false
+        };
+
+        return builder.HasConversion(
+                new ValueConverter<T[], string>(
+                    v => JsonSerializer.Serialize(v, serializerOptions),
+                    v => JsonSerializer.Deserialize<T[]>(v, serializerOptions) ?? Array.Empty<T>(),
+                    new ConverterMappingHints()) 
+            )
+            .HasColumnType("jsonb"); 
+    }
 }

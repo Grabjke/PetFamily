@@ -6,6 +6,7 @@ namespace PetFamily.Application.Extensions;
 
 public static class QueryExtensions
 {
+    
     public static async Task<PagedList<T>> ToPagedList<T>(
         this IQueryable<T> source,
         int page,
@@ -13,7 +14,7 @@ public static class QueryExtensions
         CancellationToken cancellationToken = default)
     {
         var totalCount = await source.CountAsync(cancellationToken);
-
+        
         var items = await source
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
@@ -27,11 +28,11 @@ public static class QueryExtensions
             TotalCount = totalCount
         };
     }
-
+    
     public static IQueryable<T> WhereIf<T>(
         this IQueryable<T> source,
-        Expression<Func<T, bool>> predicate,
-        bool condition)
+        bool condition,  
+        Expression<Func<T, bool>> predicate)
     {
         return condition ? source.Where(predicate) : source;
     }
