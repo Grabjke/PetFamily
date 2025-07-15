@@ -1,6 +1,14 @@
-﻿namespace PetFamily.Application.Dtos.Query;
+﻿using System.Text.Json.Serialization;
+
+namespace PetFamily.Application.Dtos.Query;
 
 public class PhotoDto
 {
-    public string PathToStorage { get; init; } = string.Empty;
+    public FilePathDto PathToStorage { get; init; } = null!;
+    public bool IsMain  { get; init; }
+}
+
+public class FilePathDto
+{
+    public string Path { get; init; } = string.Empty;
 }

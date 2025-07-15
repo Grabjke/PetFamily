@@ -13,6 +13,10 @@ public class PetDtoConfiguration : IEntityTypeConfiguration<PetDto>
 
         builder.HasKey(p => p.Id);
 
+        builder.HasOne<VolunteerDto>()
+            .WithMany()
+            .HasForeignKey(p => p.VolunteerId);
+        
         builder.Property(p => p.Name)
             .HasColumnName("name");
         

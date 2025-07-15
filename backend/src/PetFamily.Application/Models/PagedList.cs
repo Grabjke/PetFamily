@@ -8,4 +8,21 @@ public class PagedList<T>
     public int TotalCount { get; init; }
     public bool HasPreviousPage => Page > 1;
     public bool HasNextPage => Page * PageSize < TotalCount;
+    
+    public  PagedList<T> AfterLoad(Action<T> processItem)
+    {
+        var updatedItems = Items.Select(item =>
+        {
+            processItem(item);
+            return item;
+        }).ToList();
+
+        return new PagedList<T>
+        {
+            Items = updatedItems,
+            Page = Page,
+            PageSize = PageSize,
+            TotalCount = TotalCount
+        };
+    }
 }

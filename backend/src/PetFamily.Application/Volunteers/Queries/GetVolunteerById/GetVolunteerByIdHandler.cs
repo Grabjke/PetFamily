@@ -15,10 +15,10 @@ public class GetVolunteerByIdHandler :
         _context = context;
     }
     public async Task<VolunteerDto> Handle(
-        GetVolunteerByIdQuery command,
+        GetVolunteerByIdQuery query,
         CancellationToken cancellationToken = default)
     {
         return (await _context.Volunteers
-            .FirstOrDefaultAsync(v=>v.Id == command.VolunteerId,  cancellationToken))!;
+            .FirstOrDefaultAsync(v=>v.Id == query.VolunteerId,  cancellationToken))!;
     }
 }
