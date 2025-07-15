@@ -54,7 +54,9 @@ public class DeletePetHandler : ICommandHandler<Guid, DeletePetCommand>
         if (removeResult.IsFailure)
             return removeResult.Error.ToErrorList();
 
-        await _volunteersRepository.HardDeletePet(pet, cancellationToken);
+        volunteerResult.Value.HardDeletePet(pet);
+        
+        await _volunteersRepository.Save(volunteerResult.Value, cancellationToken);
         
         _logger.LogInformation("Pet with id:{PetId} hard deleted", command.PetId);
         

@@ -95,6 +95,10 @@ public class Volunteer : SoftDeletableEntity<VolunteerId>
         return Result.Success<Error>();
     }
 
+    public void HardDeletePet(Pet pet)
+    {
+        _pets.Remove(pet);
+    }
     public UnitResult<Error> UpdateSocialNetworks(List<SocialNetwork> socialNetworks)
     {
         var newSocialNetworks = new List<SocialNetwork>();
