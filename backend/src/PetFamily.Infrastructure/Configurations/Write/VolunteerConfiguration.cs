@@ -65,7 +65,7 @@ public class VolunteerConfiguration:IEntityTypeConfiguration<Volunteer>
 
         builder.ComplexProperty(v => v.PhoneNumber, vnb =>
         {
-            vnb.Property(pn => pn.PhoneNumber)
+            vnb.Property(pn => pn.Value)
                 .IsRequired()
                 .HasColumnName("phone_number");
         });

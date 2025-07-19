@@ -16,6 +16,7 @@ public class RemoveBreedHandler : ICommandHandler<Guid, RemoveBreedCommand>
     private readonly ISpeciesRepository _speciesRepository;
     private readonly IReadDbContext _readDbContext;
     private readonly IValidator<RemoveBreedCommand> _validator;
+    private readonly IUnitOfWork _unitOfWork;
 
     public RemoveBreedHandler(
         ILogger<RemoveBreedHandler> logger,
@@ -28,6 +29,7 @@ public class RemoveBreedHandler : ICommandHandler<Guid, RemoveBreedCommand>
         _speciesRepository = speciesRepository;
         _readDbContext = readDbContext;
         _validator = validator;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Result<Guid, ErrorList>> Handle(
@@ -53,7 +55,9 @@ public class RemoveBreedHandler : ICommandHandler<Guid, RemoveBreedCommand>
         if (breed is null)
             return Errors.General.NotFound().ToErrorList();
 
-        await _speciesRepository.DeleteBreed(breed, cancellationToken);
+        speciesResult.Value.DeleteBreed(breed);
+
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
         
         _logger.LogInformation("Successfully removed breed with id:{BreedId}",
             command.BreedId);

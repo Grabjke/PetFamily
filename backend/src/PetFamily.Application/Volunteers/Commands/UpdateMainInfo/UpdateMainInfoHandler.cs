@@ -39,7 +39,7 @@ public class UpdateMainInfoHandler:ICommandHandler<Guid,UpdateMainInfoCommand>
         var fullName = FullName.Create(
             command.FullName.Name,
             command.FullName.Surname,
-            command.FullName.Surname).Value;
+            command.FullName.Patronymic).Value;
 
         var email = Email.Create(command.Email).Value;
 

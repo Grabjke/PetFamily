@@ -7,8 +7,9 @@ using PetFamily.Application.Dtos.Query;
 
 namespace PetFamily.Infrastructure.DbContexts;
 
-public class ReadDbContext(IConfiguration configuration) : DbContext, IReadDbContext
+public class ReadDbContext(string connectionString) : DbContext, IReadDbContext
 {
+    
     public IQueryable<VolunteerDto> Volunteers => Set<VolunteerDto>();
     public IQueryable<SpeciesDto> Species => Set<SpeciesDto>();
     public IQueryable<BreedDto> Breeds => Set<BreedDto>();
@@ -16,7 +17,7 @@ public class ReadDbContext(IConfiguration configuration) : DbContext, IReadDbCon
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseNpgsql(configuration.GetConnectionString(InfrastructureConstants.DATABASE));
+        optionsBuilder.UseNpgsql(connectionString);
         optionsBuilder.UseSnakeCaseNamingConvention();
         optionsBuilder.UseLoggerFactory(CreateLoggerFactory());
         optionsBuilder.EnableSensitiveDataLogging();

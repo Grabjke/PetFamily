@@ -6,14 +6,15 @@ using PetFamily.Domain.Species;
 
 namespace PetFamily.Infrastructure.DbContexts;
 
-public class WriteDbContext(IConfiguration configuration) : DbContext
+public class WriteDbContext(string connectionString) : DbContext
 {
+    
     public DbSet<Volunteer> Volunteers => Set<Volunteer>();
     public DbSet<PetSpecies> Species => Set<PetSpecies>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseNpgsql(configuration.GetConnectionString(InfrastructureConstants.DATABASE));
+        optionsBuilder.UseNpgsql(connectionString);
         optionsBuilder.UseSnakeCaseNamingConvention();
         optionsBuilder.UseLoggerFactory(CreateLoggerFactory());
         optionsBuilder.EnableSensitiveDataLogging();

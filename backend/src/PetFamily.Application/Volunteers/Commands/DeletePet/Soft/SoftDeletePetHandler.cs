@@ -3,19 +3,20 @@ using FluentValidation;
 using Microsoft.Extensions.Logging;
 using PetFamily.Application.Abstractions;
 using PetFamily.Application.Extensions;
+using PetFamily.Application.Volunteers.Commands.DeletePet.Hard;
 using PetFamily.Domain.Shared;
 
-namespace PetFamily.Application.Volunteers.Commands.DeletePet;
+namespace PetFamily.Application.Volunteers.Commands.DeletePet.Soft;
 
-public class SoftDeletePetHandler : ICommandHandler<Guid, DeletePetCommand>
+public class SoftDeletePetHandler : ICommandHandler<Guid, SoftDeletePetCommand>
 {
     private readonly IVolunteersRepository _volunteersRepository;
-    private readonly IValidator<DeletePetCommand> _validator;
+    private readonly IValidator<SoftDeletePetCommand> _validator;
     private readonly ILogger<SoftDeletePetHandler> _logger;
 
     public SoftDeletePetHandler(
         IVolunteersRepository volunteersRepository,
-        IValidator<DeletePetCommand> validator,
+        IValidator<SoftDeletePetCommand> validator,
         ILogger<SoftDeletePetHandler> logger)
     {
         _volunteersRepository = volunteersRepository;
@@ -24,7 +25,7 @@ public class SoftDeletePetHandler : ICommandHandler<Guid, DeletePetCommand>
     }
         
     public async Task<Result<Guid, ErrorList>> Handle(
-        DeletePetCommand command,
+        SoftDeletePetCommand command,
         CancellationToken cancellationToken = default)
     {
         var validationResult = await _validator.ValidateAsync(command, cancellationToken);

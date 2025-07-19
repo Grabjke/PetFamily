@@ -5,18 +5,18 @@ using PetFamily.Application.Abstractions;
 using PetFamily.Application.Extensions;
 using PetFamily.Domain.Shared;
 
-namespace PetFamily.Application.Volunteers.Commands.Delete;
+namespace PetFamily.Application.Volunteers.Commands.Delete.Hard;
 
-public class SoftDeleteVolunteerHandler:ICommandHandler<Guid,DeleteVolunteerCommand>
+public class DeleteVolunteerHandler:ICommandHandler<Guid,DeleteVolunteerCommand>
 {
     private readonly IVolunteersRepository _volunteersRepository;
     private readonly IValidator<DeleteVolunteerCommand> _validator;
-    private readonly ILogger<SoftDeleteVolunteerHandler> _logger;
+    private readonly ILogger<DeleteVolunteerHandler> _logger;
 
-    public SoftDeleteVolunteerHandler(
+    public DeleteVolunteerHandler(
         IVolunteersRepository volunteersRepository,
         IValidator<DeleteVolunteerCommand> validator,
-        ILogger<SoftDeleteVolunteerHandler> logger)
+        ILogger<DeleteVolunteerHandler> logger)
     {
         _logger = logger;
         _validator = validator;
@@ -35,11 +35,9 @@ public class SoftDeleteVolunteerHandler:ICommandHandler<Guid,DeleteVolunteerComm
         if (volunteerResult.IsFailure)
             return volunteerResult.Error.ToErrorList();
         
-        volunteerResult.Value.Delete();
-        
-        await _volunteersRepository.Save(volunteerResult.Value, cancellationToken);
+        await _volunteersRepository.Delete(volunteerResult.Value, cancellationToken);
 
-        _logger.LogInformation("Volunteer with id:{VolunteerId} soft deleted", command.VolunteerId);
+        _logger.LogInformation("Volunteer with id:{VolunteerId} deleted", command.VolunteerId);
 
         return command.VolunteerId;
     }
