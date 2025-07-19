@@ -9,7 +9,6 @@ namespace PetFamily.Application.Species;
 public interface ISpeciesRepository
 {
     public Task<Guid> DeleteSpecies(PetSpecies species, CancellationToken cancellationToken = default);
-    public Task<Guid> DeleteBreed(Breed breed, CancellationToken cancellationToken = default);
     public Task<Result<PetSpecies,Error>> GetById(Guid speciesId,CancellationToken cancellationToken = default);
     
 }

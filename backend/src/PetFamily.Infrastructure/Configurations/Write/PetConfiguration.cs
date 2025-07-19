@@ -118,7 +118,7 @@ public class PetConfiguration:IEntityTypeConfiguration<Pet>
 
         builder.ComplexProperty(p => p.OwnersPhoneNumber, pnb =>
         {
-            pnb.Property(pn => pn.PhoneNumber)
+            pnb.Property(pn => pn.Value)
                 .IsRequired()
                 .HasColumnName("phone_number");
         });

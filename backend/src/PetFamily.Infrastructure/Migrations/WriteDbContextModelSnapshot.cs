@@ -108,7 +108,7 @@ namespace PetFamily.Infrastructure.Migrations
                         {
                             b1.IsRequired();
 
-                            b1.Property<string>("PhoneNumber")
+                            b1.Property<string>("Value")
                                 .IsRequired()
                                 .HasColumnType("text")
                                 .HasColumnName("phone_number");
@@ -263,7 +263,7 @@ namespace PetFamily.Infrastructure.Migrations
                         {
                             b1.IsRequired();
 
-                            b1.Property<string>("PhoneNumber")
+                            b1.Property<string>("Value")
                                 .IsRequired()
                                 .HasColumnType("text")
                                 .HasColumnName("phone_number");

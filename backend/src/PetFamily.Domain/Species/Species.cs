@@ -33,6 +33,10 @@ public class PetSpecies : Shared.Entity<SpeciesId>
         return new PetSpecies(speciesId, title);
     }
 
+    public void DeleteBreed(Breed breed)
+    {
+        _breeds.Remove(breed);
+    }
     public Result AddBreed(Breed breed)
     {
         if (_breeds.Contains(breed))

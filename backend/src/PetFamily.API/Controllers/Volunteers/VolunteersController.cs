@@ -7,7 +7,11 @@ using PetFamily.Application.Volunteers.Commands.AddPhotoPet;
 using PetFamily.Application.Volunteers.Commands.ChangeStatusPet;
 using PetFamily.Application.Volunteers.Commands.Create;
 using PetFamily.Application.Volunteers.Commands.Delete;
+using PetFamily.Application.Volunteers.Commands.Delete.Hard;
+using PetFamily.Application.Volunteers.Commands.Delete.Soft;
 using PetFamily.Application.Volunteers.Commands.DeletePet;
+using PetFamily.Application.Volunteers.Commands.DeletePet.Hard;
+using PetFamily.Application.Volunteers.Commands.DeletePet.Soft;
 using PetFamily.Application.Volunteers.Commands.MovePetPosition;
 using PetFamily.Application.Volunteers.Commands.RemovePhotoPet;
 using PetFamily.Application.Volunteers.Commands.SetMainPhotoPet;
@@ -68,7 +72,7 @@ public class VolunteersController : ApplicationController
         [FromServices] SoftDeletePetHandler handler,
         CancellationToken cancellationToken = default)
     {
-        var command = new DeletePetCommand(volunteerId, petId);
+        var command = new SoftDeletePetCommand(volunteerId, petId);
 
         var result = await handler.Handle(command, cancellationToken);
 
@@ -222,7 +226,7 @@ public class VolunteersController : ApplicationController
         [FromServices] SoftDeleteVolunteerHandler handler,
         CancellationToken cancellationToken = default)
     {
-        var command = new DeleteVolunteerCommand(id);
+        var command = new SoftDeleteVolunteerCommand(id);
 
         var result = await handler.Handle(command, cancellationToken);
 

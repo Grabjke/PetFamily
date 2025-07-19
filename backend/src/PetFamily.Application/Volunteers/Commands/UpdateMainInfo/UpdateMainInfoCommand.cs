@@ -9,4 +9,4 @@ public record UpdateMainInfoCommand(
     string Email,
     string Description,
     int Experience,
-    string PhoneNumber):ICommand;
+    string PhoneNumber) : ICommand;

@@ -8,7 +8,7 @@ using PetFamily.Domain.ValueObjects.Volunteer;
 
 namespace PetFamily.Application.Volunteers.Commands.UpdateRequisites;
 
-public class UpdateRequisitesHandler:ICommandHandler<Guid,UpdateRequisitesCommand>
+public class UpdateRequisitesHandler : ICommandHandler<Guid, UpdateRequisitesCommand>
 {
     private readonly IVolunteersRepository _volunteersRepository;
     private readonly IValidator<UpdateRequisitesCommand> _validator;
@@ -28,28 +28,28 @@ public class UpdateRequisitesHandler:ICommandHandler<Guid,UpdateRequisitesComman
         UpdateRequisitesCommand command,
         CancellationToken cancellationToken = default)
     {
-        var resultValidation = await _validator.ValidateAsync(command,cancellationToken);
+        var resultValidation = await _validator.ValidateAsync(command, cancellationToken);
         if (resultValidation.IsValid == false)
             return resultValidation.ToErrorList();
-        
-        var volunteerResult=await _volunteersRepository.GetById(command.VolunteerId, cancellationToken);
+
+        var volunteerResult = await _volunteersRepository.GetById(command.VolunteerId, cancellationToken);
         if (volunteerResult.IsFailure)
-         return  volunteerResult.Error.ToErrorList();
-        
+            return volunteerResult.Error.ToErrorList();
+
         var newRequisitesList = new List<Requisites>();
-        
+
         foreach (var (title, description) in command.Requisites)
         {
             var requisites = Requisites.Create(title, description).Value;
             newRequisitesList.Add(requisites);
         }
-        
+
         var addRequisitesResult = volunteerResult.Value.UpdateRequisites(newRequisitesList);
         if (addRequisitesResult.IsFailure)
             return addRequisitesResult.Error.ToErrorList();
 
-        await _volunteersRepository.Save(volunteerResult.Value,cancellationToken);
-       
+        await _volunteersRepository.Save(volunteerResult.Value, cancellationToken);
+
         _logger.LogInformation("Updated volunteer requisites with id:{id}", command.VolunteerId);
 
         return command.VolunteerId;

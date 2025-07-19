@@ -59,7 +59,7 @@ public class RemovePetPhotoHandler:ICommandHandler<List<string>,RemovePetPhotoCo
             if (photoPathResult.IsFailure)
                 return photoPathResult.Error.ToErrorList();
 
-            var photo = new Photo(photoPathResult.Value,false);
+            var photo = new Photo(photoPathResult.Value);
             
             petResult.Value.RemovePhoto(photo);
         }

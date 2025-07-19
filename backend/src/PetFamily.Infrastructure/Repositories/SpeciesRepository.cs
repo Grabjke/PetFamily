@@ -27,15 +27,7 @@ public class SpeciesRepository : ISpeciesRepository
 
         return species.Id.Value;
     }
-
-    public async Task<Guid> DeleteBreed(Breed breed, CancellationToken cancellationToken = default)
-    {
-        _context.Entry(breed).State = EntityState.Deleted;
-        
-        await _context.SaveChangesAsync(cancellationToken);
-        
-        return breed.Id.Value;
-    }
+    
 
     public async Task<Result<PetSpecies, Error>> GetById(
         Guid speciesId,

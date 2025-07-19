@@ -2,7 +2,7 @@
 using PetFamily.Application.Validation;
 using PetFamily.Domain.Shared;
 
-namespace PetFamily.Application.Volunteers.Commands.DeletePet;
+namespace PetFamily.Application.Volunteers.Commands.DeletePet.Hard;
 
 public class DeletePetCommandValidator: AbstractValidator<DeletePetCommand>
 {

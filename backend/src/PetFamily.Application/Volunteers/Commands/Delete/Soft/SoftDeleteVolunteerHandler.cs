@@ -5,18 +5,18 @@ using PetFamily.Application.Abstractions;
 using PetFamily.Application.Extensions;
 using PetFamily.Domain.Shared;
 
-namespace PetFamily.Application.Volunteers.Commands.Delete;
+namespace PetFamily.Application.Volunteers.Commands.Delete.Soft;
 
-public class DeleteVolunteerHandler:ICommandHandler<Guid,DeleteVolunteerCommand>
+public class SoftDeleteVolunteerHandler:ICommandHandler<Guid,SoftDeleteVolunteerCommand>
 {
     private readonly IVolunteersRepository _volunteersRepository;
-    private readonly IValidator<DeleteVolunteerCommand> _validator;
-    private readonly ILogger<DeleteVolunteerHandler> _logger;
+    private readonly IValidator<SoftDeleteVolunteerCommand> _validator;
+    private readonly ILogger<SoftDeleteVolunteerHandler> _logger;
 
-    public DeleteVolunteerHandler(
+    public SoftDeleteVolunteerHandler(
         IVolunteersRepository volunteersRepository,
-        IValidator<DeleteVolunteerCommand> validator,
-        ILogger<DeleteVolunteerHandler> logger)
+        IValidator<SoftDeleteVolunteerCommand> validator,
+        ILogger<SoftDeleteVolunteerHandler> logger)
     {
         _logger = logger;
         _validator = validator;
@@ -24,7 +24,7 @@ public class DeleteVolunteerHandler:ICommandHandler<Guid,DeleteVolunteerCommand>
     }
 
     public async Task<Result<Guid, ErrorList>> Handle(
-        DeleteVolunteerCommand command,
+        SoftDeleteVolunteerCommand command,
         CancellationToken cancellationToken)
     {
         var commandResult = await _validator.ValidateAsync(command, cancellationToken);
@@ -35,9 +35,11 @@ public class DeleteVolunteerHandler:ICommandHandler<Guid,DeleteVolunteerCommand>
         if (volunteerResult.IsFailure)
             return volunteerResult.Error.ToErrorList();
         
-        await _volunteersRepository.Delete(volunteerResult.Value, cancellationToken);
+        volunteerResult.Value.Delete();
+        
+        await _volunteersRepository.Save(volunteerResult.Value, cancellationToken);
 
-        _logger.LogInformation("Volunteer with id:{VolunteerId} deleted", command.VolunteerId);
+        _logger.LogInformation("Volunteer with id:{VolunteerId} soft deleted", command.VolunteerId);
 
         return command.VolunteerId;
     }

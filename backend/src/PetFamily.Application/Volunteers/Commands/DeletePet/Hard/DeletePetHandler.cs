@@ -6,7 +6,7 @@ using PetFamily.Application.Extensions;
 using PetFamily.Application.FileProvider;
 using PetFamily.Domain.Shared;
 
-namespace PetFamily.Application.Volunteers.Commands.DeletePet;
+namespace PetFamily.Application.Volunteers.Commands.DeletePet.Hard;
 
 public class DeletePetHandler : ICommandHandler<Guid, DeletePetCommand>
 {

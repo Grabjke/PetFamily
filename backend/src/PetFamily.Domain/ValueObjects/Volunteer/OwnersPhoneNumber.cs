@@ -10,12 +10,12 @@ public record OwnersPhoneNumber
 {
     private const string PhoneNumberPattern = @"^\d{11}$"; 
     
-    private OwnersPhoneNumber(string phoneNumber) 
+    private OwnersPhoneNumber(string value) 
     {
-        PhoneNumber = phoneNumber;
+        Value = value;
     }
     
-    public string PhoneNumber { get; }
+    public string Value { get; }
 
     public static Result<OwnersPhoneNumber,Error> Create(string phoneNumber)
     {

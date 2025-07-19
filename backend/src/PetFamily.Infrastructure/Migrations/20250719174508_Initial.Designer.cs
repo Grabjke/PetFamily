@@ -13,7 +13,7 @@ using PetFamily.Infrastructure.DbContexts;
 namespace PetFamily.Infrastructure.Migrations
 {
     [DbContext(typeof(WriteDbContext))]
-    [Migration("20250714220740_Initial")]
+    [Migration("20250719174508_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -111,7 +111,7 @@ namespace PetFamily.Infrastructure.Migrations
                         {
                             b1.IsRequired();
 
-                            b1.Property<string>("PhoneNumber")
+                            b1.Property<string>("Value")
                                 .IsRequired()
                                 .HasColumnType("text")
                                 .HasColumnName("phone_number");
@@ -266,7 +266,7 @@ namespace PetFamily.Infrastructure.Migrations
                         {
                             b1.IsRequired();
 
-                            b1.Property<string>("PhoneNumber")
+                            b1.Property<string>("Value")
                                 .IsRequired()
                                 .HasColumnType("text")
                                 .HasColumnName("phone_number");

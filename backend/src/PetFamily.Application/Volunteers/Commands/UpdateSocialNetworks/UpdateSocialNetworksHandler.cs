@@ -8,7 +8,7 @@ using PetFamily.Domain.ValueObjects.Volunteer;
 
 namespace PetFamily.Application.Volunteers.Commands.UpdateSocialNetworks;
 
-public class UpdateSocialNetworksHandler:ICommandHandler<Guid,UpdateSocialNetworksCommand>
+public class UpdateSocialNetworksHandler : ICommandHandler<Guid, UpdateSocialNetworksCommand>
 {
     private readonly IVolunteersRepository _volunteersRepository;
     private readonly IValidator<UpdateSocialNetworksCommand> _validator;

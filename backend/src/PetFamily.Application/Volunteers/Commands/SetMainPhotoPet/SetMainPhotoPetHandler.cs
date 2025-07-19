@@ -13,7 +13,6 @@ public class SetMainPhotoPetHandler:ICommandHandler<Guid,SetMainPhotoPetCommand>
     private readonly IVolunteersRepository _volunteersRepository;
     private readonly IValidator<SetMainPhotoPetCommand> _validator;
     private readonly ILogger<SetMainPhotoPetHandler> _logger;
-    private readonly IUnitOfWork _unitOfWork;
 
     public SetMainPhotoPetHandler(
         IVolunteersRepository volunteersRepository,
@@ -24,7 +23,6 @@ public class SetMainPhotoPetHandler:ICommandHandler<Guid,SetMainPhotoPetCommand>
         _volunteersRepository = volunteersRepository;
         _validator = validator;
         _logger = logger;
-        _unitOfWork = unitOfWork;
     }
 
 
