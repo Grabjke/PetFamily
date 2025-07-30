@@ -1,10 +1,10 @@
-﻿using FluentAssertions;
-using PetFamily.Domain.AggregateRoots;
-using PetFamily.Domain.Entities;
-using PetFamily.Domain.ValueObjects.Breed;
-using PetFamily.Domain.ValueObjects.Pet;
-using PetFamily.Domain.ValueObjects.Species;
-using PetFamily.Domain.ValueObjects.Volunteer;
+﻿
+
+using FluentAssertions;
+using PetFamily.SharedKernel.ValueObjects;
+using PetFamily.Volunteers.Domain.PetManagement;
+using PetFamily.Volunteers.Domain.PetManagement.ValueObjects.Pet;
+using PetFamily.Volunteers.Domain.PetManagement.ValueObjects.Volunteer;
 
 namespace PetFamily.UnitTests;
 
@@ -135,13 +135,13 @@ public class VolunteersTests
             phoneNumber);
 
         var petName = PetName.Create("Test").Value;
-        var petDescription = PetDescription.Create("Test").Value;
+        var petDescription = Description.Create("Test").Value;
         var petSpeciesBreed = PetSpeciesBreed.Create(SpeciesId.NewSpeciesId(), BreedId.NewBreedId()).Value;
-        var petColour = PetColour.Create("Test").Value;
-        var petHealthInformation = PetHealthInformation.Create("Test").Value;
+        var petColour = Colour.Create("Test").Value;
+        var petHealthInformation = HealthInformation.Create("Test").Value;
         var address = Address.Create("Test", "Test", "Test", "Test").Value;
-        var petWeight = PetWeight.Create(1).Value;
-        var petHeight = PetHeight.Create(1).Value;
+        var petWeight = Weight.Create(1).Value;
+        var petHeight = Height.Create(1).Value;
         var birthDay = Birthday.Create(new DateTime(2006, 5, 15)).Value;
         
         for (int i = 0; i < petsCount; i++)

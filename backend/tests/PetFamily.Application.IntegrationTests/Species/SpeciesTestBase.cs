@@ -1,7 +1,9 @@
-﻿using AutoFixture;
+﻿
+
+using AutoFixture;
 using Microsoft.Extensions.DependencyInjection;
-using PetFamily.Application.Database;
-using PetFamily.Infrastructure.DbContexts;
+using PetFamily.Core;
+using PetFamily.Species.Infrastructure.DbContexts;
 
 namespace PetFamily.App.IntegrationTests.Species;
 
@@ -10,8 +12,8 @@ public class SpeciesTestBase:IClassFixture<IntegrationTestsWebFactory>, IAsyncLi
     protected readonly IntegrationTestsWebFactory _factory;
     protected readonly Fixture _fixture;
     protected readonly IServiceScope _scope;
-    protected readonly IReadDbContext _readDbContext;
-    protected readonly WriteDbContext _writeDbContext;
+    protected readonly ISpeciesReadDbContext _readDbContext;
+    protected readonly WriteSpeciesDbContext _writeSpeciesDbContext;
    
 
     protected SpeciesTestBase(IntegrationTestsWebFactory factory)
@@ -19,8 +21,8 @@ public class SpeciesTestBase:IClassFixture<IntegrationTestsWebFactory>, IAsyncLi
         _factory = factory;
         _fixture = new Fixture();
         _scope = factory.Services.CreateScope();
-        _readDbContext = _scope.ServiceProvider.GetRequiredService<IReadDbContext>();
-        _writeDbContext = _scope.ServiceProvider.GetRequiredService<WriteDbContext>();
+        _readDbContext = _scope.ServiceProvider.GetRequiredService<ISpeciesReadDbContext>();
+        _writeSpeciesDbContext = _scope.ServiceProvider.GetRequiredService<WriteSpeciesDbContext>();
     }
 
     public Task InitializeAsync() => Task.CompletedTask;

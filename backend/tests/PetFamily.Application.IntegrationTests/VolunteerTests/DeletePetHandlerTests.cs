@@ -1,8 +1,10 @@
-﻿using FluentAssertions;
+﻿
+
+using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using PetFamily.Application.Abstractions;
-using PetFamily.Application.Volunteers.Commands.DeletePet.Hard;
+using PetFamily.Core.Abstractions;
+using PetFamily.Volunteers.Application.Volunteers.Commands.DeletePet.Hard;
 
 namespace PetFamily.App.IntegrationTests.VolunteerTests;
 
@@ -19,18 +21,18 @@ public class DeletePetHandlerTests : VolunteerTestBase
     public async Task Success_hard_delete_pet()
     {
         // Arrange
-        var volunteerId = await DatabaseSeeder.SeedVolunteer(_writeDbContext);
-        var (speciesId, breedId) = await DatabaseSeeder.SeedSpeciesAndBreed(_writeDbContext);
-        var petId = await DatabaseSeeder.SeedPet(_writeDbContext, volunteerId, speciesId, breedId);
+        var volunteerId = await DatabaseSeeder.SeedVolunteer(WriteVolunteerDbContext);
+        var (speciesId, breedId) = await DatabaseSeeder.SeedSpeciesAndBreed(_writeSpeciesDbContext);
+        var petId = await DatabaseSeeder.SeedPet(WriteVolunteerDbContext, volunteerId, speciesId, breedId);
 
         var command = new DeletePetCommand(volunteerId, petId);
 
         // Act
         var result = await _sut.Handle(command, CancellationToken.None);
-        await _writeDbContext.SaveChangesAsync();
+        await WriteVolunteerDbContext.SaveChangesAsync();
 
         // Assert
-        var volunteer = await _writeDbContext.Volunteers
+        var volunteer = await WriteVolunteerDbContext.Volunteers
             .Include(v => v.Pets)
             .FirstOrDefaultAsync(v => v.Id == volunteerId);
 

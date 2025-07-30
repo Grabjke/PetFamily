@@ -1,8 +1,10 @@
-﻿using FluentAssertions;
+﻿
+
+using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using PetFamily.Application.Abstractions;
-using PetFamily.Application.Volunteers.Commands.UpdateMainInfo;
+using PetFamily.Core.Abstractions;
+using PetFamily.Volunteers.Application.Volunteers.Commands.UpdateMainInfo;
 
 namespace PetFamily.App.IntegrationTests.VolunteerTests;
 
@@ -19,12 +21,12 @@ public class UpdateMainInfoVolunteerHandlerTests:VolunteerTestBase
     public async Task Success_updates_main_info_volunteer()
     {
         //Arrange
-        var volunteerId= await DatabaseSeeder.SeedVolunteer(_writeDbContext);
+        var volunteerId= await DatabaseSeeder.SeedVolunteer(WriteVolunteerDbContext);
         var command = _fixture.BuildUpdateMainInfoCommand(volunteerId);
         //Act
         var result = await _sut.Handle(command,CancellationToken.None);
         //Assert
-        var volunteer = await _writeDbContext.Volunteers.FirstOrDefaultAsync();
+        var volunteer = await WriteVolunteerDbContext.Volunteers.FirstOrDefaultAsync();
         result.IsSuccess.Should().BeTrue();
         volunteerId.Should().Be(volunteerId);
         volunteer!.FullName.Name.Should().Be(command.FullName.Name);

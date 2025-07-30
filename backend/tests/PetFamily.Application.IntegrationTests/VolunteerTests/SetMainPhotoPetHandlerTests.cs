@@ -1,8 +1,9 @@
-﻿using FluentAssertions;
+﻿
+using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using PetFamily.Application.Abstractions;
-using PetFamily.Application.Volunteers.Commands.SetMainPhotoPet;
+using PetFamily.Core.Abstractions;
+using PetFamily.Volunteers.Application.Volunteers.Commands.SetMainPhotoPet;
 
 namespace PetFamily.App.IntegrationTests.VolunteerTests;
 
@@ -19,15 +20,15 @@ public class SetMainPhotoPetHandlerTests : VolunteerTestBase
     public async Task Success_main_photo_pet()
     {
         //Arrange
-        var volunteerId = await DatabaseSeeder.SeedVolunteer(_writeDbContext);
-        var (speciesId, breedId) = await DatabaseSeeder.SeedSpeciesAndBreed(_writeDbContext);
-        var petId = await DatabaseSeeder.SeedPet(_writeDbContext, volunteerId, speciesId, breedId);
-        var path = await DatabaseSeeder.SeedPetPhoto(_writeDbContext, volunteerId, petId);
+        var volunteerId = await DatabaseSeeder.SeedVolunteer(WriteVolunteerDbContext);
+        var (speciesId, breedId) = await DatabaseSeeder.SeedSpeciesAndBreed(_writeSpeciesDbContext);
+        var petId = await DatabaseSeeder.SeedPet(WriteVolunteerDbContext, volunteerId, speciesId, breedId);
+        var path = await DatabaseSeeder.SeedPetPhoto(WriteVolunteerDbContext, volunteerId, petId);
         var command = new SetMainPhotoPetCommand(volunteerId, petId, path);
         //Act
         var result = await _sut.Handle(command, CancellationToken.None);
         //Assert
-        var volunteer = await _writeDbContext.Volunteers
+        var volunteer = await WriteVolunteerDbContext.Volunteers
             .Include(v => v.Pets)
             .FirstOrDefaultAsync();
         var pet = volunteer!.Pets.FirstOrDefault();

@@ -1,7 +1,10 @@
-﻿using AutoFixture;
+﻿
+
+using AutoFixture;
 using Microsoft.Extensions.DependencyInjection;
-using PetFamily.Application.Database;
-using PetFamily.Infrastructure.DbContexts;
+using PetFamily.Core;
+using PetFamily.Species.Infrastructure.DbContexts;
+using PetFamily.Volunteers.Infrastructure.DbContexts;
 
 namespace PetFamily.App.IntegrationTests.VolunteerTests;
 
@@ -11,8 +14,10 @@ public class VolunteerTestBase : IClassFixture<IntegrationTestsWebFactory>, IAsy
     protected readonly IntegrationTestsWebFactory _factory;
     protected readonly Fixture _fixture;
     protected readonly IServiceScope _scope;
-    protected readonly IReadDbContext _readDbContext;
-    protected readonly WriteDbContext _writeDbContext;
+    protected readonly IVolunteersReadDbContext _readVolunteerDbContext;
+    
+    protected readonly WriteVolunteerDbContext WriteVolunteerDbContext;
+    protected readonly WriteSpeciesDbContext _writeSpeciesDbContext;
    
 
     protected VolunteerTestBase(IntegrationTestsWebFactory factory)
@@ -20,8 +25,9 @@ public class VolunteerTestBase : IClassFixture<IntegrationTestsWebFactory>, IAsy
         _factory = factory;
         _fixture = new Fixture();
         _scope = factory.Services.CreateScope();
-        _readDbContext = _scope.ServiceProvider.GetRequiredService<IReadDbContext>();
-        _writeDbContext = _scope.ServiceProvider.GetRequiredService<WriteDbContext>();
+        _readVolunteerDbContext = _scope.ServiceProvider.GetRequiredService<IVolunteersReadDbContext>();
+        WriteVolunteerDbContext = _scope.ServiceProvider.GetRequiredService<WriteVolunteerDbContext>();
+        _writeSpeciesDbContext= _scope.ServiceProvider.GetRequiredService<WriteSpeciesDbContext>();
     }
 
     public Task InitializeAsync() => Task.CompletedTask;

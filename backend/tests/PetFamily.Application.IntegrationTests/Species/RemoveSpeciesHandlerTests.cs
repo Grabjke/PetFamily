@@ -1,8 +1,10 @@
-﻿using FluentAssertions;
+﻿
+
+using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using PetFamily.Application.Abstractions;
-using PetFamily.Application.Species.Commands.RemoveSpecies;
+using PetFamily.Core.Abstractions;
+using PetFamily.Species.Application.Species.Commands.RemoveSpecies;
 
 namespace PetFamily.App.IntegrationTests.Species;
 
@@ -19,12 +21,12 @@ public class RemoveSpeciesHandlerTests : SpeciesTestBase
     public async Task Should_remove_species()
     {
         //Arrange
-        var (speciesId,_) = await DatabaseSeeder.SeedSpeciesAndBreed(_writeDbContext);
+        var (speciesId,_) = await DatabaseSeeder.SeedSpeciesAndBreed(_writeSpeciesDbContext);
         var command = new RemoveSpeciesCommand(speciesId);
         //Act
         var result = await _sut.Handle(command, CancellationToken.None);
         //Assert
-        var species = await _writeDbContext.Species.FirstOrDefaultAsync();
+        var species = await _writeSpeciesDbContext.Species.FirstOrDefaultAsync();
         result.IsSuccess.Should().BeTrue();
         species.Should().BeNull();
     }

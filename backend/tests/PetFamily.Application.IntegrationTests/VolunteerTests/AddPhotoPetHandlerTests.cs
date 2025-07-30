@@ -1,8 +1,12 @@
-﻿using FluentAssertions;
+﻿
+
+
+using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using PetFamily.Application.Abstractions;
-using PetFamily.Application.Volunteers.Commands.AddPhotoPet;
+using PetFamily.Core.Abstractions;
+using PetFamily.Species.Infrastructure.DbContexts;
+using PetFamily.Volunteers.Application.Volunteers.Commands.AddPhotoPet;
 
 namespace PetFamily.App.IntegrationTests.VolunteerTests;
 
@@ -19,19 +23,19 @@ public class AddPhotoPetHandlerTests : VolunteerTestBase
     public async Task Success_add_photo_to_pet()
     {
         //Arrange
-        var volunteerId = await DatabaseSeeder.SeedVolunteer(_writeDbContext);
-        var (speciesId, breedId) = await DatabaseSeeder.SeedSpeciesAndBreed(_writeDbContext);
-        var petId = await DatabaseSeeder.SeedPet(_writeDbContext,volunteerId, speciesId, breedId);
+        var volunteerId = await DatabaseSeeder.SeedVolunteer(WriteVolunteerDbContext);
+        var (speciesId, breedId) = await DatabaseSeeder.SeedSpeciesAndBreed(_writeSpeciesDbContext);
+        var petId = await DatabaseSeeder.SeedPet(WriteVolunteerDbContext,volunteerId, speciesId, breedId);
         var command = _fixture.BuildAddPhotoPetCommand(volunteerId, petId);
             
         //Act
         var result = await _sut.Handle(command, CancellationToken.None);
         //Assert
-        var volunteer = await _writeDbContext.Volunteers
+        var volunteer = await WriteVolunteerDbContext.Volunteers
             .Include(v => v.Pets)
             .FirstOrDefaultAsync();
 
-        var pet = await _readDbContext.Pets
+        var pet = await _readVolunteerDbContext.Pets
             .FirstOrDefaultAsync(p => p.SpeciesId == speciesId && p.BreedId == breedId);
         
         result.IsSuccess.Should().BeTrue();
@@ -50,18 +54,18 @@ public class AddPhotoPetHandlerTests : VolunteerTestBase
     public async Task Failure_add_photo_to_pet_because_invalid_file_format()
     {
         //Arrange
-        var volunteerId = await DatabaseSeeder.SeedVolunteer(_writeDbContext);
-        var (speciesId, breedId) = await DatabaseSeeder.SeedSpeciesAndBreed(_writeDbContext);
-        var petId = await DatabaseSeeder.SeedPet(_writeDbContext,volunteerId, speciesId, breedId);
+        var volunteerId = await DatabaseSeeder.SeedVolunteer(WriteVolunteerDbContext);
+        var (speciesId, breedId) = await DatabaseSeeder.SeedSpeciesAndBreed(_writeSpeciesDbContext);
+        var petId = await DatabaseSeeder.SeedPet(WriteVolunteerDbContext,volunteerId, speciesId, breedId);
         var command = _fixture.BuildAddPhotoPetCommandWithInvalidFormat(volunteerId, petId);
         //Act
         var result = await _sut.Handle(command, CancellationToken.None);
         //Assert
-        var volunteer = await _writeDbContext.Volunteers
+        var volunteer = await WriteVolunteerDbContext.Volunteers
             .Include(v => v.Pets)
             .FirstOrDefaultAsync();
 
-        var pet = await _readDbContext.Pets
+        var pet = await _readVolunteerDbContext.Pets
             .FirstOrDefaultAsync(p => p.SpeciesId == speciesId && p.BreedId == breedId);
         
         result.IsFailure.Should().BeTrue();
