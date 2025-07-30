@@ -1,9 +1,5 @@
 using PetFamily.Files.Application;
-using PetFamily.Species.Application;
-using PetFamily.Species.Infrastructure;
 using PetFamily.Species.Presentation.DependencyInjection;
-using PetFamily.Volunteers.Application;
-using PetFamily.Volunteers.Infrastructure;
 using PetFamily.Volunteers.Presentation.DependencyInjection;
 using PetFamily.Web.Middlewares;
 using Serilog;
@@ -55,8 +51,5 @@ app.UseAuthentication();
 app.MapControllers();
 
 app.Run();
+public partial class Program;
 
-namespace PetFamily.Web
-{
-    public partial class Program;
-}
