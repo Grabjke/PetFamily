@@ -1,8 +1,9 @@
-﻿using FluentAssertions;
+﻿
+using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using PetFamily.Application.Abstractions;
-using PetFamily.Application.Volunteers.Commands.MovePetPosition;
+using PetFamily.Core.Abstractions;
+using PetFamily.Volunteers.Application.Volunteers.Commands.MovePetPosition;
 
 namespace PetFamily.App.IntegrationTests.VolunteerTests;
 
@@ -19,18 +20,18 @@ public class MovePetPositionHandlerTests : VolunteerTestBase
     public async Task Success_move_position_pet()
     {
         //Arrange
-        var volunteerId = await DatabaseSeeder.SeedVolunteer(_writeDbContext);
-        var (speciesId, breedId) = await DatabaseSeeder.SeedSpeciesAndBreed(_writeDbContext);
-        var petIds = await DatabaseSeeder.SeedManyPets(_writeDbContext, volunteerId, speciesId, breedId);
+        var volunteerId = await DatabaseSeeder.SeedVolunteer(WriteVolunteerDbContext);
+        var (speciesId, breedId) = await DatabaseSeeder.SeedSpeciesAndBreed(_writeSpeciesDbContext);
+        var petIds = await DatabaseSeeder.SeedManyPets(WriteVolunteerDbContext, volunteerId, speciesId, breedId);
         var command = new MovePetPositionCommand(volunteerId, petIds.First(), 3);
         //Act
         var result = await _sut.Handle(command, CancellationToken.None);
         //Assert
-        var volunteer = await _writeDbContext.Volunteers
+        var volunteer = await WriteVolunteerDbContext.Volunteers
             .Include(v => v.Pets)
             .FirstOrDefaultAsync();
 
-        var pet = await _readDbContext.Pets
+        var pet = await _readVolunteerDbContext.Pets
             .FirstOrDefaultAsync(p => p.Id == petIds.First());
 
         result.IsSuccess.Should().BeTrue();

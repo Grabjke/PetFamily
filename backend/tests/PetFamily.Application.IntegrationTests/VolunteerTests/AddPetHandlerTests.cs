@@ -1,8 +1,10 @@
-﻿using FluentAssertions;
+﻿
+using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using PetFamily.Application.Abstractions;
-using PetFamily.Application.Volunteers.Commands.AddPet;
+using PetFamily.Core.Abstractions;
+using PetFamily.Species.Infrastructure.DbContexts;
+using PetFamily.Volunteers.Application.Volunteers.Commands.AddPet;
 
 namespace PetFamily.App.IntegrationTests.VolunteerTests;
 
@@ -19,17 +21,17 @@ public class AddPetHandlerTests : VolunteerTestBase
     public async Task Add_pet_to_database()
     {
         //Arrange
-        var volunteerId = await DatabaseSeeder.SeedVolunteer(_writeDbContext);
-        var (speciesId, breedId) = await DatabaseSeeder.SeedSpeciesAndBreed(_writeDbContext);
+        var volunteerId = await DatabaseSeeder.SeedVolunteer(WriteVolunteerDbContext);
+        var (speciesId, breedId) = await DatabaseSeeder.SeedSpeciesAndBreed(_writeSpeciesDbContext);
         var command = _fixture.BuildAddPetCommand(volunteerId, speciesId, breedId);
         //Act
         var result = await _sut.Handle(command, CancellationToken.None);
         //Assert
-        var volunteer = await _writeDbContext.Volunteers
+        var volunteer = await WriteVolunteerDbContext.Volunteers
             .Include(v => v.Pets)
             .FirstOrDefaultAsync();
 
-        var pet = await _readDbContext.Pets
+        var pet = await _readVolunteerDbContext.Pets
             .FirstOrDefaultAsync(p => p.SpeciesId == speciesId && p.BreedId == breedId);
 
         result.IsSuccess.Should().BeTrue();
@@ -46,17 +48,17 @@ public class AddPetHandlerTests : VolunteerTestBase
     public async Task Cannot_add_pet_to_database_because_breed_is_not_found()
     {
         //Arrange
-        var volunteerId = await DatabaseSeeder.SeedVolunteer(_writeDbContext);
-        var (speciesId, breedId) = await DatabaseSeeder.SeedSpeciesAndBreed(_writeDbContext);
+        var volunteerId = await DatabaseSeeder.SeedVolunteer(WriteVolunteerDbContext);
+        var (speciesId, breedId) = await DatabaseSeeder.SeedSpeciesAndBreed(_writeSpeciesDbContext);
         var command = _fixture.BuildAddPetCommand(volunteerId, speciesId, Guid.NewGuid());
         //Act
         var result = await _sut.Handle(command, CancellationToken.None);
         //Assert
-        var volunteer = await _writeDbContext.Volunteers
+        var volunteer = await WriteVolunteerDbContext.Volunteers
             .Include(v => v.Pets)
             .FirstOrDefaultAsync();
 
-        var pet = await _readDbContext.Pets
+        var pet = await _readVolunteerDbContext.Pets
             .FirstOrDefaultAsync(p => p.SpeciesId == speciesId && p.BreedId == breedId);
 
         result.IsFailure.Should().BeTrue();

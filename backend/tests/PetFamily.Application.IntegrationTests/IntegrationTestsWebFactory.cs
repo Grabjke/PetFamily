@@ -2,10 +2,14 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Npgsql;
-using PetFamily.Application.Database;
-using PetFamily.Infrastructure.DbContexts;
+using PetFamily.Core;
+using PetFamily.Species.Infrastructure.DbContexts;
+using PetFamily.Volunteers.Infrastructure.DbContexts;
+using PetFamily.Web;
 using Respawn;
 using Testcontainers.PostgreSql;
 
@@ -30,22 +34,19 @@ public class IntegrationTestsWebFactory : WebApplicationFactory<Program>, IAsync
 
     protected virtual void ConfigureDefaultServices(IServiceCollection services)
     {
-        var readContext = services.SingleOrDefault(s =>
-            s.ServiceType == typeof(IReadDbContext));
-
-        var writeContext = services.SingleOrDefault(s =>
-            s.ServiceType == typeof(WriteDbContext));
-
-        if (readContext is not null)
-            services.Remove(readContext);
-
-        if (writeContext is not null)
-            services.Remove(writeContext);
+        services.RemoveAll<IVolunteersReadDbContext>();
+        services.RemoveAll<ISpeciesReadDbContext>();
+        services.RemoveAll<WriteVolunteerDbContext>();
+        services.RemoveAll<WriteSpeciesDbContext>();
 
         var connectionString = _dbContainer.GetConnectionString();
 
-        services.AddScoped<WriteDbContext>(_ => new WriteDbContext(connectionString));
-        services.AddScoped<IReadDbContext>(_ => new ReadDbContext(connectionString));
+        services.AddScoped<WriteVolunteerDbContext>(_ => new WriteVolunteerDbContext(connectionString));
+        services.AddScoped<WriteSpeciesDbContext>(_ => new WriteSpeciesDbContext(connectionString));
+        services.AddScoped<IVolunteersReadDbContext>(_ =>
+            new VolunteerReadDbContext(connectionString));
+        services.AddScoped<ISpeciesReadDbContext>(_ =>
+            new SpeciesReadDbContext(connectionString));
     }
 
     public async Task InitializeAsync()
@@ -53,8 +54,10 @@ public class IntegrationTestsWebFactory : WebApplicationFactory<Program>, IAsync
         await _dbContainer.StartAsync();
 
         using var scope = Services.CreateScope();
-        var dbContext = scope.ServiceProvider.GetRequiredService<WriteDbContext>();
-        await dbContext.Database.EnsureCreatedAsync();
+        var dbContext = scope.ServiceProvider.GetRequiredService<WriteVolunteerDbContext>();
+        var dbContextSpecies = scope.ServiceProvider.GetRequiredService<WriteSpeciesDbContext>();
+        await dbContext.Database.MigrateAsync();
+        await dbContextSpecies.Database.MigrateAsync();
 
         _dbConnection = new NpgsqlConnection(_dbContainer.GetConnectionString());
 
@@ -71,7 +74,6 @@ public class IntegrationTestsWebFactory : WebApplicationFactory<Program>, IAsync
                 SchemasToInclude = ["public"]
             }
         );
-        
     }
 
     public async Task ResetDatabaseAsync()

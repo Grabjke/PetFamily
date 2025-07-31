@@ -1,8 +1,10 @@
-﻿using FluentAssertions;
+﻿
+
+using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using PetFamily.Application.Abstractions;
-using PetFamily.Application.Volunteers.Commands.Create;
+using PetFamily.Core.Abstractions;
+using PetFamily.Volunteers.Application.Volunteers.Commands.Create;
 
 namespace PetFamily.App.IntegrationTests.VolunteerTests;
 
@@ -23,7 +25,7 @@ public class CreateVolunteerHandlerTests : VolunteerTestBase
         //Act
         var result = await _sut.Handle(command, CancellationToken.None);
         //Assert
-        var volunteer = await _readDbContext.Volunteers
+        var volunteer = await _readVolunteerDbContext.Volunteers
             .FirstOrDefaultAsync();
         result.IsSuccess.Should().BeTrue();
         volunteer.Should().NotBeNull();

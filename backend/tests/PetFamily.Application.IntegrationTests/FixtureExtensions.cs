@@ -1,14 +1,16 @@
-﻿using AutoFixture;
+﻿
+
+using AutoFixture;
 using AutoFixture.AutoNSubstitute;
-using PetFamily.Application.Dtos;
-using PetFamily.Application.Volunteers.Commands.AddPet;
-using PetFamily.Application.Volunteers.Commands.AddPhotoPet;
-using PetFamily.Application.Volunteers.Commands.Create;
-using PetFamily.Application.Volunteers.Commands.UpdateMainInfo;
-using PetFamily.Application.Volunteers.Commands.UpdateMainInfoPet;
-using PetFamily.Application.Volunteers.Commands.UpdateRequisites;
-using PetFamily.Application.Volunteers.Commands.UpdateSocialNetworks;
-using PetFamily.Domain.ValueObjects.Pet;
+using PetFamily.Core.Dtos;
+using PetFamily.Volunteers.Application.Volunteers.Commands.AddPet;
+using PetFamily.Volunteers.Application.Volunteers.Commands.AddPhotoPet;
+using PetFamily.Volunteers.Application.Volunteers.Commands.Create;
+using PetFamily.Volunteers.Application.Volunteers.Commands.UpdateMainInfo;
+using PetFamily.Volunteers.Application.Volunteers.Commands.UpdateMainInfoPet;
+using PetFamily.Volunteers.Application.Volunteers.Commands.UpdateRequisites;
+using PetFamily.Volunteers.Application.Volunteers.Commands.UpdateSocialNetworks;
+using PetFamily.Volunteers.Domain.PetManagement.ValueObjects.Pet;
 
 namespace PetFamily.App.IntegrationTests;
 
