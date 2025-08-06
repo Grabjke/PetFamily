@@ -46,7 +46,7 @@ public class UpdateMainInfoPetHandler : ICommandHandler<Guid, UpdateMainInfoPetC
         var isSpeciesAndBreedExist = await _speciesContract.IsSpeciesAndBreedExist(
             new IsSpeciesAndBreedExistRequest(command.SpeciesId, command.BreedId), cancellationToken);
         if (!isSpeciesAndBreedExist)
-            return Errors.Species.SpeciesAndBreedExist().ToErrorList();
+            return Errors.Species.SpeciesOrBreedNotExist().ToErrorList();
 
         var petSpecies = SpeciesId.Create(command.SpeciesId);
         var petBreed = BreedId.Create(command.BreedId);

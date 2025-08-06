@@ -1,4 +1,5 @@
-﻿namespace PetFamily.Core.Dtos.Query;
+﻿
+namespace PetFamily.Core.Dtos.Query;
 
 public class PetDto
 {

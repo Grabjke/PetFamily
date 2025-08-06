@@ -22,10 +22,14 @@ public class GetPetByIdHandler : IQueryHandler<PetDto, GetPetByIdQuery>
             .AsNoTracking()
             .FirstOrDefaultAsync(p => p.Id == query.PetId, cancellationToken);
         
-        var sortedPhotos = pet!.Photos
-            .OrderByDescending(p => p.IsMain)
-            .ToArray();
+        PhotoDto[] sortedPhotos = [];
         
+        if (pet.Photos is not null)
+        {
+            sortedPhotos = pet.Photos
+                .OrderByDescending(p => p.IsMain)
+                .ToArray();
+        }
         return new PetDto
         {
             Id = pet.Id,
