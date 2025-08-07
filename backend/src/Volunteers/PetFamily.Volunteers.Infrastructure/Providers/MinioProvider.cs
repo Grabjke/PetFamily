@@ -6,7 +6,7 @@ using PetFamily.Core;
 using PetFamily.SharedKernel;
 using FileInfo = PetFamily.Core.FileProvider.FileInfo;
 
-namespace PetFamily.Files.Infrastructure.Providers;
+namespace PetFamily.Volunteers.Infrastructure.Providers;
 
 public class MinioProvider : IFileProvider
 {

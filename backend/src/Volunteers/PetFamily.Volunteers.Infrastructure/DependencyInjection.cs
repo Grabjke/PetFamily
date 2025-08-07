@@ -5,12 +5,12 @@ using PetFamily.Core;
 using PetFamily.Core.FileProvider;
 using PetFamily.Core.Messaging;
 using PetFamily.Core.Options;
-using PetFamily.Files.Infrastructure.Providers;
 using PetFamily.Volunteers.Application.Volunteers;
 using PetFamily.Volunteers.Infrastructure.BackgroundServices;
 using PetFamily.Volunteers.Infrastructure.DbContexts;
 using PetFamily.Volunteers.Infrastructure.Files;
 using PetFamily.Volunteers.Infrastructure.MessageQueues;
+using PetFamily.Volunteers.Infrastructure.Providers;
 using PetFamily.Volunteers.Infrastructure.Repositories;
 using FileInfo = PetFamily.Core.FileProvider.FileInfo;
 
@@ -64,10 +64,12 @@ public static class DependencyInjection
         IConfiguration configuration)
     {
         services.AddScoped<WriteVolunteerDbContext>(_ => 
-            new WriteVolunteerDbContext(configuration.GetConnectionString(InfrastructureConstants.DATABASE)!));
+            new WriteVolunteerDbContext(configuration.GetConnectionString(
+                InfrastructureConstants.DATABASE)!));
         
         services.AddScoped<IVolunteersReadDbContext, VolunteerReadDbContext>(_ => 
-            new VolunteerReadDbContext(configuration.GetConnectionString(InfrastructureConstants.DATABASE)!));
+            new VolunteerReadDbContext(configuration.GetConnectionString(
+                InfrastructureConstants.DATABASE)!));
         
         return services;
     }

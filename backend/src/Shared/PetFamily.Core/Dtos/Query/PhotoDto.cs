@@ -1,4 +1,6 @@
-﻿namespace PetFamily.Core.Dtos.Query;
+﻿using System.Text.Json.Serialization;
+
+namespace PetFamily.Core.Dtos.Query;
 
 public class PhotoDto
 {

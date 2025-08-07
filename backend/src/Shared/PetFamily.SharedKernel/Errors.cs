@@ -52,10 +52,10 @@ public static class Errors
                 "cannot delete species because there are animals associated with it");
         }
         
-        public static Error SpeciesAndBreedExist()
+        public static Error SpeciesOrBreedNotExist()
         {
-            return Error.Validation("species.or.breed.has.dependencies", 
-                "species or breed has dependencies");
+            return Error.Validation("species.or.breed.has.not.exist", 
+                "species or breed has not exist");
         }
         
     }
@@ -65,6 +65,14 @@ public static class Errors
         {
             return Error.Validation("breed.has.dependencies", 
                 "cannot delete breed because there are animals associated with it");
+        }
+    }
+    public static class User
+    {
+        public static Error InvalidCredentials()
+        {
+            return Error.Validation("credentials.is.invalid", 
+                "credentials is invalid");
         }
     }
     
