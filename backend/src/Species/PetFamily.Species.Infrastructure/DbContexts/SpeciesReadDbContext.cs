@@ -22,6 +22,8 @@ public class SpeciesReadDbContext(string connectionString) : DbContext, ISpecies
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.HasDefaultSchema("species");
+        
         modelBuilder.ApplyConfigurationsFromAssembly(
             typeof(WriteSpeciesDbContext).Assembly,
             type => type.FullName?.Contains("Configurations.Read") ?? false);

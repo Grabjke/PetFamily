@@ -2,12 +2,17 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using PetFamily.Accounts.Application.Authorization;
+using PetFamily.Accounts.Application;
 using PetFamily.Accounts.Domain;
+using PetFamily.Accounts.Infrastructure.IdentityManagers;
+using PetFamily.Accounts.Infrastructure.Options;
+using PetFamily.Accounts.Infrastructure.Seeding;
 using PetFamily.Core;
+using PetFamily.Framework.Authorization;
 
 namespace PetFamily.Accounts.Infrastructure;
 
@@ -17,8 +22,18 @@ public static class DependencyInjection
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddAuthorizationDbContext(configuration);
+        services
+            .AddAuthorizationDbContext(configuration)
+            .AddDatabase();
 
+        services.AddSingleton<AccountsSeeder>();
+        services.AddScoped<PermissionManager>();
+        services.AddScoped<RolePermissionManager>();
+        services.AddScoped<AdminAccountManager>();
+        services.AddScoped<AccountsSeederService>();
+        services.AddSingleton<IAuthorizationHandler, PermissionRequirementHandler>();
+        services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
+        
         return services;
     }
 
@@ -30,13 +45,17 @@ public static class DependencyInjection
 
         services.Configure<JwtOptions>(
             configuration.GetSection(JwtOptions.JWT));
+        
+        services.Configure<AdminOptions>(
+            configuration.GetSection(AdminOptions.ADMIN));
 
         services
             .AddIdentity<User, Role>(options => { options.User.RequireUniqueEmail = true; })
-            .AddEntityFrameworkStores<AuthorizationDbContext>();
+            .AddEntityFrameworkStores<AccountDbContext>()
+            .AddDefaultTokenProviders();
 
-        services.AddScoped<AuthorizationDbContext>(_ =>
-            new AuthorizationDbContext(configuration.GetConnectionString(
+        services.AddScoped<AccountDbContext>(_ =>
+            new AccountDbContext(configuration.GetConnectionString(
                 InfrastructureConstants.DATABASE)!)
         );
 
@@ -64,10 +83,14 @@ public static class DependencyInjection
                     ClockSkew = TimeSpan.Zero
                 };
             });
-
+        
         services.AddAuthorization();
-
-        services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
+        
+        return services;
+    }
+    private static IServiceCollection AddDatabase(this IServiceCollection services)
+    {
+        services.AddKeyedScoped<IUnitOfWork, UnitOfWork>(Modules.Accounts);
         
         return services;
     }

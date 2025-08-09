@@ -42,6 +42,27 @@ public static class EfCorePropertyExtensions
             .HasColumnType("jsonb");
     }
 
+
+    public static PropertyBuilder<List<T>> HasJsonbListConversion<T>(
+        this PropertyBuilder<List<T>> propertyBuilder)
+    {
+        var converter = new ValueConverter<List<T>, string>(
+            v => JsonSerializer.Serialize(v, (JsonSerializerOptions?)null),
+            v => JsonSerializer.Deserialize<List<T>>(v, (JsonSerializerOptions?)null) ?? new List<T>());
+
+        var comparer = new ValueComparer<List<T>>(
+            (c1, c2) => c1!.SequenceEqual(c2!),
+            c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v!.GetHashCode())),
+            c => c.ToList());
+
+        propertyBuilder.HasConversion(converter);
+        propertyBuilder.Metadata.SetValueConverter(converter);
+        propertyBuilder.Metadata.SetValueComparer(comparer);
+        
+        return propertyBuilder.HasColumnType("jsonb");
+    }
+
+
     public static PropertyBuilder<T[]> HasJsonConversion<T>(
         this PropertyBuilder<T[]> builder)
     {
@@ -57,11 +78,11 @@ public static class EfCorePropertyExtensions
             )
             .HasColumnType("jsonb");
     }
-    
+
     public static PropertyBuilder<T[]> HasJsonArrayConversion<T>(
         this PropertyBuilder<T[]> builder,
         JsonSerializerOptions? options = null)
-        where T : class 
+        where T : class
     {
         var serializerOptions = options ?? new JsonSerializerOptions
         {
@@ -73,8 +94,8 @@ public static class EfCorePropertyExtensions
                 new ValueConverter<T[], string>(
                     v => JsonSerializer.Serialize(v, serializerOptions),
                     v => JsonSerializer.Deserialize<T[]>(v, serializerOptions) ?? Array.Empty<T>(),
-                    new ConverterMappingHints()) 
+                    new ConverterMappingHints())
             )
-            .HasColumnType("jsonb"); 
+            .HasColumnType("jsonb");
     }
 }

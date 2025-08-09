@@ -1,6 +1,6 @@
 ﻿using PetFamily.Core.Abstractions;
 using PetFamily.Core.Dtos;
-using PetFamily.Volunteers.Domain.PetManagement.ValueObjects.Pet;
+using PetFamily.Core.ValueObjects.Pet;
 
 namespace PetFamily.Volunteers.Application.Volunteers.Commands.UpdateMainInfoPet;
 

@@ -1,11 +1,10 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
-using PetFamily.Core;
 using PetFamily.Core.Abstractions;
 using PetFamily.Core.Extensions;
+using PetFamily.Core.ValueObjects.Volunteer;
 using PetFamily.SharedKernel;
-using PetFamily.Volunteers.Domain.PetManagement.ValueObjects.Volunteer;
 
 namespace PetFamily.Volunteers.Application.Volunteers.Commands.UpdateMainInfo;
 

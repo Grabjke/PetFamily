@@ -1,6 +1,6 @@
 ﻿using PetFamily.Core.Dtos;
+using PetFamily.Core.ValueObjects.Pet;
 using PetFamily.Volunteers.Application.Volunteers.Commands.UpdateMainInfoPet;
-using PetFamily.Volunteers.Domain.PetManagement.ValueObjects.Pet;
 
 namespace PetFamily.Volunteers.Presentation.Requests;
 

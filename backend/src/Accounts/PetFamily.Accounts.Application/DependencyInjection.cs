@@ -1,7 +1,5 @@
 ﻿using FluentValidation;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
-using PetFamily.Accounts.Application.Requirements;
 using PetFamily.Core.Abstractions;
 
 namespace PetFamily.Accounts.Application;
@@ -12,8 +10,7 @@ public static class DependencyInjection
     {
         services
             .AddCommands()
-            .AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly)
-            .AddRequirements();
+            .AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
 
         return services;
     }
@@ -26,11 +23,5 @@ public static class DependencyInjection
             .AsSelfWithInterfaces()
             .WithScopedLifetime());
     }
-
-    private static IServiceCollection AddRequirements(this IServiceCollection services)
-    {
-        services.AddSingleton<IAuthorizationHandler, PermissionRequirementHandler>();
-        
-        return services;
-    }
+    
 }

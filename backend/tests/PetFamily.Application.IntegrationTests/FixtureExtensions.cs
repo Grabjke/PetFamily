@@ -1,16 +1,12 @@
-﻿
-
-using AutoFixture;
+﻿using AutoFixture;
 using AutoFixture.AutoNSubstitute;
 using PetFamily.Core.Dtos;
+using PetFamily.Core.ValueObjects.Pet;
 using PetFamily.Volunteers.Application.Volunteers.Commands.AddPet;
 using PetFamily.Volunteers.Application.Volunteers.Commands.AddPhotoPet;
 using PetFamily.Volunteers.Application.Volunteers.Commands.Create;
 using PetFamily.Volunteers.Application.Volunteers.Commands.UpdateMainInfo;
 using PetFamily.Volunteers.Application.Volunteers.Commands.UpdateMainInfoPet;
-using PetFamily.Volunteers.Application.Volunteers.Commands.UpdateRequisites;
-using PetFamily.Volunteers.Application.Volunteers.Commands.UpdateSocialNetworks;
-using PetFamily.Volunteers.Domain.PetManagement.ValueObjects.Pet;
 
 namespace PetFamily.App.IntegrationTests;
 
@@ -92,31 +88,8 @@ public static class FixtureExtensions
             })
             .Create();
     }
-    public static UpdateRequisitesCommand BuildUpdateRequisitesCommand(
-        this IFixture fixture,
-        Guid volunteerId)
-    {
-        return fixture.Build<UpdateRequisitesCommand>()
-            .With(x => x.VolunteerId, volunteerId)
-            .With(v => v.Requisites, new List<RequisitesDto>
-            {
-                new RequisitesDto("Update Сбербанк", " Update40817810550001234567")
-            })
-            .Create();
-    }
-    public static UpdateSocialNetworksCommand BuildUpdateSocialNetworksCommand(
-        this IFixture fixture,
-        Guid volunteerId)
-    {
-        return fixture.Build<UpdateSocialNetworksCommand>()
-            .With(x => x.VolunteerId, volunteerId)
-            .With(v => v.SocialNetworks, new List<SocialNetworkDto>
-            {
-                new("UpdateVK", "Updatehttps://vk.com/volunteer"),
-                new("UpdateTelegram", "Updatehttps://t.me/volunteer")
-            })
-            .Create();
-    }
+   
+   
     public static UpdateMainInfoCommand BuildUpdateMainInfoCommand(
         this IFixture fixture,
         Guid volunteerId)

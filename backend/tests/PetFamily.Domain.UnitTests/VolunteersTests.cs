@@ -1,10 +1,8 @@
-﻿
-
-using FluentAssertions;
+﻿using FluentAssertions;
+using PetFamily.Core.ValueObjects.Pet;
+using PetFamily.Core.ValueObjects.Volunteer;
 using PetFamily.SharedKernel.ValueObjects;
 using PetFamily.Volunteers.Domain.PetManagement;
-using PetFamily.Volunteers.Domain.PetManagement.ValueObjects.Pet;
-using PetFamily.Volunteers.Domain.PetManagement.ValueObjects.Volunteer;
 
 namespace PetFamily.UnitTests;
 

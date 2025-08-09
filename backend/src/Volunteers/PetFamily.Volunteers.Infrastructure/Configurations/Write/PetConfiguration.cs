@@ -1,12 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using PetFamily.Core;
 using PetFamily.Core.Extensions;
 using PetFamily.SharedKernel;
 using PetFamily.SharedKernel.ValueObjects;
 using PetFamily.Volunteers.Domain.PetManagement;
-using PetFamily.Volunteers.Domain.PetManagement.ValueObjects;
-using PetFamily.Volunteers.Domain.PetManagement.ValueObjects.Pet;
 
 namespace PetFamily.Volunteers.Infrastructure.Configurations.Write;
 

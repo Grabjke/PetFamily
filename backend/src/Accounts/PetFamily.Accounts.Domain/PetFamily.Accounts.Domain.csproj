@@ -11,6 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\Shared\PetFamily.Core\PetFamily.Core.csproj" />
       <Reference Include="Microsoft.AspNetCore.Authorization">
         <HintPath>C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\9.0.0\Microsoft.AspNetCore.Authorization.dll</HintPath>
       </Reference>

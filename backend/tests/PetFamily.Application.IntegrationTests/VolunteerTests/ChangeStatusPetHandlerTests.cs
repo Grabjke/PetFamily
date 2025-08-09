@@ -4,8 +4,8 @@ using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using PetFamily.Core.Abstractions;
+using PetFamily.Core.ValueObjects.Pet;
 using PetFamily.Volunteers.Application.Volunteers.Commands.ChangeStatusPet;
-using PetFamily.Volunteers.Domain.PetManagement.ValueObjects.Pet;
 
 namespace PetFamily.App.IntegrationTests.VolunteerTests;
 

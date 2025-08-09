@@ -1,16 +1,14 @@
 ﻿using CSharpFunctionalExtensions;
+using PetFamily.Core.ValueObjects.Pet;
+using PetFamily.Core.ValueObjects.Volunteer;
 using PetFamily.SharedKernel;
 using PetFamily.SharedKernel.ValueObjects;
-using PetFamily.Volunteers.Domain.PetManagement.ValueObjects.Pet;
-using PetFamily.Volunteers.Domain.PetManagement.ValueObjects.Volunteer;
 
 namespace PetFamily.Volunteers.Domain.PetManagement;
 
 public class Volunteer : SoftDeletableEntity<VolunteerId>
 {
     private readonly List<Pet> _pets = [];
-    private readonly List<SocialNetwork> _socialNetworks = [];
-    private readonly List<Requisites> _requisites = [];
 
     //ef core
     private Volunteer(VolunteerId id) : base(id)
@@ -41,8 +39,6 @@ public class Volunteer : SoftDeletableEntity<VolunteerId>
     public int PetsLookingForHome => GetCountPetsLookingForHome();
     public int PetsNeedsHelp => GetCountPetsNeedsHelp();
     public OwnersPhoneNumber PhoneNumber { get; private set; }
-    public IReadOnlyList<SocialNetwork> SocialNetworks => _socialNetworks;
-    public IReadOnlyList<Requisites> Requisites => _requisites;
     public IReadOnlyList<Pet> Pets => _pets;
 
     public override void Delete()
@@ -76,47 +72,13 @@ public class Volunteer : SoftDeletableEntity<VolunteerId>
         Experience = experience;
         PhoneNumber = phoneNumber;
     }
-
-    public UnitResult<Error> UpdateRequisites(List<Requisites> requisites)
-    {
-        var newRequisites = new List<Requisites>();
-
-        foreach (var requisite in requisites)
-        {
-            if (newRequisites.Contains(requisite))
-                return Errors.General.AllReadyExist();
-
-            newRequisites.Add(requisite);
-        }
-
-        _requisites.Clear();
-        _requisites.AddRange(newRequisites);
-
-        return Result.Success<Error>();
-    }
+    
 
     public void HardDeletePet(Pet pet)
     {
         _pets.Remove(pet);
     }
-
-    public UnitResult<Error> UpdateSocialNetworks(List<SocialNetwork> socialNetworks)
-    {
-        var newSocialNetworks = new List<SocialNetwork>();
-
-        foreach (var socialNetwork in socialNetworks)
-        {
-            if (newSocialNetworks.Contains(socialNetwork))
-                return Errors.General.AllReadyExist();
-
-            newSocialNetworks.Add(socialNetwork);
-        }
-
-        _socialNetworks.Clear();
-        _socialNetworks.AddRange(newSocialNetworks);
-
-        return Result.Success<Error>();
-    }
+    
 
     public Result<Pet, Error> GetPetById(PetId petId)
     {
@@ -142,25 +104,7 @@ public class Volunteer : SoftDeletableEntity<VolunteerId>
 
         return Result.Success<Error>();
     }
-
-    public UnitResult<Error> AddRequisites(Requisites requisites)
-    {
-        if (_requisites.Contains(requisites))
-            return Errors.General.AllReadyExist();
-
-        _requisites.Add(requisites);
-
-        return Result.Success<Error>();
-    }
-
-    public UnitResult<Error> AddSocialNetwork(SocialNetwork socialNetwork)
-    {
-        if (_socialNetworks.Contains(socialNetwork))
-            return Errors.General.AllReadyExist();
-
-        _socialNetworks.Add(socialNetwork);
-        return Result.Success<Error>();
-    }
+    
 
     public UnitResult<Error> MovePet(Pet pet, Position newPosition)
     {

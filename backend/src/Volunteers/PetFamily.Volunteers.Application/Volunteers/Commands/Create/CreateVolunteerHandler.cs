@@ -3,9 +3,9 @@ using FluentValidation;
 using Microsoft.Extensions.Logging;
 using PetFamily.Core.Abstractions;
 using PetFamily.Core.Extensions;
+using PetFamily.Core.ValueObjects.Volunteer;
 using PetFamily.SharedKernel;
 using PetFamily.SharedKernel.ValueObjects;
-using PetFamily.Volunteers.Domain.PetManagement.ValueObjects.Volunteer;
 
 namespace PetFamily.Volunteers.Application.Volunteers.Commands.Create;
 
@@ -64,31 +64,7 @@ public class CreateVolunteerHandler:ICommandHandler<Guid,CreateVolunteerCommand>
             experience,
             phoneNumber
         );
-
-        if (command.SocialNetworks?.Any() == true)
-        {
-            foreach (var (url, name) in command.SocialNetworks)
-            {
-                var socialNetwork = SocialNetwork.Create(url, name).Value;
-
-                var addResult = volunteer.AddSocialNetwork(socialNetwork);
-                if (addResult.IsFailure)
-                    return addResult.Error.ToErrorList();
-            }
-        }
-
-        if (command.Requisites?.Any() == true)
-        {
-            foreach (var (title, description) in command.Requisites)
-            {
-                var requisites = Requisites.Create(title, description).Value;
-
-                var addRequisitesResult = volunteer.AddRequisites(requisites);
-                if (addRequisitesResult.IsFailure)
-                    return addRequisitesResult.Error.ToErrorList();
-            }
-        }
-
+        
         await _volunteersRepository.Add(volunteer, cancellationToken);
 
         _logger.LogInformation("Created volunteer with id {Id}", volunteerId);

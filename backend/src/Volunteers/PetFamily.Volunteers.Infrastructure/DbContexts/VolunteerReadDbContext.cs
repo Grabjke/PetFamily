@@ -22,6 +22,8 @@ public class VolunteerReadDbContext(string connectionString) : DbContext, IVolun
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.HasDefaultSchema("volunteers");
+        
         modelBuilder.ApplyConfigurationsFromAssembly(
             typeof(WriteVolunteerDbContext).Assembly,
             type => type.FullName?.Contains("Configurations.Read") ?? false);

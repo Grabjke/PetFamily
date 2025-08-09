@@ -1,11 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using PetFamily.Core;
 using PetFamily.Core.Extensions;
 using PetFamily.SharedKernel;
 using PetFamily.SharedKernel.ValueObjects;
 using PetFamily.Volunteers.Domain.PetManagement;
-using PetFamily.Volunteers.Domain.PetManagement.ValueObjects.Volunteer;
 
 namespace PetFamily.Volunteers.Infrastructure.Configurations.Write;
 
@@ -71,18 +69,6 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
                 .IsRequired()
                 .HasColumnName("phone_number");
         });
-
-        builder.Property(v => v.SocialNetworks)
-            .JsonValueObjectCollectionConversion()
-            .IsRequired()
-            .HasColumnName("social_networks")
-            .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
-
-        builder.Property(v => v.Requisites)
-            .JsonValueObjectCollectionConversion()
-            .IsRequired()
-            .HasColumnName("requisites")
-            .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
 
         builder.HasMany(v => v.Pets)
             .WithOne()
