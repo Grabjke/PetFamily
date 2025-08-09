@@ -5,9 +5,9 @@ using PetFamily.Core;
 using PetFamily.Core.Abstractions;
 using PetFamily.Core.Extensions;
 using PetFamily.Core.Messaging;
+using PetFamily.Core.ValueObjects.Pet;
 using PetFamily.SharedKernel;
 using PetFamily.SharedKernel.ValueObjects;
-using PetFamily.Volunteers.Domain.PetManagement.ValueObjects.Pet;
 using FileInfo = PetFamily.Core.FileProvider.FileInfo;
 
 namespace PetFamily.Volunteers.Application.Volunteers.Commands.AddPhotoPet;

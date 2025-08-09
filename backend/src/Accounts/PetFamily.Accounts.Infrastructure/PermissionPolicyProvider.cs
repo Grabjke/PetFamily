@@ -6,7 +6,6 @@ namespace PetFamily.Accounts.Infrastructure;
 
 public class PermissionPolicyProvider : IAuthorizationPolicyProvider
 {
-
     public Task<AuthorizationPolicy?> GetPolicyAsync(string policyName)
     {
         if (string.IsNullOrEmpty(policyName))

@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PetFamily.Core;
+using PetFamily.Core.ValueObjects.Pet;
+using PetFamily.Core.ValueObjects.Volunteer;
 using PetFamily.SharedKernel.ValueObjects;
 using PetFamily.Species.Domain;
 using PetFamily.Species.Infrastructure.DbContexts;
 using PetFamily.Volunteers.Domain.PetManagement;
-using PetFamily.Volunteers.Domain.PetManagement.ValueObjects.Pet;
-using PetFamily.Volunteers.Domain.PetManagement.ValueObjects.Volunteer;
 using PetFamily.Volunteers.Infrastructure.DbContexts;
 
 namespace PetFamily.App.IntegrationTests;

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PetFamily.Core;
 using PetFamily.Framework;
+using PetFamily.Framework.Authorization;
 using PetFamily.Volunteers.Application.Volunteers.Commands.AddPet;
 using PetFamily.Volunteers.Application.Volunteers.Commands.AddPhotoPet;
 using PetFamily.Volunteers.Application.Volunteers.Commands.ChangeStatusPet;
@@ -16,8 +17,6 @@ using PetFamily.Volunteers.Application.Volunteers.Commands.RemovePhotoPet;
 using PetFamily.Volunteers.Application.Volunteers.Commands.SetMainPhotoPet;
 using PetFamily.Volunteers.Application.Volunteers.Commands.UpdateMainInfo;
 using PetFamily.Volunteers.Application.Volunteers.Commands.UpdateMainInfoPet;
-using PetFamily.Volunteers.Application.Volunteers.Commands.UpdateRequisites;
-using PetFamily.Volunteers.Application.Volunteers.Commands.UpdateSocialNetworks;
 using PetFamily.Volunteers.Application.Volunteers.Queries.GetPetById;
 using PetFamily.Volunteers.Application.Volunteers.Queries.GetPetsWithPagination;
 using PetFamily.Volunteers.Application.Volunteers.Queries.GetVolunteerById;
@@ -28,7 +27,7 @@ namespace PetFamily.Volunteers.Presentation;
 
 public class VolunteersController : ApplicationController
 {
-    [Permission("get.pet")]
+    [Permission(Permissions.Volunteers.PetRead)]
     [HttpGet("pets/{petId:guid}")]
     public async Task<ActionResult> GetPetById(
         [FromServices] GetPetByIdHandler handler,
@@ -41,7 +40,7 @@ public class VolunteersController : ApplicationController
 
         return Ok(response);
     }
-    [Permission("get.pet")]
+    [Permission(Permissions.Volunteers.PetRead)]
     [HttpGet("pets")]
     public async Task<ActionResult> GetPetsWithPagination(
         [FromServices] GetPetsWithPaginationHandler handler,
@@ -52,7 +51,6 @@ public class VolunteersController : ApplicationController
 
         return Ok(response);
     }
-    [Permission("set.main.photo")]
     [HttpPut("volunteers/{volunteerId:guid}/pets/{petId:guid}/set-main-photo")]
     public async Task<ActionResult<Guid>> SetMainPhoto(
         [FromRoute] Guid volunteerId,
@@ -68,7 +66,7 @@ public class VolunteersController : ApplicationController
             : Ok(result.Value);
     }
 
-    [Permission("delete.pet")]
+    [Permission(Permissions.Volunteers.DeletePet)]
     [HttpDelete("volunteers/{volunteerId:guid}/pets/{petId:guid}/soft-deleted")]
     public async Task<ActionResult<Guid>> SoftDeletePet(
         [FromRoute] Guid volunteerId,
@@ -85,7 +83,7 @@ public class VolunteersController : ApplicationController
             : Ok(result.Value);
 
     }
-    [Permission("delete.pet")]
+    [Permission(Permissions.Volunteers.DeletePet)]
     [HttpDelete("volunteers/{volunteerId:guid}/pets/{petId:guid}/hard-deleted")]
     public async Task<ActionResult<Guid>> HardDeletePet(
         [FromRoute] Guid volunteerId,
@@ -101,7 +99,6 @@ public class VolunteersController : ApplicationController
             ? result.Error.ToResponse()
             : Ok(result.Value);
     }
-    [Permission("change.status")]
     [HttpPut("volunteers/{volunteerId:guid}/pets/{petId:guid}/change-status")]
     public async Task<ActionResult<Guid>> ChangeStatus(
         [FromRoute] Guid volunteerId,
@@ -116,7 +113,6 @@ public class VolunteersController : ApplicationController
             ? result.Error.ToResponse()
             : Ok(result.Value);
     }
-    [Permission("update.main.info")]
     [HttpPut("volunteers/{volunteerId:guid}/pets/{petId:guid}/update-main-info")]
     public async Task<ActionResult<Guid>> UpdatePet(
         [FromRoute] Guid volunteerId,
@@ -131,7 +127,6 @@ public class VolunteersController : ApplicationController
             ? result.Error.ToResponse()
             : Ok(result.Value);
     }
-    [Permission("get.volunteers")]
     [HttpGet]
     public async Task<ActionResult> Get(
         [FromServices] GetVolunteerWithPaginationHandler handler,
@@ -182,34 +177,7 @@ public class VolunteersController : ApplicationController
             ? result.Error.ToResponse()
             : Ok(result.Value);
     }
-
-    [HttpPut("{id:guid}/requisite")]
-    public async Task<ActionResult<Guid>> Update(
-        [FromRoute] Guid id,
-        [FromBody] UpdateRequisitesRequest request,
-        [FromServices] UpdateRequisitesHandler handler,
-        CancellationToken cancellationToken = default)
-    {
-        var result = await handler.Handle(request.ToCommand(id), cancellationToken);
-
-        return result.IsFailure
-            ? result.Error.ToResponse()
-            : Ok(result.Value);
-    }
-
-    [HttpPut("{id:guid}/social-network")]
-    public async Task<ActionResult<Guid>> Update(
-        [FromRoute] Guid id,
-        [FromBody] UpdateSocialNetworksRequest request,
-        [FromServices] UpdateSocialNetworksHandler handler,
-        CancellationToken cancellationToken = default)
-    {
-        var result = await handler.Handle(request.ToCommand(id), cancellationToken);
-
-        return result.IsFailure
-            ? result.Error.ToResponse()
-            : Ok(result.Value);
-    }
+    
 
     [HttpDelete("{id:guid}/hard")]
     public async Task<ActionResult<Guid>> Delete(

@@ -1,6 +1,5 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using PetFamily.Accounts.Infrastructure.Seeding;
 using PetFamily.Accounts.Presentation.DependencyInjection;
 using PetFamily.Files.Application;
 using PetFamily.Species.Presentation.DependencyInjection;
@@ -8,6 +7,8 @@ using PetFamily.Volunteers.Presentation.DependencyInjection;
 using PetFamily.Web.Middlewares;
 using Serilog;
 using Serilog.Events;
+
+DotNetEnv.Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -65,6 +66,10 @@ builder.Services
 
 var app = builder.Build();
 
+var seeder = app.Services.GetService<AccountsSeeder>();
+
+await seeder.SeedAsync();
+
 app.UseExceptionMiddleware();
 
 app.UseSerilogRequestLogging();
@@ -85,4 +90,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-public partial class Program;
+namespace PetFamily.Web
+{
+    public partial class Program;
+}
