@@ -17,7 +17,6 @@ public class RemoveBreedHandler : ICommandHandler<Guid, RemoveBreedCommand>
 {
     private readonly ILogger<RemoveBreedHandler> _logger;
     private readonly ISpeciesRepository _speciesRepository;
-    private readonly ISpeciesReadDbContext _readDbContext;
     private readonly IValidator<RemoveBreedCommand> _validator;
     private readonly IVolunteerContract _volunteerContract;
     private readonly IUnitOfWork _unitOfWork;
@@ -32,7 +31,6 @@ public class RemoveBreedHandler : ICommandHandler<Guid, RemoveBreedCommand>
     {
         _logger = logger;
         _speciesRepository = speciesRepository;
-        _readDbContext = readDbContext;
         _validator = validator;
         _volunteerContract = volunteerContract;
         _unitOfWork = unitOfWork;

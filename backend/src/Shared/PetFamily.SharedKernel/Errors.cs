@@ -9,6 +9,10 @@ public static class Errors
             var label = name ?? "value";
             return Error.Validation("value.is.invalid", $"{label} is invalid");
         }
+        public static Error ServerError()
+        {
+            return Error.Failure("server.error","server.error");
+        }
         
         public static Error NotFound(Guid? id = null)
         {
