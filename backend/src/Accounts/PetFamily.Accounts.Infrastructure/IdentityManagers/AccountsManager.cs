@@ -2,11 +2,11 @@
 
 namespace PetFamily.Accounts.Infrastructure.IdentityManagers;
 
-public class AdminAccountManager
+public class AccountsManager
 {
     private readonly AccountDbContext _context;
 
-    public AdminAccountManager(AccountDbContext context)
+    public AccountsManager(AccountDbContext context)
     {
         _context = context;
     }

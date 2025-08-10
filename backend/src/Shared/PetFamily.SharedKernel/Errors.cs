@@ -14,6 +14,11 @@ public static class Errors
             return Error.Failure("server.error","server.error");
         }
         
+        public static Error Failure()
+        {
+            return Error.Failure("failure","Failure");
+        }
+        
         public static Error NotFound(Guid? id = null)
         {
             var recordId = id == null ? "": $" for Id '{id}'";
@@ -71,6 +76,20 @@ public static class Errors
                 "cannot delete breed because there are animals associated with it");
         }
     }
+    
+    public static class Tokens
+    {
+        public static Error ExpiredToken()
+        {
+            return Error.Validation("token.is.expired", "token is expired");
+        }
+        
+        public static Error InvalidToken()
+        {
+            return Error.Validation("token.is.invalid", "token is invalid");
+        }
+    }
+    
     public static class User
     {
         public static Error InvalidCredentials()
