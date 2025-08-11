@@ -2,8 +2,8 @@
 
 namespace PetFamily.Accounts.Presentation.Requests;
 
-public record RefreshTokensRequest(string AccessToken, Guid RefreshToken)
+public record RefreshTokensRequest(string AccessToken)
 {
-    public RefreshTokenCommand ToCommand()
-        => new(AccessToken, RefreshToken);
+    public RefreshTokenCommand ToCommand(Guid refreshTokenId)
+        => new(AccessToken,refreshTokenId);
 }
