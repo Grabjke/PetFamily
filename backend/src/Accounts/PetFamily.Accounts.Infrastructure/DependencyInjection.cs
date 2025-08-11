@@ -12,6 +12,7 @@ using PetFamily.Accounts.Infrastructure.IdentityManagers;
 using PetFamily.Accounts.Infrastructure.Options;
 using PetFamily.Accounts.Infrastructure.Seeding;
 using PetFamily.Core;
+using PetFamily.Framework;
 using PetFamily.Framework.Authorization;
 
 namespace PetFamily.Accounts.Infrastructure;
@@ -28,11 +29,13 @@ public static class DependencyInjection
 
         services.AddSingleton<AccountsSeeder>();
         services.AddScoped<PermissionManager>();
+        services.AddScoped<IRefreshSessionManager, RefreshSessionManager>();
         services.AddScoped<RolePermissionManager>();
-        services.AddScoped<AdminAccountManager>();
+        services.AddScoped<AccountsManager>();
         services.AddScoped<AccountsSeederService>();
         services.AddSingleton<IAuthorizationHandler, PermissionRequirementHandler>();
         services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
+        
         
         return services;
     }
@@ -45,6 +48,9 @@ public static class DependencyInjection
 
         services.Configure<JwtOptions>(
             configuration.GetSection(JwtOptions.JWT));
+        
+        services.Configure<RefreshSessionOptions>(
+            configuration.GetSection(RefreshSessionOptions.RefreshSession));
         
         services.Configure<AdminOptions>(
             configuration.GetSection(AdminOptions.ADMIN));
@@ -70,18 +76,9 @@ public static class DependencyInjection
             {
                 var jwtOptions = configuration.GetSection(JwtOptions.JWT).Get<JwtOptions>()
                                  ?? throw new ApplicationException("Options jwt not found");
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidIssuer = jwtOptions.Issuer,
-                    ValidAudience = jwtOptions.Audience,
-                    IssuerSigningKey =
-                        new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key)),
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ClockSkew = TimeSpan.Zero
-                };
+                
+                options.TokenValidationParameters = TokenValidationParametersFactory
+                    .CreateWithLifeTime(jwtOptions);
             });
         
         services.AddAuthorization();

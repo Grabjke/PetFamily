@@ -15,7 +15,7 @@ public class AccountsSeederService
 {
     private readonly UserManager<User> _userManager;
     private readonly RoleManager<Role> _roleManager;
-    private readonly AdminAccountManager _adminAccountManager;
+    private readonly AccountsManager _accountsManager;
     private readonly PermissionManager _permissionManager;
     private readonly RolePermissionManager _rolePermissionManager;
     private readonly AdminOptions _adminOptions;
@@ -24,7 +24,7 @@ public class AccountsSeederService
     public AccountsSeederService(
         UserManager<User> userManager,
         RoleManager<Role> roleManager,
-        AdminAccountManager adminAccountManager,
+        AccountsManager accountsManager,
         PermissionManager permissionManager,
         RolePermissionManager rolePermissionManager,
         IOptions<AdminOptions> adminOptions,
@@ -32,7 +32,7 @@ public class AccountsSeederService
     {
         _userManager = userManager;
         _roleManager = roleManager;
-        _adminAccountManager = adminAccountManager;
+        _accountsManager = accountsManager;
         _permissionManager = permissionManager;
         _rolePermissionManager = rolePermissionManager;
         _adminOptions = adminOptions.Value;
@@ -67,7 +67,7 @@ public class AccountsSeederService
 
         var adminAccount = new AdminAccount(fullname, adminUser);
         
-        await _adminAccountManager.CreateAdminAccount(adminAccount);
+        await _accountsManager.CreateAdminAccount(adminAccount);
     }
     
     private async Task<bool> AnyAdminExistsAsync()

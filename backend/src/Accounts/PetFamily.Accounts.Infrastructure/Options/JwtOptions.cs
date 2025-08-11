@@ -1,6 +1,6 @@
 ﻿namespace PetFamily.Accounts.Infrastructure.Options;
 
-public class JwtOptions
+public  class JwtOptions
 {
     public const string JWT = nameof(JWT);
     public string Issuer { get; init; }

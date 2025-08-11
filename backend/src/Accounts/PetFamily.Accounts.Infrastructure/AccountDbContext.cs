@@ -15,7 +15,8 @@ public class AccountDbContext(string connectionString)
     public DbSet<RolePermission> RolePermissions => Set<RolePermission>();
     public DbSet<Permission> Permissions => Set<Permission>();
     public DbSet<AdminAccount> AdminAccounts => Set<AdminAccount>();
-
+    public DbSet<RefreshSession> RefreshSessions => Set<RefreshSession>();
+    
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
