@@ -37,13 +37,15 @@ public class AccountController(IOptions<RefreshSessionOptions> options) : Applic
         SetRefreshTokenCookie(result.Value.RefreshToken.ToString());
         
         return result.IsFailure
-            ? result.Error.ToResponse()
-            : Ok(result.Value.AccessToken);
+            ? result.Error.ToResponse() 
+            : Ok(new {
+                accessToken = result.Value.AccessToken,
+                refreshToken = result.Value.RefreshToken
+            });
     }
 
     [HttpPost("refresh")]
     public async Task<IActionResult> RefreshTokens(
-        [FromBody] RefreshTokensRequest request,
         [FromServices] RefreshTokensHandler handler,
         CancellationToken cancellationToken)
     {
@@ -54,13 +56,16 @@ public class AccountController(IOptions<RefreshSessionOptions> options) : Applic
         if (!Guid.TryParse(refreshToken, out var refreshTokenGuid))
             return Unauthorized(Errors.Tokens.InvalidToken().ToResponse());
         
-        var result = await handler.Handle(request.ToCommand(refreshTokenGuid), cancellationToken);
+        var result = await handler.Handle(new RefreshTokenCommand(refreshTokenGuid), cancellationToken);
 
         SetRefreshTokenCookie(result.Value.RefreshToken.ToString());
         
         return result.IsFailure
-            ? result.Error.ToResponse()
-            : Ok(result.Value.AccessToken);
+            ? result.Error.ToResponse() 
+            : Ok(new {
+                accessToken = result.Value.AccessToken,
+                refreshToken = result.Value.RefreshToken
+            });
     }
     
     private void SetRefreshTokenCookie(string refreshToken)
