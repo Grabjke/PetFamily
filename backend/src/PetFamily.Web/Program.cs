@@ -1,6 +1,7 @@
 using Microsoft.OpenApi.Models;
 using PetFamily.Accounts.Infrastructure.Seeding;
 using PetFamily.Accounts.Presentation.DependencyInjection;
+using PetFamily.Core.Extensions;
 using PetFamily.Files.Application;
 using PetFamily.Species.Presentation.DependencyInjection;
 using PetFamily.Volunteers.Presentation.DependencyInjection;
@@ -79,17 +80,32 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 
-    // await app.ApplyMigration();
+    //  await app.ApplyMigration();
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(config =>
+{
+    config.WithOrigins("http://localhost:5173")
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials();
+});
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
 
+app.MapGet("/api/users", () =>
+{
+    List<string> users = ["user1", "user2", "user3"];
+    return Results.Ok(users);
+});
+
 app.Run();
+
 namespace PetFamily.Web
 {
     public partial class Program;

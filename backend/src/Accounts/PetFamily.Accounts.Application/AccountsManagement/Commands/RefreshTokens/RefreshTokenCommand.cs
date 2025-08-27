@@ -2,4 +2,4 @@
 
 namespace PetFamily.Accounts.Application.AccountsManagement.Commands.RefreshTokens;
 
-public record RefreshTokenCommand(string AccessToken, Guid RefreshToken) : ICommand;
+public record RefreshTokenCommand(Guid RefreshToken) : ICommand;
