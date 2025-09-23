@@ -45,29 +45,6 @@ public class AccountsSeederService
         {
             return; 
         }
-        
-        var json = await File.ReadAllTextAsync(FilePaths.Accounts);
-
-        var seedData = JsonSerializer.Deserialize<RolePermissionOptions>(json)
-                       ?? throw new ApplicationException("Json doesn't contain role permission config");
-
-        await SeedPermissions(seedData);
-
-        await SeedRoles(seedData);
-
-        await SeedRolePermissions(seedData);
-
-        var adminRole = await _roleManager.FindByNameAsync(AdminAccount.ADMIN)
-                        ?? throw new ApplicationException("Admin role doesn't exist");
-
-        var adminUser = User.CreateAdmin(_adminOptions.UserName, _adminOptions.Email, adminRole);
-        await _userManager.CreateAsync(adminUser, _adminOptions.Password);
-
-        var fullname = FullName.Create(_adminOptions.UserName, _adminOptions.UserName).Value;
-
-        var adminAccount = new AdminAccount(fullname, adminUser);
-        
-        await _accountsManager.CreateAdminAccount(adminAccount);
     }
     
     private async Task<bool> AnyAdminExistsAsync()

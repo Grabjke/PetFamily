@@ -60,6 +60,7 @@ public class PetDtoConfiguration : IEntityTypeConfiguration<PetDto>
             .HasColumnName("day_of_birth");
         
         builder.Property(p => p.HelpStatus)
+            .HasConversion<string>()
             .HasColumnName("help_status");
         
         builder.Property(p => p.Requisites)

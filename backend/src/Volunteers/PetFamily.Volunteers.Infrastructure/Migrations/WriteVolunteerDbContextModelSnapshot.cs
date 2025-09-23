@@ -229,18 +229,6 @@ namespace PetFamily.Volunteers.Infrastructure.Migrations
                         .HasDefaultValue(false)
                         .HasColumnName("is_deleted");
 
-                    b.Property<string>("Requisites")
-                        .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("jsonb")
-                        .HasColumnName("requisites");
-
-                    b.Property<string>("SocialNetworks")
-                        .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("jsonb")
-                        .HasColumnName("social_networks");
-
                     b.ComplexProperty<Dictionary<string, object>>("Description", "PetFamily.Volunteers.Domain.PetManagement.Volunteer.Description#VolunteerDescription", b1 =>
                         {
                             b1.IsRequired();

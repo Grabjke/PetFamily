@@ -13,8 +13,8 @@ using PetFamily.Volunteers.Infrastructure.DbContexts;
 namespace PetFamily.Volunteers.Infrastructure.Migrations
 {
     [DbContext(typeof(WriteVolunteerDbContext))]
-    [Migration("20250807125513_Volunteer_Initial")]
-    partial class Volunteer_Initial
+    [Migration("20250923173636_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -231,18 +231,6 @@ namespace PetFamily.Volunteers.Infrastructure.Migrations
                         .HasColumnType("boolean")
                         .HasDefaultValue(false)
                         .HasColumnName("is_deleted");
-
-                    b.Property<string>("Requisites")
-                        .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("jsonb")
-                        .HasColumnName("requisites");
-
-                    b.Property<string>("SocialNetworks")
-                        .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("jsonb")
-                        .HasColumnName("social_networks");
 
                     b.ComplexProperty<Dictionary<string, object>>("Description", "PetFamily.Volunteers.Domain.PetManagement.Volunteer.Description#VolunteerDescription", b1 =>
                         {

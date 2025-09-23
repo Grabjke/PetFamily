@@ -5,10 +5,10 @@ using PetFamily.VolunteersApplications.Domain.Enums;
 
 namespace PetFamily.UnitTests;
 
-public class VolunteersTests
+public class VolunteersApplicationsTests
 {
     [Fact]
-    public void Volunteer_application_should_be_created_when_data_is_valid()
+    public void Create_ShouldReturnSuccess_WhenDataIsValid()
     {
         var userId = Guid.NewGuid();
         var volunteerInfoResult = VolunteerInfo.Create(
@@ -30,7 +30,7 @@ public class VolunteersTests
     }
 
     [Fact]
-    public void Volunteer_application_creation_should_fail_when_required_fields_are_invalid()
+    public void Create_ShouldReturnFailure_WhenRequiredFieldsInvalid()
     {
         var userId = Guid.NewGuid();
 
@@ -46,7 +46,7 @@ public class VolunteersTests
     }
 
     [Fact]
-    public void Volunteer_application_should_be_taken_to_review_when_admin_and_discussion_are_provided()
+    public void Take_to_review_should_success()
     {
         var userId = Guid.NewGuid();
         var adminId = Guid.NewGuid();
@@ -72,7 +72,7 @@ public class VolunteersTests
     }
 
     [Fact]
-    public void Volunteer_application_status_should_be_approved_when_admin_approves()
+    public void Approve_ShouldSetStatusToApproved()
     {
         var userId = Guid.NewGuid();
         var adminId = Guid.NewGuid();
@@ -96,7 +96,7 @@ public class VolunteersTests
     }
 
     [Fact]
-    public void Volunteer_application_status_should_be_rejected_with_comment_when_admin_rejects()
+    public void Reject_ShouldSetStatusToRejectedAndStoreComment()
     {
         var comment = "Rejection comment";
         var userId = Guid.NewGuid();
@@ -122,7 +122,7 @@ public class VolunteersTests
     }
 
     [Fact]
-    public void Volunteer_application_creation_should_fail_when_user_id_is_empty()
+    public void Create_ShouldReturnFailure_WhenUserIdIsEmpty()
     {
         var emptyUserId = Guid.Empty;
         var volunteerInfoResult = VolunteerInfo.Create(

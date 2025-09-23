@@ -81,9 +81,10 @@ public class GetPetsWithPaginationHandler : IQueryHandler<PagedList<PetDto>, Get
             query.IsVaccinated.HasValue,
             p => p.IsVaccinated == query.IsVaccinated);
 
+        
         petsQuery = petsQuery.WhereIf(
             query.HelpStatus.HasValue,
-            p => Equals(p.HelpStatus, query.HelpStatus));
+            p => p.HelpStatus == ((HelpStatusDto)query.HelpStatus.Value));
 
 
         Expression<Func<PetDto, object>> keySelector = query.SortBy?.ToLower()switch

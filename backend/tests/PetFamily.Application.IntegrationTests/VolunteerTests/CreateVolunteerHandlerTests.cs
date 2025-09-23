@@ -1,6 +1,4 @@
-﻿
-
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using PetFamily.Core.Abstractions;
@@ -31,8 +29,6 @@ public class CreateVolunteerHandlerTests : VolunteerTestBase
         volunteer.Should().NotBeNull();
         volunteer.Name.Should().Be(command.FullName.Name);
         volunteer.PhoneNumber.Should().Be(command.PhoneNumber);
-        volunteer.SocialNetworks.Should().NotBeEmpty();
-        volunteer.Requisites.Should().NotBeEmpty();
     }
     
 }
