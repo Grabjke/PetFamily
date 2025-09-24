@@ -18,7 +18,7 @@ public class PetDtoConfiguration : IEntityTypeConfiguration<PetDto>
             .HasForeignKey(p => p.VolunteerId);
         
         builder.Property(p => p.Name)
-            .HasColumnName("name");
+            .HasColumnName("petName");
         
         builder.Property(p => p.Description)
             .HasColumnName("description");

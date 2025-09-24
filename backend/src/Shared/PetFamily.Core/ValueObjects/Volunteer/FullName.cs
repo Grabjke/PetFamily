@@ -18,7 +18,7 @@ public record FullName
     public static Result<FullName,Error> Create(string name, string surname, string? patronymic)
     {
         if (string.IsNullOrWhiteSpace(name)||name.Length > Constants.MAX_LOW_TEXT_LENGTH)
-            return Errors.General.ValueIsInvalid("Name");
+            return Errors.General.ValueIsInvalid("PetName");
         
         if (string.IsNullOrWhiteSpace(surname)|| surname.Length > Constants.MAX_LOW_TEXT_LENGTH)
             return Errors.General.ValueIsInvalid("Surname");

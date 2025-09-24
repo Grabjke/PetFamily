@@ -89,7 +89,7 @@ public class GetPetsWithPaginationHandler : IQueryHandler<PagedList<PetDto>, Get
 
         Expression<Func<PetDto, object>> keySelector = query.SortBy?.ToLower()switch
         {
-            "name" => x => x.Name,
+            "petName" => x => x.Name,
             "description" => x => x.Description,
             "colour" => x => x.Colour,
             "country" => x => x.Country,

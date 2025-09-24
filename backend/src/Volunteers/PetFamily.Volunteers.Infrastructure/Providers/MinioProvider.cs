@@ -100,7 +100,7 @@ public class MinioProvider : IFileProvider
         catch (Exception ex)
         {
             _logger.LogError(ex,
-                "Fail to presigned files in minio, files name: {name}", fileName);
+                "Fail to presigned files in minio, files petName: {petName}", fileName);
             return Error.Failure("file.presigned", "Fail to presigned files in minio");
         }
     }
@@ -129,7 +129,7 @@ public class MinioProvider : IFileProvider
         catch (Exception ex)
         {
             _logger.LogError(ex,
-                "Fail to remove file in minio with file name {path} in bucket {bucket}",
+                "Fail to remove file in minio with file petName {path} in bucket {bucket}",
                 fileInfo.FilePath.Path,
                 BUCKET_NAME);
 
@@ -189,7 +189,7 @@ public class MinioProvider : IFileProvider
         catch (Exception ex)
         {
             _logger.LogError(ex,
-                "Fail to remove file in minio with file name {path} in bucket {bucket}",
+                "Fail to remove file in minio with file petName {path} in bucket {bucket}",
                 fileName,
                 BUCKET_NAME);
 

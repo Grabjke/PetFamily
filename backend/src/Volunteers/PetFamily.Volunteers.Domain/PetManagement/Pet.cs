@@ -18,7 +18,7 @@ public class Pet : SoftDeletableEntity<PetId>
 
     public Pet(
         PetId id,
-        PetName name,
+        PetName petName,
         Description description,
         PetSpeciesBreed speciesBreed,
         Colour colour,
@@ -33,7 +33,7 @@ public class Pet : SoftDeletableEntity<PetId>
         HelpStatus helpStatus
     ) : base(id)
     {
-        Name = name;
+        PetName = petName;
         Description = description;
         PetSpeciesBreed = speciesBreed;
         Colour = colour;
@@ -49,7 +49,7 @@ public class Pet : SoftDeletableEntity<PetId>
         DateOfCreation = DateTime.UtcNow;
     }
 
-    public PetName Name { get; private set; } = null!;
+    public PetName PetName { get; private set; } = null!;
     public Description Description { get; private set; } = null!;
     public PetSpeciesBreed PetSpeciesBreed { get; private set; }
     public Colour Colour { get; private set; } = null!;
@@ -113,7 +113,7 @@ public class Pet : SoftDeletableEntity<PetId>
     }
 
     internal void UpdateMainInfo(
-        PetName name,
+        PetName petName,
         Description description,
         PetSpeciesBreed speciesBreed,
         Colour colour,
@@ -127,7 +127,7 @@ public class Pet : SoftDeletableEntity<PetId>
         bool isVaccinated,
         HelpStatus helpStatus)
     {
-        Name = name;
+        PetName = petName;
         Description = description;
         PetSpeciesBreed = speciesBreed;
         Colour = colour;

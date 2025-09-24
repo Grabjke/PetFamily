@@ -27,7 +27,6 @@ public class VolunteerApplication : SharedKernel.Entity<Guid>
         Guid userId,
         VolunteerInfo volunteerInfo) : base(id)
     {
-        Id = id;
         UserId = userId;
         VolunteerInfo = volunteerInfo;
         Status = VolunteerRequestStatus.Created;
