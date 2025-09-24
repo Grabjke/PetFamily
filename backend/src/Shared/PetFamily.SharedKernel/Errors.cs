@@ -14,11 +14,6 @@ public static class Errors
             return Error.Failure("server.error","server.error");
         }
         
-        public static Error Failure()
-        {
-            return Error.Failure("failure","Failure");
-        }
-        
         public static Error NotFound(Guid? id = null)
         {
             var recordId = id == null ? "": $" for Id '{id}'";
@@ -29,21 +24,6 @@ public static class Errors
         {
             var label = name ?? "Value";
             return Error.Validation("value.is.required", $"{label} is required");
-        }
-        
-        public static Error InvalidLength(string? name = null, int? maxLength = null, int? minLength = null)
-        {
-            var label = name ?? "Value";
-            var lengthInfo = string.Empty;
-    
-            if (minLength.HasValue && maxLength.HasValue)
-                lengthInfo = $" (expected {minLength}-{maxLength} characters)";
-            else if (maxLength.HasValue)
-                lengthInfo = $" (max {maxLength} characters)";
-            else if (minLength.HasValue)
-                lengthInfo = $" (min {minLength} characters)";
-
-            return Error.Validation("invalid.length", $"{label} has invalid length{lengthInfo}");
         }
         
         public static Error AllReadyExist()

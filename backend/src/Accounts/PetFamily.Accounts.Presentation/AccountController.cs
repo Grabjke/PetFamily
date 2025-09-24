@@ -35,12 +35,16 @@ public class AccountController(IOptions<RefreshSessionOptions> options) : Applic
         var result = await handler.Handle(request.ToCommand(), cancellationToken);
 
         SetRefreshTokenCookie(result.Value.RefreshToken.ToString());
-        
+
         return result.IsFailure
-            ? result.Error.ToResponse() 
-            : Ok(new {
+            ? result.Error.ToResponse()
+            : Ok(new
+            {
                 accessToken = result.Value.AccessToken,
-                refreshToken = result.Value.RefreshToken
+                refreshToken = result.Value.RefreshToken,
+                roles = result.Value.Roles,
+                email = result.Value.Email,
+                userId = result.Value.UserId,
             });
     }
 
@@ -52,30 +56,34 @@ public class AccountController(IOptions<RefreshSessionOptions> options) : Applic
         var refreshToken = Request.Cookies["refreshToken"];
         if (string.IsNullOrEmpty(refreshToken))
             return Unauthorized(Errors.Tokens.InvalidToken().ToResponse());
-        
+
         if (!Guid.TryParse(refreshToken, out var refreshTokenGuid))
             return Unauthorized(Errors.Tokens.InvalidToken().ToResponse());
-        
+
         var result = await handler.Handle(new RefreshTokenCommand(refreshTokenGuid), cancellationToken);
 
         SetRefreshTokenCookie(result.Value.RefreshToken.ToString());
-        
+
         return result.IsFailure
-            ? result.Error.ToResponse() 
-            : Ok(new {
+            ? result.Error.ToResponse()
+            : Ok(new
+            {
                 accessToken = result.Value.AccessToken,
-                refreshToken = result.Value.RefreshToken
+                refreshToken = result.Value.RefreshToken,
+                roles = result.Value.Roles,
+                email = result.Value.Email,
+                userId = result.Value.UserId,
             });
     }
-    
+
     private void SetRefreshTokenCookie(string refreshToken)
     {
         var cookieOptions = new CookieOptions
         {
-            HttpOnly = true, 
-            Secure = true,   
+            HttpOnly = true,
+            Secure = true,
             IsEssential = true,
-            SameSite = SameSiteMode.Strict, 
+            SameSite = SameSiteMode.Strict,
             Expires = DateTime.UtcNow.AddDays(int.Parse(options.Value.ExpiredDaysTime)),
         };
 

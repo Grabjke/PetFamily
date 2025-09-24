@@ -67,9 +67,11 @@ builder.Services
 
 var app = builder.Build();
 
+
+
 var seeder = app.Services.GetService<AccountsSeeder>();
 
-await seeder.SeedAsync();
+await seeder!.SeedAsync();
 
 app.UseExceptionMiddleware();
 
@@ -85,9 +87,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseRouting();
+
 app.UseCors(config =>
 {
-    config.WithOrigins("http://localhost:5173")
+    config.WithOrigins("http://localhost:5173", "http://localhost:5174")
         .AllowAnyHeader()
         .AllowAnyMethod()
         .AllowCredentials();
@@ -97,12 +101,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
-app.MapGet("/api/users", () =>
-{
-    List<string> users = ["user1", "user2", "user3"];
-    return Results.Ok(users);
-});
 
 app.Run();
 

@@ -34,15 +34,22 @@ public class LoginHandler : ICommandHandler<LoginResponse, LoginUserCommand>
             return Errors.General.NotFound().ToErrorList();
         }
 
+        var roles = await _userManager.GetRolesAsync(user);
+
         var passwordConfirmed = await _userManager.CheckPasswordAsync(user, command.Password);
         if (passwordConfirmed is false)
             return Errors.User.InvalidCredentials().ToErrorList();
 
         var accessToken = _tokenProvider.GenerateAccessToken(user);
-        var refreshToken = await _tokenProvider.GenerateRefreshToken(user,accessToken.Jti ,cancellationToken);
-        
+        var refreshToken = await _tokenProvider.GenerateRefreshToken(user, accessToken.Jti, cancellationToken);
+
         _logger.LogInformation("Successfully logged in");
 
-        return new LoginResponse(accessToken.AccessToken, refreshToken,user.Id,user.Email!);
+        return new LoginResponse(
+            accessToken.AccessToken,
+            refreshToken,
+            user.Id, 
+            user.Email!,
+            roles.Select(r=>r.ToLower()));
     }
 }

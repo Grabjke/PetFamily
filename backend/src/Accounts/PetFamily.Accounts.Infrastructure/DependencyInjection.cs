@@ -56,7 +56,14 @@ public static class DependencyInjection
             configuration.GetSection(AdminOptions.ADMIN));
 
         services
-            .AddIdentity<User, Role>(options => { options.User.RequireUniqueEmail = true; })
+            .AddIdentity<User, Role>(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+                options.User.AllowedUserNameCharacters =
+                    "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУ" +
+                    "ФХЦЧШЩЪЫЬЭЮЯabcdefghijklmnopqrst" +
+                    "uvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            })
             .AddEntityFrameworkStores<AccountDbContext>()
             .AddDefaultTokenProviders();
 

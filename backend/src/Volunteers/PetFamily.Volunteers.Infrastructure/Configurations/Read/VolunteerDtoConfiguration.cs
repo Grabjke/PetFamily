@@ -18,14 +18,6 @@ public class VolunteerDtoConfiguration : IEntityTypeConfiguration<VolunteerDto>
         
         builder.Property(v => v.SurName)
             .HasColumnName("surname");
-
-        builder.Property(v => v.Requisites)
-            .HasJsonConversion()
-            .HasColumnName("requisites");
-        
-        builder.Property(v => v.SocialNetworks)
-            .HasJsonConversion()
-            .HasColumnName("social_networks");
         
         
     }

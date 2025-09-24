@@ -1,6 +1,8 @@
 ﻿services:
   web:
-    image: grabjke/pet-family:1.0
+    build:
+      context: .
+      dockerfile: src/PetFamily.Web/Dockerfile
     ports:
       - "8080:8080"
     depends_on:

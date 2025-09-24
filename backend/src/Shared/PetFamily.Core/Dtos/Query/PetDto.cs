@@ -21,10 +21,18 @@ public class PetDto
     public bool Castration { get;  init; }
     public DateTime Birthday { get;  init; }
     public bool IsVaccinated { get;  init; }
-    public string HelpStatus { get;  init; } = string.Empty;
+    public HelpStatusDto HelpStatus { get;  init; }
     public RequisitesDto[] Requisites { get; init; } = []; 
     public PhotoDto[] Photos { get; init; } = [];         
     public DateTime DateOfCreation { get;  init; }
     public int Position { get;  init; }
 }
+
+public enum HelpStatusDto
+{
+    NeedsHelp = 1,
+    LookingForHome = 2,
+    FoundHome = 3
+}
+
 

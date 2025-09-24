@@ -4,6 +4,7 @@ using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using PetFamily.Core.Abstractions;
+using PetFamily.Core.Dtos.Query;
 using PetFamily.Core.ValueObjects.Pet;
 using PetFamily.Volunteers.Application.Volunteers.Commands.ChangeStatusPet;
 
@@ -39,7 +40,7 @@ public class ChangeStatusPetHandlerTests : VolunteerTestBase
         result.IsSuccess.Should().BeTrue();
         pet.Should().NotBeNull();
         volunteer.Should().NotBeNull();
-        pet.HelpStatus.Should().Be(HelpStatus.LookingForHome.ToString());
+        pet.HelpStatus.Should().Be(HelpStatusDto.LookingForHome);
     }
     
     [Fact]
