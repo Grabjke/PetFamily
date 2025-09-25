@@ -8,8 +8,6 @@ public record Address
     private Address()
     {
     }
-
-    
     private Address(string street, string city, string country, string? zipcode)
     {
         Street = street;

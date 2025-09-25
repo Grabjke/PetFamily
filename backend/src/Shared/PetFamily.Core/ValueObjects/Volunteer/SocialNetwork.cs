@@ -25,7 +25,7 @@ public record SocialNetwork
             return Errors.General.ValueIsInvalid("URL");
         
         if (string.IsNullOrWhiteSpace(name))
-            return Errors.General.ValueIsInvalid("Name");
+            return Errors.General.ValueIsInvalid("PetName");
         
 
         return new SocialNetwork(url, name);

@@ -30,7 +30,6 @@ public class Volunteer : SoftDeletableEntity<VolunteerId>
         Experience = experience;
         PhoneNumber = phoneNumber;
     }
-
     public FullName FullName { get; private set; }
     public Email Email { get; private set; }
     public VolunteerDescription Description { get; private set; }
@@ -141,7 +140,7 @@ public class Volunteer : SoftDeletableEntity<VolunteerId>
 
     public UnitResult<Error> UpdateMainInfoPet(
         PetId petId,
-        PetName name,
+        PetName petName,
         Description description,
         PetSpeciesBreed speciesBreed,
         Colour colour,
@@ -160,7 +159,7 @@ public class Volunteer : SoftDeletableEntity<VolunteerId>
             return Errors.General.NotFound();
 
         pet.UpdateMainInfo(
-            name,
+            petName,
             description,
             speciesBreed,
             colour,

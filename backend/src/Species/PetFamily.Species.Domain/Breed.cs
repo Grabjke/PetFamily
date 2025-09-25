@@ -25,7 +25,7 @@ public class Breed : SharedKernel.Entity<BreedId>
             return Errors.General.ValueIsInvalid("BreedId");
 
         if (string.IsNullOrWhiteSpace(name))
-            return Errors.General.ValueIsInvalid("Name");
+            return Errors.General.ValueIsInvalid("PetName");
 
         var breed = new Breed(breedId, name);
 

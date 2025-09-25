@@ -20,7 +20,7 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
                 id => id.Value,
                 value => PetId.Create(value));
 
-        builder.ComplexProperty(p => p.Name, nb =>
+        builder.ComplexProperty(p => p.PetName, nb =>
         {
             nb.Property(p => p.Value)
                 .IsRequired()
