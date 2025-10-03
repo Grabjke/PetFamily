@@ -31,7 +31,7 @@ public static class DependencyInjection
         services.AddScoped<PermissionManager>();
         services.AddScoped<IRefreshSessionManager, RefreshSessionManager>();
         services.AddScoped<RolePermissionManager>();
-        services.AddScoped<AccountsManager>();
+        services.AddScoped<AdminAccountManager>();
         services.AddScoped<AccountsSeederService>();
         services.AddSingleton<IAuthorizationHandler, PermissionRequirementHandler>();
         services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();

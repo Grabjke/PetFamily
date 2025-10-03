@@ -117,7 +117,7 @@ public class VolunteersApplicationsTests
         volunteerApplication.Reject(adminId, comment);
 
         volunteerApplication.Status.Should().Be(VolunteerRequestStatus.Rejected);
-        volunteerApplication.RejectionComment.Should().Be(comment);
+        volunteerApplication.Comment.Should().Be(comment);
         volunteerApplication.AdminId.Should().Be(adminId);
     }
 

@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+﻿﻿using System.Text.Json;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -15,7 +15,7 @@ public class AccountsSeederService
 {
     private readonly UserManager<User> _userManager;
     private readonly RoleManager<Role> _roleManager;
-    private readonly AccountsManager _accountsManager;
+    private readonly AdminAccountManager _adminAccountManager;
     private readonly PermissionManager _permissionManager;
     private readonly RolePermissionManager _rolePermissionManager;
     private readonly AdminOptions _adminOptions;
@@ -24,7 +24,7 @@ public class AccountsSeederService
     public AccountsSeederService(
         UserManager<User> userManager,
         RoleManager<Role> roleManager,
-        AccountsManager accountsManager,
+        AdminAccountManager adminAccountManager,
         PermissionManager permissionManager,
         RolePermissionManager rolePermissionManager,
         IOptions<AdminOptions> adminOptions,
@@ -32,7 +32,7 @@ public class AccountsSeederService
     {
         _userManager = userManager;
         _roleManager = roleManager;
-        _accountsManager = accountsManager;
+        _adminAccountManager = adminAccountManager;
         _permissionManager = permissionManager;
         _rolePermissionManager = rolePermissionManager;
         _adminOptions = adminOptions.Value;
@@ -45,6 +45,29 @@ public class AccountsSeederService
         {
             return; 
         }
+        
+        var json = await File.ReadAllTextAsync(FilePaths.Accounts);
+
+        var seedData = JsonSerializer.Deserialize<RolePermissionOptions>(json)
+                       ?? throw new ApplicationException("Json doesn't contain role permission config");
+
+        await SeedPermissions(seedData);
+
+        await SeedRoles(seedData);
+
+        await SeedRolePermissions(seedData);
+
+        var adminRole = await _roleManager.FindByNameAsync(AdminAccount.ADMIN)
+                        ?? throw new ApplicationException("Admin role doesn't exist");
+
+        var adminUser = User.CreateAdmin(_adminOptions.UserName, _adminOptions.Email, adminRole);
+        await _userManager.CreateAsync(adminUser, _adminOptions.Password);
+
+        var fullname = FullName.Create(_adminOptions.UserName, _adminOptions.UserName).Value;
+
+        var adminAccount = new AdminAccount(fullname, adminUser);
+        
+        await _adminAccountManager.CreateAdminAccount(adminAccount);
     }
     
     private async Task<bool> AnyAdminExistsAsync()

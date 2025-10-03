@@ -8,10 +8,16 @@
     ],
     "Participant": [
       "pet.read"
+    ],
+    "Volunteer": [
+      "pet.create",
+      "pet.read",
+      "pet.update",
+      "pet.delete"
     ]
   },
   "Permissions": {
-    "Pet":[
+    "Pet": [
       "pet.create",
       "pet.read",
       "pet.update",
