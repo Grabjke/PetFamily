@@ -348,6 +348,10 @@ namespace PetFamily.Accounts.Infrastructure.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("access_failed_count");
 
+                    b.Property<DateTime>("BannedApplicationUntil")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("banned_application_until");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("text")
@@ -431,9 +435,9 @@ namespace PetFamily.Accounts.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<int>("Expirience")
+                    b.Property<int>("Experience")
                         .HasColumnType("integer")
-                        .HasColumnName("expirience");
+                        .HasColumnName("experience");
 
                     b.Property<string>("Requisites")
                         .IsRequired()
@@ -447,6 +451,10 @@ namespace PetFamily.Accounts.Infrastructure.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_volunteer_accounts");
+
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_volunteer_accounts_user_id");
 
                     b.ToTable("volunteer_accounts", "accounts");
                 });
@@ -561,6 +569,14 @@ namespace PetFamily.Accounts.Infrastructure.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("PetFamily.Accounts.Domain.VolunteerAccount", b =>
+                {
+                    b.HasOne("PetFamily.Accounts.Domain.User", null)
+                        .WithOne("VolunteerAccount")
+                        .HasForeignKey("PetFamily.Accounts.Domain.VolunteerAccount", "UserId")
+                        .HasConstraintName("fk_volunteer_accounts_users_user_id");
+                });
+
             modelBuilder.Entity("PetFamily.Accounts.Domain.Role", b =>
                 {
                     b.Navigation("RolePermissions");
@@ -569,6 +585,8 @@ namespace PetFamily.Accounts.Infrastructure.Migrations
             modelBuilder.Entity("PetFamily.Accounts.Domain.User", b =>
                 {
                     b.Navigation("ParticipantAccount");
+
+                    b.Navigation("VolunteerAccount");
                 });
 #pragma warning restore 612, 618
         }

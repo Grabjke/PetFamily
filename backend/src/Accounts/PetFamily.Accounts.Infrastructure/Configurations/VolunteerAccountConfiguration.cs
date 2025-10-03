@@ -14,7 +14,7 @@ public class VolunteerAccountConfiguration : IEntityTypeConfiguration<VolunteerA
 
         builder.HasKey(v => v.Id);
 
-        builder.Property(v => v.Expirience)
+        builder.Property(v => v.Experience)
             .IsRequired();
         
         builder.Property(v => v.Requisites)

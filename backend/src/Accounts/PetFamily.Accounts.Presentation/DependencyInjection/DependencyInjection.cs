@@ -9,14 +9,14 @@ namespace PetFamily.Accounts.Presentation.DependencyInjection;
 public static class DependencyInjection
 {
     public static IServiceCollection AddAccountsModule(
-        this IServiceCollection services, 
+        this IServiceCollection services,
         IConfiguration configuration)
     {
         services
             .AddAccountsInfrastructure(configuration)
             .AddAccountsApplication()
             .AddAccountsPresentation();
-        
+
         return services;
     }
 
@@ -24,12 +24,7 @@ public static class DependencyInjection
         this IServiceCollection services)
     {
         services.AddScoped<IAccountContract, AccountsContract>();
-        
+
         return services;
     }
-
-   
-   
-    
-  
 }

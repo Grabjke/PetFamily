@@ -6,4 +6,15 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="EFCore.NamingConventions" Version="9.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.8" />
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\PetFamily.VolunteersApplications.Application\PetFamily.VolunteersApplications.Application.csproj" />
+      <ProjectReference Include="..\PetFamily.VolunteersApplications.Domain\PetFamily.VolunteersApplications.Domain.csproj" />
+    </ItemGroup>
+
 </Project>

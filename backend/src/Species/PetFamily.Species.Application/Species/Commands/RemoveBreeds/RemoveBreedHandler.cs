@@ -24,7 +24,6 @@ public class RemoveBreedHandler : ICommandHandler<Guid, RemoveBreedCommand>
     public RemoveBreedHandler(
         ILogger<RemoveBreedHandler> logger,
         ISpeciesRepository speciesRepository,
-        ISpeciesReadDbContext readDbContext,
         IValidator<RemoveBreedCommand> validator,
         IVolunteerContract volunteerContract,
         [FromKeyedServices(Modules.Species)]IUnitOfWork unitOfWork)

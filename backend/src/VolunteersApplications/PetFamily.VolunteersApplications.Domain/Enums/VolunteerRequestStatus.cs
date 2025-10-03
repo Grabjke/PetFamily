@@ -2,7 +2,7 @@
 
 public enum VolunteerRequestStatus
 {
-    Submitted,
+    Revision,
     OnReview,
     Approved,
     Rejected,

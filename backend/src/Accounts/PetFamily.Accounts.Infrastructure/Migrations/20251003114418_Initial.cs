@@ -51,6 +51,7 @@ namespace PetFamily.Accounts.Infrastructure.Migrations
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     social_networks = table.Column<string>(type: "jsonb", maxLength: 2000, nullable: false),
+                    banned_application_until = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     user_name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     normalized_user_name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -69,21 +70,6 @@ namespace PetFamily.Accounts.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_users", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "volunteer_accounts",
-                schema: "accounts",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uuid", nullable: false),
-                    expirience = table.Column<int>(type: "integer", nullable: false),
-                    requisites = table.Column<string>(type: "jsonb", maxLength: 2000, nullable: false),
-                    user_id = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_volunteer_accounts", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -297,6 +283,27 @@ namespace PetFamily.Accounts.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "volunteer_accounts",
+                schema: "accounts",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    experience = table.Column<int>(type: "integer", nullable: false),
+                    requisites = table.Column<string>(type: "jsonb", maxLength: 2000, nullable: false),
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_volunteer_accounts", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_volunteer_accounts_users_user_id",
+                        column: x => x.user_id,
+                        principalSchema: "accounts",
+                        principalTable: "users",
+                        principalColumn: "id");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "ix_admin_accounts_user_id",
                 schema: "accounts",
@@ -372,6 +379,13 @@ namespace PetFamily.Accounts.Infrastructure.Migrations
                 schema: "accounts",
                 table: "users",
                 column: "normalized_user_name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "ix_volunteer_accounts_user_id",
+                schema: "accounts",
+                table: "volunteer_accounts",
+                column: "user_id",
                 unique: true);
         }
 

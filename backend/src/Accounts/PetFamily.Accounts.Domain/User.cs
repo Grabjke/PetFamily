@@ -13,6 +13,8 @@ public class User : IdentityUser<Guid>
     public IReadOnlyList<Role> Roles => _roles;
     public IReadOnlyList<SocialNetwork> SocialNetworks { get; set; } = [];
     public ParticipantAccount? ParticipantAccount { get; set; }
+    public VolunteerAccount? VolunteerAccount { get; set; }
+    public DateTime BannedApplicationUntil { get; set; }
 
     public static User CreateAdmin(string username, string email, Role role)
     {
@@ -42,8 +44,17 @@ public class User : IdentityUser<Guid>
 
         return user;
     }
+    
+    public void CreateVolunteerAccount(Role role)
+    {
+        var volunteer = new VolunteerAccount();
 
-    public void AddRole(List<Role> roles)
+        VolunteerAccount = volunteer;
+        
+        _roles.Add(role);
+    }
+
+    public void AddRoles(List<Role> roles)
     {
         _roles.AddRange(roles);
     }

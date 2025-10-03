@@ -7,16 +7,14 @@ namespace PetFamily.VolunteersApplications.Domain.ApplicationManagement;
 
 public class VolunteerApplication : SharedKernel.Entity<Guid>
 {
-    public new Guid Id { get; private set; }
     public Guid UserId { get; private set; }
     public Guid? AdminId { get; private set; }
     public Guid? DiscussionId { get; private set; }
     public VolunteerInfo VolunteerInfo { get; private set; }
     public VolunteerRequestStatus Status { get; private set; }
-    public string? RejectionComment { get; private set; }
+    public string? Comment { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
-
     //ef
     private VolunteerApplication(Guid id) : base(id)
     {
@@ -54,18 +52,47 @@ public class VolunteerApplication : SharedKernel.Entity<Guid>
         UpdatedAt = DateTime.UtcNow;
     }
 
-    public void Approve(Guid adminId)
+    public UnitResult<Error> Approve(Guid adminId)
     {
-        AdminId = adminId;
+        if (adminId != AdminId)
+            return Errors.General.NotFound();
+
         Status = VolunteerRequestStatus.Approved;
         UpdatedAt = DateTime.UtcNow;
+
+        return Result.Success<Error>();
     }
 
-    public void Reject(Guid adminId, string comment)
+    public UnitResult<Error> Reject(Guid adminId, string comment)
     {
-        AdminId = adminId;
+        if (adminId != AdminId)
+            return Errors.General.NotFound();;
+
         Status = VolunteerRequestStatus.Rejected;
-        RejectionComment = comment;
+        Comment = comment;
         UpdatedAt = DateTime.UtcNow;
+
+        return Result.Success<Error>();
+    }
+
+    public UnitResult<Error> Revision(Guid adminId, string comment)
+    {
+        if (adminId != AdminId)
+            return Errors.General.NotFound();
+
+        Status = VolunteerRequestStatus.Revision;
+        Comment = comment;
+        UpdatedAt = DateTime.UtcNow;
+
+        return Result.Success<Error>();
+    }
+    public UnitResult<Error> Update(Guid userId,VolunteerInfo information)
+    {
+        if(userId != UserId)
+            return Errors.General.NotFound();
+        
+        VolunteerInfo = information;
+        
+        return Result.Success<Error>();
     }
 }

@@ -28,5 +28,14 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .WithOne()
             .HasForeignKey<ParticipantAccount>(p => p.UserId)
             .IsRequired(false);
+        
+        builder.HasOne(u => u.VolunteerAccount)
+            .WithOne()
+            .HasForeignKey<VolunteerAccount>(p => p.UserId)
+            .IsRequired(false);
+
+        builder.Property(u => u.BannedApplicationUntil)
+            .HasColumnName("banned_application_until")
+            .SetDefaultDateTimeKind(DateTimeKind.Utc);
     }
 }

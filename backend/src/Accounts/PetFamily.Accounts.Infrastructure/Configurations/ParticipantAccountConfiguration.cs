@@ -17,7 +17,7 @@ public class ParticipantAccountConfiguration : IEntityTypeConfiguration<Particip
         builder.Property(pa => pa.UserId)
             .IsRequired();
 
-        builder.Property(pa => pa.FavoritePetsIds)!
+        builder.Property(pa => pa.FavoritePetsIds)
             .JsonValueObjectCollectionConversion()
             .IsRequired(false);
     }

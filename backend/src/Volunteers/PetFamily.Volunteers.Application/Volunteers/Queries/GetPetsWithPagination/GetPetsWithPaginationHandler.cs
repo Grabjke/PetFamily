@@ -80,7 +80,6 @@ public class GetPetsWithPaginationHandler : IQueryHandler<PagedList<PetDto>, Get
         petsQuery = petsQuery.WhereIf(
             query.IsVaccinated.HasValue,
             p => p.IsVaccinated == query.IsVaccinated);
-
         
         petsQuery = petsQuery.WhereIf(
             query.HelpStatus.HasValue,

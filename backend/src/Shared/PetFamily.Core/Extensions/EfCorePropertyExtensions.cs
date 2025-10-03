@@ -26,6 +26,20 @@ public static class EfCorePropertyExtensions
             v => JsonSerializer.Deserialize<TValueObject>(v, JsonSerializerOptions.Default)!);
     }
 
+    public static PropertyBuilder<IReadOnlyList<Guid>> HasUuidArrayConversion(
+        this PropertyBuilder<IReadOnlyList<Guid>> propertyBuilder)
+    {
+        return propertyBuilder
+            .HasConversion(
+                v => v.ToArray(),
+                v => v.ToList(),
+                new ValueComparer<IReadOnlyList<Guid>>(
+                    (c1, c2) => (c1 == null && c2 == null) || (c1 != null && c2 != null && c1.SequenceEqual(c2)),
+                    c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+                    c => c.ToList()
+                ))
+            .HasColumnType("uuid[]");
+    }
 
     public static PropertyBuilder<IReadOnlyList<TValueObject>> JsonValueObjectCollectionConversion<TValueObject>(
         this PropertyBuilder<IReadOnlyList<TValueObject>> builder)
@@ -58,7 +72,7 @@ public static class EfCorePropertyExtensions
         propertyBuilder.HasConversion(converter);
         propertyBuilder.Metadata.SetValueConverter(converter);
         propertyBuilder.Metadata.SetValueComparer(comparer);
-        
+
         return propertyBuilder.HasColumnType("jsonb");
     }
 

@@ -72,13 +72,11 @@ public class Volunteer : SoftDeletableEntity<VolunteerId>
         PhoneNumber = phoneNumber;
     }
     
-
     public void HardDeletePet(Pet pet)
     {
         _pets.Remove(pet);
     }
     
-
     public Result<Pet, Error> GetPetById(PetId petId)
     {
         var pet = _pets.FirstOrDefault(x => x.Id == petId);
