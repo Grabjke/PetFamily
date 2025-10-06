@@ -7,7 +7,6 @@ namespace PetFamily.Volunteers.Infrastructure.DbContexts;
 
 public class VolunteerReadDbContext(string connectionString) : DbContext, IVolunteersReadDbContext
 {
-    
     public IQueryable<VolunteerDto> Volunteers => Set<VolunteerDto>();
     public IQueryable<PetDto> Pets => Set<PetDto>();
 

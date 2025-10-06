@@ -13,3 +13,7 @@ public interface IVolunteersReadDbContext
     public IQueryable<VolunteerDto> Volunteers { get; }
     public IQueryable<PetDto> Pets { get; }
 }
+public interface IApplicationReadDbContext
+{
+    public IQueryable<ApplicationDto> Applications { get; }
+}
