@@ -10,7 +10,7 @@ public interface ICommandHandler<TResponse, in TCommand> where TCommand : IComma
         CancellationToken cancellationToken = default);
 }
 
-public interface ICommandHandler<in TCommand>
+public interface ICommandHandler<in TCommand> where TCommand : ICommand
 {
     public Task<UnitResult<ErrorList>> Handle(
         TCommand command,

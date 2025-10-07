@@ -18,7 +18,5 @@ public class VolunteerDtoConfiguration : IEntityTypeConfiguration<VolunteerDto>
         
         builder.Property(v => v.SurName)
             .HasColumnName("surname");
-        
-        
     }
 }

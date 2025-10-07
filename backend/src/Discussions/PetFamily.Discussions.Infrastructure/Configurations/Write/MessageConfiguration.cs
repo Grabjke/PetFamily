@@ -13,7 +13,7 @@ public class MessageConfiguration : IEntityTypeConfiguration<Message>
         builder.ToTable("messages");
         
         builder.HasKey(x => x.Id);
-
+        
         builder.ComplexProperty(m => m.Text, t =>
         {
             t.Property(t => t.Value)

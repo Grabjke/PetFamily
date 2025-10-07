@@ -14,7 +14,8 @@ public static class DependencyInjection
     {
         services
             .AddDbContexts(configuration)
-            .AddRepositories();
+            .AddRepositories()
+            .AddDatabase();
 
 
         return services;
@@ -24,6 +25,10 @@ public static class DependencyInjection
         this IServiceCollection services,
         IConfiguration configuration)
     {
+        services.AddScoped<IDiscussionReadDbContext,ReadDiscussionDbContext>(_ =>
+            new ReadDiscussionDbContext(configuration.GetConnectionString(
+                InfrastructureConstants.DATABASE)!));
+        
         services.AddScoped<WriteDiscussionDbContext>(_ =>
             new WriteDiscussionDbContext(configuration.GetConnectionString(
                 InfrastructureConstants.DATABASE)!));
@@ -31,6 +36,12 @@ public static class DependencyInjection
         return services;
     }
 
+    private static IServiceCollection AddDatabase(this IServiceCollection services)
+    {
+        services.AddKeyedScoped<IUnitOfWork, UnitOfWork>(Modules.Discussion);
+        
+        return services;
+    }
     private static IServiceCollection AddRepositories(
         this IServiceCollection services)
     {
