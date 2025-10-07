@@ -1,3 +1,5 @@
-﻿namespace PetFamily.Accounts.Application.AccountsManagement.Commands.RegisterVolunteer;
+﻿using PetFamily.Core.Abstractions;
 
-public record RegisterVolunteerCommand(Guid userId);
+namespace PetFamily.Accounts.Application.AccountsManagement.Commands.RegisterVolunteer;
+
+public record RegisterVolunteerCommand(Guid userId) : ICommand;

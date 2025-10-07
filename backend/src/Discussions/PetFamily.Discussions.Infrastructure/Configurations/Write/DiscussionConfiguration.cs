@@ -11,7 +11,7 @@ public class DiscussionConfiguration : IEntityTypeConfiguration<Discussion>
     public void Configure(EntityTypeBuilder<Discussion> builder)
     {
         builder.ToTable("discussions");
-        
+
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.RelationId)
@@ -31,5 +31,6 @@ public class DiscussionConfiguration : IEntityTypeConfiguration<Discussion>
             .WithOne()
             .HasForeignKey("discussion_id")
             .IsRequired();
+        
     }
 }

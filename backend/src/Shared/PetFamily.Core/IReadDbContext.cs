@@ -17,3 +17,10 @@ public interface IApplicationReadDbContext
 {
     public IQueryable<ApplicationDto> Applications { get; }
 }
+
+public interface IDiscussionReadDbContext
+{
+    public IQueryable<DiscussionDto> Discussions { get; }
+    public IQueryable<MessageDto> Messages { get; }
+    
+}

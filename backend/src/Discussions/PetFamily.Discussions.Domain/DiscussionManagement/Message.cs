@@ -6,13 +6,12 @@ namespace PetFamily.Discussions.Domain.DiscussionManagement;
 
 public class Message : SharedKernel.Entity<Guid>
 {
-    private Message(Guid id) : base(id)
+    private Message() : base(Guid.Empty)
     {
     }
     private Message(
-        Guid id,
         Text text,
-        Guid userId) : base(id)
+        Guid userId) : base(Guid.Empty)
     {
         Text = text;
         UserId = userId;
@@ -29,9 +28,7 @@ public class Message : SharedKernel.Entity<Guid>
         if (userId == Guid.Empty)
             return Errors.General.ValueIsInvalid("UserId");
 
-        var messageId = Guid.NewGuid();
-
-        return new Message(messageId, text, userId);
+        return new Message(text, userId);
     }
 
     internal void EditText(Text text)
@@ -39,6 +36,4 @@ public class Message : SharedKernel.Entity<Guid>
         Text = text;
         IsEdited = true;
     }
-    
-    
 }

@@ -10,8 +10,8 @@ public class Discussion : SharedKernel.Entity<Guid>
     private const int MEMBERS_DISCUSSIONS_COUNT = 2;
     private readonly List<Guid> _usersIds = [];
     private readonly List<Message> _messages = [];
-    //ef
 
+    //ef
     private Discussion(Guid id) : base(id)
     {
     }
@@ -46,27 +46,16 @@ public class Discussion : SharedKernel.Entity<Guid>
         return new Discussion(discussionId, relationId, usersList);
     }
 
-    public Result<Guid, Error> AddMessage(
-        Text text,
-        Guid userId)
+    public void AddMessage(Message message)
     {
-        if (!_usersIds.Contains(userId))
-            return Errors.General.NotFound();
-
-        var messageResult = Message.Create(text, userId);
-        if (messageResult.IsFailure)
-            return messageResult.Error;
-
-        _messages.Add(messageResult.Value);
-
-        return messageResult.Value.Id;
+        _messages.Add(message);
     }
 
     public UnitResult<Error> RemoveMessage(
-        Guid MessageId,
+        Guid messageId,
         Guid userId)
     {
-        var message = _messages.FirstOrDefault(m => m.Id == MessageId && m.UserId == userId);
+        var message = _messages.FirstOrDefault(m => m.Id == messageId && m.UserId == userId);
         if (message is null)
             return Errors.General.NotFound();
 
@@ -78,10 +67,10 @@ public class Discussion : SharedKernel.Entity<Guid>
 
     public UnitResult<Error> EditMessage(
         Text text,
-        Guid MessageId,
+        Guid messageId,
         Guid userId)
     {
-        var message = _messages.FirstOrDefault(m => m.Id == MessageId && m.UserId == userId);
+        var message = _messages.FirstOrDefault(m => m.Id == messageId && m.UserId == userId);
         if (message is null)
             return Errors.General.NotFound();
 
@@ -90,6 +79,14 @@ public class Discussion : SharedKernel.Entity<Guid>
         return Result.Success<Error>();
     }
 
-    public void CloseDiscussion() =>
+    public UnitResult<Error> CloseDiscussion(Guid adminId)
+    {
+        var adminExist = _usersIds.Contains(adminId);
+        if (adminExist == false)
+            return Errors.General.NotFound(adminId);
+
         Status = DiscussionStatus.Closed;
+
+        return Result.Success<Error>();
+    }
 }

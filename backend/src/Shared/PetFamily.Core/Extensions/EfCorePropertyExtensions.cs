@@ -40,6 +40,8 @@ public static class EfCorePropertyExtensions
                 ))
             .HasColumnType("uuid[]");
     }
+    
+    
 
     public static PropertyBuilder<IReadOnlyList<TValueObject>> JsonValueObjectCollectionConversion<TValueObject>(
         this PropertyBuilder<IReadOnlyList<TValueObject>> builder)

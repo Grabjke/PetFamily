@@ -1,12 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using PetFamily.Discussions.Domain.DiscussionManagement;
+using PetFamily.Core;
+using PetFamily.Core.Dtos.Query;
 
 namespace PetFamily.Discussions.Infrastructure.DbContexts;
 
-public class WriteDiscussionDbContext(string connectionString) : DbContext
+public class ReadDiscussionDbContext(string connectionString) : DbContext, IDiscussionReadDbContext
 {
-    public DbSet<Discussion> Discussions => Set<Discussion>();
+    public IQueryable<DiscussionDto> Discussions => Set<DiscussionDto>();
+    public IQueryable<MessageDto> Messages => Set<MessageDto>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -22,7 +24,7 @@ public class WriteDiscussionDbContext(string connectionString) : DbContext
 
         modelBuilder.ApplyConfigurationsFromAssembly(
             typeof(WriteDiscussionDbContext).Assembly,
-            type => type.FullName?.Contains("Configurations.Write") ?? false);
+            type => type.FullName?.Contains("Configurations.Read") ?? false);
     }
 
     private ILoggerFactory CreateLoggerFactory() =>
