@@ -16,6 +16,15 @@ public static class EfCorePropertyExtensions
             v => v.ToUniversalTime(),
             v => DateTime.SpecifyKind(v, kind));
     }
+    
+    public static PropertyBuilder<DateTime?> SetDefaultDateTimeKind(
+        this PropertyBuilder<DateTime?> builder,
+        DateTimeKind kind)
+    {
+        return builder.HasConversion(
+            v => v.HasValue ? v.Value.ToUniversalTime() : v,
+            v => v.HasValue ? DateTime.SpecifyKind(v.Value, kind) : v);
+    }
 
 
     public static PropertyBuilder<TValueObject> JsonValueObjectConversion<TValueObject>(

@@ -1,7 +1,8 @@
+using MassTransit;
 using Microsoft.OpenApi.Models;
+using PetFamily.Accounts.Infrastructure.Consumers;
 using PetFamily.Accounts.Infrastructure.Seeding;
 using PetFamily.Accounts.Presentation.DependencyInjection;
-using PetFamily.Core.Extensions;
 using PetFamily.Discussions.Presentation;
 using PetFamily.Files.Application;
 using PetFamily.Species.Presentation.DependencyInjection;
@@ -68,6 +69,25 @@ builder.Services
     .AddAccountsModule(builder.Configuration)
     .AddVolunteersApplicationModule(builder.Configuration)
     .AddFilesApplication();
+
+builder.Services.AddMassTransit(configure =>
+{
+    configure.SetKebabCaseEndpointNameFormatter();
+
+    configure.AddConsumer<RegisterVolunteerConsumer>(); 
+
+    configure.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host(new Uri(builder.Configuration["RabbitMQ:Host"]!), h =>
+        {
+            h.Username(builder.Configuration["RabbitMQ:UserName"]!);
+            h.Password(builder.Configuration["RabbitMQ:Password"]!);
+        });
+
+        cfg.Durable = true;
+        cfg.ConfigureEndpoints(context);
+    });
+});
 
 var app = builder.Build();
 

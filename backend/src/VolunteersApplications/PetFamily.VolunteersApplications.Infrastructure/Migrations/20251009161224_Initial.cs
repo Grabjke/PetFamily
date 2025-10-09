@@ -38,6 +38,31 @@ namespace PetFamily.VolunteersApplications.Infrastructure.Migrations
                 {
                     table.PrimaryKey("pk_applications", x => x.id);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "outbox_messages",
+                schema: "applications",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    type = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
+                    payload = table.Column<string>(type: "jsonb", nullable: false),
+                    occurred_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    processed_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    error = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_outbox_messages", x => x.id);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "idx_outbox_messages_unprocessed",
+                schema: "applications",
+                table: "outbox_messages",
+                columns: new[] { "occurred_on_utc", "processed_on_utc" },
+                filter: "processed_on_utc IS NULL")
+                .Annotation("Npgsql:IndexInclude", new[] { "id", "type", "payload" });
         }
 
         /// <inheritdoc />
@@ -45,6 +70,10 @@ namespace PetFamily.VolunteersApplications.Infrastructure.Migrations
         {
             migrationBuilder.DropTable(
                 name: "applications",
+                schema: "applications");
+
+            migrationBuilder.DropTable(
+                name: "outbox_messages",
                 schema: "applications");
         }
     }
