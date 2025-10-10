@@ -8,12 +8,17 @@
 
     <ItemGroup>
       <PackageReference Include="EFCore.NamingConventions" Version="9.0.0" />
+      <PackageReference Include="MassTransit.RabbitMQ" Version="8.5.5-develop.2378" />
       <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.8" />
       <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+      <PackageReference Include="Polly" Version="8.6.4" />
+      <PackageReference Include="Quartz" Version="3.15.0" />
+      <PackageReference Include="Quartz.Extensions.Hosting" Version="3.15.0" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\PetFamily.VolunteersApplications.Application\PetFamily.VolunteersApplications.Application.csproj" />
+      <ProjectReference Include="..\PetFamily.VolunteersApplications.Contracts\PetFamily.VolunteersApplications.Contracts.csproj" />
       <ProjectReference Include="..\PetFamily.VolunteersApplications.Domain\PetFamily.VolunteersApplications.Domain.csproj" />
     </ItemGroup>
 

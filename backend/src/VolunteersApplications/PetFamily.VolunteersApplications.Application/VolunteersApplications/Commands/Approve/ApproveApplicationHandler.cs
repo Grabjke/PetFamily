@@ -2,12 +2,12 @@
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using PetFamily.Accounts.Contracts;
-using PetFamily.Accounts.Contracts.Requests;
 using PetFamily.Core;
 using PetFamily.Core.Abstractions;
+using PetFamily.Core.Dtos;
 using PetFamily.Core.Extensions;
 using PetFamily.SharedKernel;
+using PetFamily.VolunteersApplications.Contracts.Messaging;
 
 namespace PetFamily.VolunteersApplications.Application.VolunteersApplications.Commands.Approve;
 
@@ -17,7 +17,7 @@ public class ApproveApplicationHandler : ICommandHandler<Guid, ApproveApplicatio
     private readonly IVolunteerApplicationsRepository _repository;
     private readonly IValidator<ApproveApplicationCommand> _validator;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IAccountContract _contract;
+    private readonly IOutBoxRepository _outBoxRepository;
 
     public ApproveApplicationHandler(
         ILogger<ApproveApplicationHandler> logger,
@@ -25,13 +25,13 @@ public class ApproveApplicationHandler : ICommandHandler<Guid, ApproveApplicatio
         IValidator<ApproveApplicationCommand> validator,
         [FromKeyedServices(Modules.Application)]
         IUnitOfWork unitOfWork,
-        IAccountContract contract)
+        IOutBoxRepository outBoxRepository)
     {
         _logger = logger;
         _repository = repository;
         _validator = validator;
         _unitOfWork = unitOfWork;
-        _contract = contract;
+        _outBoxRepository = outBoxRepository;
     }
 
     public async Task<Result<Guid, ErrorList>> Handle(
@@ -49,10 +49,8 @@ public class ApproveApplicationHandler : ICommandHandler<Guid, ApproveApplicatio
             if (applicationResult.IsSuccess == false)
                 return applicationResult.Error.ToErrorList();
 
-            var createVolunteerResult = await _contract.CreateVolunteer(
-                new CreateVolunteerRequest(applicationResult.Value.UserId), cancellationToken);
-            if (createVolunteerResult.IsSuccess == false)
-                return createVolunteerResult.Error.ToErrorList();
+            await _outBoxRepository.Add(new ApprovedApplicationEvent(applicationResult.Value.UserId),
+                cancellationToken);
 
             var resultApprove = applicationResult.Value.Approve(command.AdminId);
             if (resultApprove.IsSuccess == false)

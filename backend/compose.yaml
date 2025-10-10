@@ -52,8 +52,19 @@
     depends_on:
       - web
     restart: always
+  rabbitmq:
+    image: rabbitmq:management-alpine
+    container_name: rabbitmq
+    hostname: rabbitmq
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    restart: always
 
 volumes:
   postgres-data:
   minio_data:
+  rabbitmq_data:
 

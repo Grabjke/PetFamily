@@ -13,6 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\VolunteersApplications\PetFamily.VolunteersApplications.Contracts\PetFamily.VolunteersApplications.Contracts.csproj" />
       <ProjectReference Include="..\PetFamily.Discussions.Application\PetFamily.Discussions.Application.csproj" />
       <ProjectReference Include="..\PetFamily.Discussions.Domain\PetFamily.Discussions.Domain.csproj" />
     </ItemGroup>
