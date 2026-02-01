@@ -6,7 +6,7 @@ using PetFamily.SharedKernel;
 
 namespace PetFamily.Volunteers.Application.Volunteers.Commands.UpdateMainInfoPet;
 
-public class UpdateMainInfoPetCommandValidator: AbstractValidator<UpdateMainInfoPetCommand>
+public class UpdateMainInfoPetCommandValidator : AbstractValidator<UpdateMainInfoPetCommand>
 {
     public UpdateMainInfoPetCommandValidator()
     {

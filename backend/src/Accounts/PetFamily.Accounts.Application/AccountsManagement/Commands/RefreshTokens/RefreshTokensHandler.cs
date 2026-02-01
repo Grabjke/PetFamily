@@ -38,7 +38,7 @@ public class RefreshTokensHandler : ICommandHandler<LoginResponse, RefreshTokenC
 
         if (oldRefreshSession.Value.ExpiresIn < DateTime.UtcNow)
             return Errors.Tokens.InvalidToken().ToErrorList();
-
+        
         _refreshSessionManager.Delete(oldRefreshSession.Value);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

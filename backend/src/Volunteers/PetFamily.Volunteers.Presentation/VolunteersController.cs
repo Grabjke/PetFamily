@@ -17,6 +17,7 @@ using PetFamily.Volunteers.Application.Volunteers.Commands.RemovePhotoPet;
 using PetFamily.Volunteers.Application.Volunteers.Commands.SetMainPhotoPet;
 using PetFamily.Volunteers.Application.Volunteers.Commands.UpdateMainInfo;
 using PetFamily.Volunteers.Application.Volunteers.Commands.UpdateMainInfoPet;
+using PetFamily.Volunteers.Application.Volunteers.Dapper;
 using PetFamily.Volunteers.Application.Volunteers.Queries.GetPetById;
 using PetFamily.Volunteers.Application.Volunteers.Queries.GetPetsWithPagination;
 using PetFamily.Volunteers.Application.Volunteers.Queries.GetVolunteerById;
@@ -145,9 +146,22 @@ public class VolunteersController : ApplicationController
         return Ok(response);
     }
 
-    [HttpGet("{id:guid}")]
+    /*[HttpGet("{id:guid}")]
     public async Task<ActionResult> GetById(
         [FromServices] GetVolunteerByIdHandler handler,
+        [FromRoute] Guid id,
+        CancellationToken cancellationToken)
+    {
+        var query = new GetVolunteerByIdQuery(id);
+
+        var response = await handler.Handle(query, cancellationToken);
+
+        return Ok(response);
+    }*/
+    
+    [HttpGet("{id:guid}")]
+    public async Task<ActionResult> GetById(
+        [FromServices] GetVolunteerById handler,
         [FromRoute] Guid id,
         CancellationToken cancellationToken)
     {

@@ -35,6 +35,6 @@ public class MovePetPositionHandlerTests : VolunteerTestBase
             .FirstOrDefaultAsync(p => p.Id == petIds.First());
 
         result.IsSuccess.Should().BeTrue();
-        pet!.Position.Should().Be(3);
+        pet!.SerialNumber.Should().Be(3);
     }
 }

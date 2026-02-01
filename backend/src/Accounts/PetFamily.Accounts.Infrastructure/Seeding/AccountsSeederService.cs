@@ -75,7 +75,7 @@ public class AccountsSeederService
         var adminRole = await _roleManager.FindByNameAsync(AdminAccount.ADMIN);
         if (adminRole == null) return false;
     
-        var admins = await _userManager.GetUsersInRoleAsync(adminRole.Name);
+        var admins = await _userManager.GetUsersInRoleAsync(adminRole.Name!);
         
         return admins.Any();
     }

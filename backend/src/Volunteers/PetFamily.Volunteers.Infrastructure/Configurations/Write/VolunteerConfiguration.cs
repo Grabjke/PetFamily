@@ -24,7 +24,7 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
         {
             fnb.Property(fn => fn.Name)
                 .IsRequired()
-                .HasColumnName("pet_name")
+                .HasColumnName("name")
                 .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
 
             fnb.Property(fn => fn.Surname)
