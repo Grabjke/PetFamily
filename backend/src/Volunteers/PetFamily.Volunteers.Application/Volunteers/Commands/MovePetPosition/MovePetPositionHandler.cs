@@ -56,7 +56,7 @@ public class MovePetPositionHandler : ICommandHandler<Guid, MovePetPositionComma
 
         await _volunteersRepository.Save(volunteerResult.Value, cancellationToken);
 
-        _logger.LogInformation("Moving pet {PetId} to position {Position}", command.PetId, position);
+        _logger.LogInformation("Moving pet {PetId} to position {SerialNumber}", command.PetId, position);
 
         return petId.Value;
     }

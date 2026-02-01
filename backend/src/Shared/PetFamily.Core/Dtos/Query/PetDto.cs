@@ -5,7 +5,7 @@ public class PetDto
 {
     public Guid Id { get; init; }
     public Guid VolunteerId { get; init; }
-    public string Name { get;  init; } = null!;
+    public string PetName { get;  init; } = null!;
     public string Description { get;  init; } = null!;
     public Guid SpeciesId { get;  init; }
     public Guid BreedId { get;  init; }
@@ -17,15 +17,15 @@ public class PetDto
     public string? ZipCode { get;  init; } = string.Empty;
     public double Weight { get;  init; }
     public int Height { get;  init; }
-    public string OwnersPhoneNumber { get;  init; } = string.Empty;
+    public string PhoneNumber { get;  init; } = string.Empty;
     public bool Castration { get;  init; }
-    public DateTime Birthday { get;  init; }
+    public DateTime DayOfBirth { get;  init; }
     public bool IsVaccinated { get;  init; }
     public HelpStatusDto HelpStatus { get;  init; }
     public RequisitesDto[] Requisites { get; init; } = []; 
     public PhotoDto[] Photos { get; init; } = [];         
     public DateTime DateOfCreation { get;  init; }
-    public int Position { get;  init; }
+    public int SerialNumber { get;  init; } 
 }
 
 public enum HelpStatusDto

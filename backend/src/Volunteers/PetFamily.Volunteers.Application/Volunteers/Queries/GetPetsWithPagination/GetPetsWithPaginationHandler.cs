@@ -19,7 +19,7 @@ public class GetPetsWithPaginationHandler : IQueryHandler<PagedList<PetDto>, Get
     public Task<PagedList<PetDto>> Handle(GetPetsWithPaginationQuery query,
         CancellationToken cancellationToken = default)
     {
-        var petsQuery = _readDbContext.Pets.AsQueryable();
+        var petsQuery = _readDbContext.Pets;
 
         petsQuery = petsQuery.WhereIf(
             query.VolunteerId.HasValue,
@@ -27,7 +27,7 @@ public class GetPetsWithPaginationHandler : IQueryHandler<PagedList<PetDto>, Get
 
         petsQuery = petsQuery.WhereIf(
             !string.IsNullOrWhiteSpace(query.Name),
-            p => p.Name.Contains(query.Name!));
+            p => p.PetName.Contains(query.Name!));
 
         petsQuery = petsQuery.WhereIf(
             !string.IsNullOrWhiteSpace(query.Description),
@@ -88,7 +88,7 @@ public class GetPetsWithPaginationHandler : IQueryHandler<PagedList<PetDto>, Get
 
         Expression<Func<PetDto, object>> keySelector = query.SortBy?.ToLower()switch
         {
-            "petName" => x => x.Name,
+            "petName" => x => x.PetName,
             "description" => x => x.Description,
             "colour" => x => x.Colour,
             "country" => x => x.Country,

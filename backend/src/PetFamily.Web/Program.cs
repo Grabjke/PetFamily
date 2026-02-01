@@ -1,13 +1,13 @@
+using System.Reflection;
+using Elastic.CommonSchema.Serilog;
+using Elastic.Ingest.Elasticsearch;
+using Elastic.Ingest.Elasticsearch.DataStreams;
+using Elastic.Serilog.Sinks;
 using MassTransit;
 using Microsoft.OpenApi.Models;
 using PetFamily.Accounts.Infrastructure.Consumers;
 using PetFamily.Accounts.Infrastructure.Seeding;
-using PetFamily.Accounts.Presentation.DependencyInjection;
-using PetFamily.Discussions.Presentation;
-using PetFamily.Files.Application;
-using PetFamily.Species.Presentation.DependencyInjection;
-using PetFamily.Volunteers.Presentation.DependencyInjection;
-using PetFamily.VolunteersApplications.Presentation;
+using PetFamily.Web;
 using PetFamily.Web.Middlewares;
 using Serilog;
 using Serilog.Events;
@@ -16,11 +16,17 @@ DotNetEnv.Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
+string indexFormat = $"{Assembly.GetExecutingAssembly().GetName().Name?.ToLower().Replace(".", "-")}-{DateTime.UtcNow:yyyy-MM}";
+
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .WriteTo.Debug()
-    .WriteTo.Seq(builder.Configuration.GetConnectionString("Seq")
-                 ?? throw new ArgumentNullException("Seq"))
+    .WriteTo.Elasticsearch([new Uri("http://localhost:9200")], options =>
+    {
+        options.DataStream = new DataStreamName(indexFormat);
+        options.TextFormatting = new EcsTextFormatterConfiguration<LogEventEcsDocument>();
+        options.BootstrapMethod = BootstrapMethod.Silent;
+    })
     .MinimumLevel.Override("Microsoft.AspNetCore.Hosting", LogEventLevel.Warning)
     .MinimumLevel.Override("Microsoft.AspNetCore.Mvc", LogEventLevel.Warning)
     .MinimumLevel.Override("Microsoft.AspNetCore.Routing", LogEventLevel.Warning)
@@ -53,28 +59,31 @@ builder.Services.AddSwaggerGen(c =>
                 {
                     Type = ReferenceType.SecurityScheme,
                     Id = "Bearer"
-                }
+                },
             },
             []
-        }
+        },
     });
 });
 
 builder.Services.AddSerilog();
 
 builder.Services
-    .AddDiscussionModule(builder.Configuration)
-    .AddVolunteersModule(builder.Configuration)
-    .AddSpeciesModule(builder.Configuration)
-    .AddAccountsModule(builder.Configuration)
-    .AddVolunteersApplicationModule(builder.Configuration)
-    .AddFilesApplication();
+    .AddProgramDependency(builder.Configuration);
+
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    string connection = builder.Configuration.GetConnectionString("Redis") ??
+                        throw new ArgumentNullException(nameof(connection));
+
+    options.Configuration = connection;
+});
 
 builder.Services.AddMassTransit(configure =>
 {
     configure.SetKebabCaseEndpointNameFormatter();
 
-    configure.AddConsumer<RegisterVolunteerConsumer>(); 
+    configure.AddConsumer<RegisterVolunteerConsumer>();
 
     configure.UsingRabbitMq((context, cfg) =>
     {
@@ -96,6 +105,8 @@ var seeder = app.Services.GetService<AccountsSeeder>();
 
 await seeder!.SeedAsync();
 
+app.UseOpenTelemetryPrometheusScrapingEndpoint();
+
 app.UseExceptionMiddleware();
 
 app.UseSerilogRequestLogging();
@@ -105,7 +116,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 
-    //  await app.ApplyMigration();
+    // await app.ApplyMigration();
 }
 
 app.UseHttpsRedirection();

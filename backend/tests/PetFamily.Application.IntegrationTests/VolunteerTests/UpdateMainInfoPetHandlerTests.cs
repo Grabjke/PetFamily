@@ -34,7 +34,7 @@ public class UpdateMainInfoPetHandlerTests : VolunteerTestBase
             .FirstOrDefaultAsync(p => p.SpeciesId == speciesId && p.BreedId == breedId);
 
         result.IsSuccess.Should().BeTrue();
-        pet!.Name.Should().Be(command.Name);
+        pet!.PetName.Should().Be(command.Name);
         pet.Street.Should().Be(command.Address.Street);
         pet.Description.Should().Be(command.Description);
         pet.City.Should().Be(command.Address.City);

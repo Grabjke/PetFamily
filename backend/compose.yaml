@@ -8,13 +8,18 @@
     depends_on:
       - postgres
       - minio
-      - seq
+      - elasticsearch
+      - redis
+      - rabbitmq
     restart: always
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
+    networks:
+      - petfamily-network
+
   postgres:
     container_name: postgres
-    image: postgres
+    image: postgres:17
     restart: always
     environment:
       POSTGRES_DB: pet_family
@@ -24,15 +29,66 @@
       - "5434:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
-  seq:
-    image: datalust/seq:latest
-    container_name: seq
-    restart: always
-    environment:
-      - ACCEPT_EULA=Y
+    networks:
+      - petfamily-network
+
+  elasticsearch:
+    image: elasticsearch:8.16.1
+    container_name: elasticsearch
     ports:
-      - "5341:5341"
-      - "8081:80"
+      - "9200:9200"
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    restart: always
+    networks:
+      - petfamily-network
+
+  kibana:
+    container_name: kibana
+    image: kibana:8.16.1
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    restart: always
+    networks:
+      - petfamily-network
+  
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    restart: always
+    networks:
+      - petfamily-network
+  
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - prometheus
+    restart: always
+    networks:
+      - petfamily-network
+
   minio:
     container_name: minio
     image: minio/minio
@@ -43,6 +99,9 @@
       - minio_data:/data
     command: server --console-address ":9001" /data
     restart: always
+    networks:
+      - petfamily-network
+
   nginx:
     image: nginx:latest
     ports:
@@ -52,6 +111,9 @@
     depends_on:
       - web
     restart: always
+    networks:
+      - petfamily-network
+
   rabbitmq:
     image: rabbitmq:management-alpine
     container_name: rabbitmq
@@ -62,9 +124,37 @@
       - "5672:5672"
       - "15672:15672"
     restart: always
+    networks:
+      - petfamily-network
+  
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: always
+    command: redis-server --appendonly yes
+    networks:
+      - petfamily-network
+
+networks:
+  petfamily-network:
+    driver: bridge
 
 volumes:
   postgres-data:
+    driver: local
+  redis_data:
+    driver: local
   minio_data:
+    driver: local
   rabbitmq_data:
-
+    driver: local
+  elasticsearch-data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local

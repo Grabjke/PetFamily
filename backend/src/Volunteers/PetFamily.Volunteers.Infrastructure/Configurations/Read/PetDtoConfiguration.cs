@@ -17,8 +17,8 @@ public class PetDtoConfiguration : IEntityTypeConfiguration<PetDto>
             .WithMany()
             .HasForeignKey(p => p.VolunteerId);
         
-        builder.Property(p => p.Name)
-            .HasColumnName("petName");
+        builder.Property(p => p.PetName)
+            .HasColumnName("pet_name");
         
         builder.Property(p => p.Description)
             .HasColumnName("description");
@@ -53,10 +53,10 @@ public class PetDtoConfiguration : IEntityTypeConfiguration<PetDto>
         builder.Property(p => p.Height)
             .HasColumnName("height");
         
-        builder.Property(p => p.OwnersPhoneNumber)
+        builder.Property(p => p.PhoneNumber)
             .HasColumnName("phone_number");
         
-        builder.Property(p => p.Birthday)
+        builder.Property(p => p.DayOfBirth)
             .HasColumnName("day_of_birth");
         
         builder.Property(p => p.HelpStatus)
@@ -74,7 +74,7 @@ public class PetDtoConfiguration : IEntityTypeConfiguration<PetDto>
         builder.Property(p => p.DateOfCreation)
             .HasColumnName("date_of_creation");
         
-        builder.Property(p => p.Position)
+        builder.Property(p => p.SerialNumber)
             .HasColumnName("serial_number");
     }
 }

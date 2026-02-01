@@ -19,6 +19,4 @@ public record AddPetCommand(
     bool Castration,
     DateTime Birthday,
     bool isVaccinated,
-    HelpStatus HelpStatus):ICommand;
-    
-
+    HelpStatus HelpStatus) : ICommand;

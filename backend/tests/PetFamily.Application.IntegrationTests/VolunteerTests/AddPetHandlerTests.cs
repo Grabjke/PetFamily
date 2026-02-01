@@ -39,7 +39,7 @@ public class AddPetHandlerTests : VolunteerTestBase
         volunteer.Should().NotBeNull();
         volunteer.Pets.Should().HaveCount(1);
         pet.Should().NotBeNull();
-        pet.Name.Should().Be(command.Name);
+        pet.PetName.Should().Be(command.Name);
         pet.BreedId.Should().Be(breedId);
         pet.SpeciesId.Should().Be(speciesId);
         pet.VolunteerId.Should().Be(volunteerId);

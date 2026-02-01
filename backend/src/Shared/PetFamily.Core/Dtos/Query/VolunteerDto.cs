@@ -14,4 +14,6 @@ public class VolunteerDto
 
     public string Email { get; init; } = string.Empty;
     public string PhoneNumber { get; init; } = string.Empty;
+    
+    public List<PetDto> Pets { get; init; } = [];
 }

@@ -5,6 +5,7 @@ using PetFamily.Core;
 using PetFamily.Core.FileProvider;
 using PetFamily.Core.Messaging;
 using PetFamily.Core.Options;
+using PetFamily.Volunteers.Application;
 using PetFamily.Volunteers.Application.Volunteers;
 using PetFamily.Volunteers.Infrastructure.BackgroundServices;
 using PetFamily.Volunteers.Infrastructure.DbContexts;
@@ -56,6 +57,8 @@ public static class DependencyInjection
     private static IServiceCollection AddDatabase(this IServiceCollection services)
     {
         services.AddKeyedScoped<IUnitOfWork, UnitOfWork>(Modules.Volunteers);
+        
+        services.AddSingleton<IDbConnectionFactory, ConnectionFactory>();
         
         return services;
     }
