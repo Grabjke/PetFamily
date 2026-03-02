@@ -23,14 +23,4 @@ public static class DependencyInjection
             .AsSelfWithInterfaces()
             .WithScopedLifetime());
     }
-
-    private static IServiceCollection AdTest(this IServiceCollection services)
-    {
-        return services.Scan(scan => scan.FromAssemblies(typeof(DependencyInjection).Assembly)
-            .AddClasses(classes => classes.AssignableToAny(
-                [typeof(ICommandHandler<>), typeof(ICommandHandler<,>)]))
-            .AsSelfWithInterfaces()
-            .WithScopedLifetime());
-    }
-   //asdasdasdasda 
 }
