@@ -24,7 +24,7 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
         {
             nb.Property(p => p.Value)
                 .IsRequired()
-                .HasColumnName("name")
+                .HasColumnName("pet_name")
                 .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
         });
 

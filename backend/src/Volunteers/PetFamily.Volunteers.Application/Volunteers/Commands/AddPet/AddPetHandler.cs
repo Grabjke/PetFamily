@@ -46,13 +46,13 @@ public class AddPetHandler : ICommandHandler<Guid, AddPetCommand>
             new IsSpeciesAndBreedExistRequest(command.SpeciesId, command.BreedId), cancellationToken);
         if (!isSpeciesAndBreedExist)
             return Errors.Species.SpeciesOrBreedNotExist().ToErrorList();
+
+        var volunteerResult = await _volunteersRepository
+            .GetById(command.VolunteerId, cancellationToken);
         
         var petSpecies = SpeciesId.Create(command.SpeciesId);
 
         var petBreed = BreedId.Create(command.BreedId);
-
-        var volunteerResult = await _volunteersRepository
-            .GetById(command.VolunteerId, cancellationToken);
 
         if (volunteerResult.IsFailure)
             return volunteerResult.Error.ToErrorList();

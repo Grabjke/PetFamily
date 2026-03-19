@@ -13,7 +13,7 @@ using PetFamily.Volunteers.Infrastructure.DbContexts;
 namespace PetFamily.Volunteers.Infrastructure.Migrations
 {
     [DbContext(typeof(WriteVolunteerDbContext))]
-    [Migration("20250924163020_Initial")]
+    [Migration("20260101161313_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -173,7 +173,7 @@ namespace PetFamily.Volunteers.Infrastructure.Migrations
                                 .IsRequired()
                                 .HasMaxLength(2000)
                                 .HasColumnType("character varying(2000)")
-                                .HasColumnName("name");
+                                .HasColumnName("pet_name");
                         });
 
                     b.ComplexProperty<Dictionary<string, object>>("PetSpeciesBreed", "PetFamily.Volunteers.Domain.PetManagement.Pet.PetSpeciesBreed#PetSpeciesBreed", b1 =>
@@ -271,7 +271,7 @@ namespace PetFamily.Volunteers.Infrastructure.Migrations
                                 .IsRequired()
                                 .HasMaxLength(100)
                                 .HasColumnType("character varying(100)")
-                                .HasColumnName("petName");
+                                .HasColumnName("name");
 
                             b1.Property<string>("Patronymic")
                                 .HasMaxLength(100)

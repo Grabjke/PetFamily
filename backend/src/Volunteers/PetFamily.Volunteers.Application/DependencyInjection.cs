@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using PetFamily.Core.Abstractions;
+using PetFamily.Volunteers.Application.Volunteers.Dapper;
 
 namespace PetFamily.Volunteers.Application;
 
@@ -12,6 +13,8 @@ public static class DependencyInjection
             .AddCommands()
             .AddQueries()
             .AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
+
+        services.AddScoped<GetVolunteerById>();
 
         return services;
     }
