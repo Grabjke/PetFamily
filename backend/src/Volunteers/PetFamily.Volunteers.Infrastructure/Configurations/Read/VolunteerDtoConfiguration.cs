@@ -13,6 +13,9 @@ public class VolunteerDtoConfiguration : IEntityTypeConfiguration<VolunteerDto>
 
         builder.HasKey(p => p.Id);
 
+        builder.Property(v => v.Name)
+            .HasColumnName("petName");
+        
         builder.Property(v => v.PhoneNumber)
             .HasColumnName("phone_number");
         

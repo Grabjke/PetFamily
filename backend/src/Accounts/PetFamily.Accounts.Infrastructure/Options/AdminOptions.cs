@@ -3,7 +3,7 @@
 public class AdminOptions
 {
     public const string ADMIN = "ADMIN";
-    public string UserName { get; init; } = string.Empty;
-    public string Email { get; init; } = string.Empty;
-    public string Password { get; init; } = string.Empty;
+    public string UserName { get; init; } = "ADMIN";
+    public string Email { get; init; } = "ADMIN@asdasd.com";
+    public string Password { get; init; } = "ADMIN1312";
 }

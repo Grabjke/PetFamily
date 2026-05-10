@@ -42,7 +42,6 @@ public class VolunteersController : ApplicationController
     }
 
     [HttpGet("pets")]
-    [Permission(Permissions.Volunteers.PetRead)]
     public async Task<ActionResult> GetPetsWithPagination(
         [FromServices] GetPetsWithPaginationHandler handler,
         [FromQuery] GetPetsWithPaginationRequest request,
@@ -50,11 +49,9 @@ public class VolunteersController : ApplicationController
     {
         var response = await handler.Handle(request.ToQuery(), cancellationToken);
 
-        await Task.Delay(500, cancellationToken);
-
         return Ok(response);
     }
-
+    
     [HttpPut("volunteers/{volunteerId:guid}/pets/{petId:guid}/set-main-photo")]
     public async Task<ActionResult<Guid>> SetMainPhoto(
         [FromRoute] Guid volunteerId,

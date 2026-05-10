@@ -8,9 +8,6 @@ using PetFamily.Files.Application.Files.Upload;
 using PetFamily.Framework;
 
 namespace PetFamily.Files.Presentation;
-
-[ApiController]
-[Route("[controller]")]
 public class FileController : ApplicationController
 {
     private readonly IMinioClient _minioClient;
